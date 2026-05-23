@@ -8,9 +8,10 @@ let excelFileId = null;
 
 const SCOPES = ["Files.ReadWrite", "User.Read"];
 const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
+const DEFAULT_CLIENT_ID = "1e727060-da1f-4cc2-bb6c-9a77aa3132cc";
 
 function getClientId() {
-  return localStorage.getItem("mpm_client_id") || "";
+  return localStorage.getItem("mpm_client_id") || DEFAULT_CLIENT_ID;
 }
 function salvarClientId(v) {
   localStorage.setItem("mpm_client_id", v.trim());
@@ -73,9 +74,23 @@ async function iniciarLogin() {
     showToast("Conectado com sucesso! ✓", "success");
     atualizarPassos(2);
   } catch (e) {
-    setStatus("error", e.message || "Erro ao conectar");
-    addLog("err", e.message || "Erro desconhecido");
-    showToast("Erro no login: " + (e.message || "tente novamente"), "warn");
+    const raw = e.message || "Erro desconhecido";
+    const isSpaError =
+      raw.includes("AADSTS70002") || raw.includes("client_secret");
+    const userMsg = isSpaError
+      ? "Configuração Azure incorreta: veja o log para instruções de correção."
+      : "Erro no login: " + raw;
+    setStatus("error", isSpaError ? "URI de redirecionamento incorreto" : raw);
+    if (isSpaError) {
+      addLog("err", "AADSTS70002 — o app Azure está configurado como cliente confidencial.");
+      addLog("warn", "Correção: Portal Azure → Registros de aplicativo → Autenticação");
+      addLog("warn", "→ em 'URIs de redirecionamento', REMOVA o URI da seção 'Web'");
+      addLog("warn", "→ ADICIONE o mesmo URI na seção 'Single-page application (SPA)'");
+      addLog("warn", "→ Salve e tente novamente. Nenhuma alteração no código é necessária.");
+    } else {
+      addLog("err", raw);
+    }
+    showToast(userMsg, "warn");
   }
 }
 
@@ -350,8 +365,7 @@ function addLog(type, msg) {
 // Restaura estado salvo
 function restaurarEstado() {
   const acc = localStorage.getItem("mpm_account");
-  const clientId = localStorage.getItem("mpm_client_id");
-  if (clientId) document.getElementById("input-clientid").value = clientId;
+  document.getElementById("input-clientid").value = getClientId();
   if (acc) {
     setStatus("connected");
     document.getElementById("secao-arquivo").style.display = "";
