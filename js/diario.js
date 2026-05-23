@@ -143,6 +143,7 @@ async function validarArquivo() {
     );
     showToast("Arquivo encontrado! ✓", "success");
     atualizarPassos(4);
+    await carregarDadosPlanilha();
   } catch (e) {
     addLog("err", "Arquivo não encontrado: " + caminho);
     showToast("Arquivo não encontrado. Verifique o caminho.", "warn");
@@ -185,6 +186,7 @@ async function abrirFilePicker() {
       document.getElementById("arquivo-nome").textContent = f.name;
       document.getElementById("secao-sync").style.display = "";
       showToast("Arquivo selecionado! ✓", "success");
+      await carregarDadosPlanilha();
     }
   } catch (e) {
     showToast("Erro ao listar arquivos", "warn");
@@ -196,82 +198,157 @@ function trocarArquivo() {
   document.getElementById("arquivo-picker").style.display = "";
 }
 
-async function sincronizarAgora() {
+// ── LEITURA COMPLETA DA PLANILHA ──────────────────────────────────────────
+async function carregarDadosPlanilha() {
   const token = graphToken || (await obterToken());
   const fileId = excelFileId || localStorage.getItem("mpm_file_id");
   if (!token || !fileId) {
-    showToast("Configure o arquivo primeiro", "warn");
+    showToast("Configure a planilha primeiro", "warn");
     return;
   }
-  const btn = document.getElementById("btn-sync");
-  btn.disabled = true;
-  btn.innerHTML =
-    '<i class="ti ti-loader" style="animation:spin 1s linear infinite" aria-hidden="true"></i> Sincronizando...';
-  addLog("ok", "Iniciando sincronização...");
+  const btn = document.getElementById("btn-atualizar");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML =
+      '<i class="ti ti-loader" style="animation:spin 1s linear infinite" aria-hidden="true"></i> Carregando...';
+  }
+  addLog("ok", "Carregando dados da planilha...");
   try {
-    // Lê a aba "Diário de Aulas" (sheet 2, linhas 3..N)
-    const endpoint = `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Diário de Aulas')/usedRange`;
-    const res = await fetch(endpoint, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error("Erro ao ler planilha");
-    const data = await res.json();
-    const linhas = (data.values || []).length - 2; // desconta cabeçalho
-    addLog("ok", `Lidas ${linhas} linhas da planilha`);
-    // Escreve novos registros pendentes (DB.pending)
-    if (DB.pending && DB.pending.length > 0) {
-      addLog("ok", `Enviando ${DB.pending.length} registro(s) novo(s)...`);
+    // ── Diário de Aulas ───────────────────────────────────────────────────
+    const resAulas = await fetch(
+      `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Diário de Aulas')/usedRange`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    if (!resAulas.ok) throw new Error("Aba 'Diário de Aulas' não encontrada");
+    const dAulas = await resAulas.json();
+    const rowsAulas = (dAulas.values || []).slice(2); // pula 2 linhas de cabeçalho
+    DB.aulas = rowsAulas
+      .filter((r) => r[0] && r[1])
+      .map((r) => ({
+        data:     String(r[0]  || ""),
+        aluno:    String(r[1]  || ""),
+        presenca: String(r[2]  || ""),
+        motivo:   String(r[3]  || ""),
+        tipo:     String(r[4]  || ""),
+        metodo:   String(r[5]  || ""),
+        conteudo: String(r[6]  || ""),
+        hino:     String(r[7]  || ""),
+        licao:    String(r[8]  || ""),
+        video:    String(r[9]  || ""),
+        obs:      String(r[10] || ""),
+      }));
+    _aulaSheetRowCount = DB.aulas.length;
+    addLog("ok", `${DB.aulas.length} aula(s) carregada(s)`);
+
+    // ── Alunos (aba opcional) ─────────────────────────────────────────────
+    const resAlunos = await fetch(
+      `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Alunos')/usedRange`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    if (resAlunos.ok) {
+      const dAlunos = await resAlunos.json();
+      const rowsAlunos = (dAlunos.values || []).slice(1);
+      const parsed = rowsAlunos
+        .filter((r) => r[1])
+        .map((r, i) => ({
+          id:          Number(r[0])  || i + 1,
+          nome:        String(r[1]  || ""),
+          nasc:        String(r[2]  || ""),
+          instrumento: String(r[3]  || ""),
+          horario:     String(r[4]  || ""),
+          mensalidade: Number(r[5]) || 0,
+          inicio:      String(r[6]  || ""),
+          estagio:     String(r[7]  || "Iniciante"),
+          teoria:      Number(r[8]) || 0,
+          metodo:      String(r[9]  || ""),
+          pagina:      String(r[10] || ""),
+          hinos:       Number(r[11]) || 0,
+          listahinos:  String(r[12] || "—"),
+          tecnica: {
+            m1:  String(r[13] || "Não iniciado"),
+            m2:  String(r[14] || "Não iniciado"),
+            ped: String(r[15] || "Não iniciado"),
+          },
+          culto: {
+            jovens: String(r[16] || "Não avaliado"),
+            adulto: String(r[17] || "Não avaliado"),
+            ofic:   String(r[18] || "Não avaliado"),
+          },
+          obs: String(r[19] || ""),
+        }));
+      if (parsed.length) {
+        DB.alunos = parsed;
+        addLog("ok", `${DB.alunos.length} aluno(s) carregado(s)`);
+      } else {
+        addLog("warn", "Aba 'Alunos' vazia — mantendo dados locais");
+      }
+    } else {
+      addLog("warn", "Aba 'Alunos' não encontrada — mantendo dados locais");
+    }
+
+    DB.pending = [];
+    renderHome();
+    renderListaAlunos(DB.alunos);
+    renderCalendario();
+    initLancamento();
+    const agora = new Date().toLocaleString("pt-BR");
+    document.getElementById("ultimo-sync").textContent = `Última leitura: ${agora}`;
+    localStorage.setItem("mpm_last_sync", agora);
+    atualizarPassos(5);
+    atualizarSyncIndicator(true);
+    showToast("Dados carregados da planilha! ✓", "success");
+  } catch (e) {
+    addLog("err", "Erro ao carregar: " + e.message);
+    showToast("Erro ao carregar dados: " + e.message, "warn");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-refresh" aria-hidden="true"></i> Atualizar tudo';
+    }
+  }
+}
+
+// ── ATUALIZAR TUDO (push pendentes + leitura completa) ────────────────────
+async function atualizarTudo() {
+  const token = graphToken || (await obterToken());
+  const fileId = excelFileId || localStorage.getItem("mpm_file_id");
+  if (!token || !fileId) {
+    showToast("Configure a planilha primeiro", "warn");
+    return;
+  }
+  if (DB.pending.length > 0) {
+    addLog("ok", `Enviando ${DB.pending.length} registro(s) pendente(s)...`);
+    try {
+      const res = await fetch(
+        `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Diário de Aulas')/usedRange`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      const d = await res.json();
+      let nr = (d.values || []).length + 1;
       for (const aula of DB.pending) {
-        const row = [
-          [
-            aula.data,
-            aula.aluno,
-            aula.presenca,
-            aula.motivo || "",
-            aula.tipo || "",
-            aula.metodo || "",
-            aula.conteudo || "",
-            aula.hino || "",
-            aula.licao || "",
-            aula.video || "",
-            aula.obs || "",
-            "",
-          ],
-        ];
-        const nextRow = linhas + 3;
-        const rangeAddr = `A${nextRow}:L${nextRow}`;
+        const row = [[
+          aula.data, aula.aluno, aula.presenca,
+          aula.motivo || "", aula.tipo || "", aula.metodo || "",
+          aula.conteudo || "", aula.hino || "", aula.licao || "",
+          aula.video || "", aula.obs || "",
+        ]];
         await fetch(
-          `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Diário de Aulas')/range(address='${rangeAddr}')`,
+          `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Diário de Aulas')/range(address='A${nr}:K${nr}')`,
           {
             method: "PATCH",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
+            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
             body: JSON.stringify({ values: row }),
           },
         );
+        nr++;
       }
       DB.pending = [];
-      addLog("ok", "Registros enviados com sucesso");
-    } else {
-      addLog("ok", "Nenhum registro pendente");
+      addLog("ok", "Registros pendentes enviados");
+    } catch (e) {
+      addLog("err", "Erro ao enviar pendentes: " + e.message);
     }
-    const agora = new Date().toLocaleString("pt-BR");
-    document.getElementById("ultimo-sync").textContent =
-      `Última sync: ${agora}`;
-    localStorage.setItem("mpm_last_sync", agora);
-    showToast("Sincronizado com sucesso! ✓", "success");
-    atualizarPassos(5);
-    atualizarSyncIndicator(true);
-  } catch (e) {
-    addLog("err", "Erro: " + e.message);
-    showToast("Erro na sincronização: " + e.message, "warn");
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML =
-      '<i class="ti ti-cloud-upload" aria-hidden="true"></i> Sincronizar agora';
   }
+  await carregarDadosPlanilha();
 }
 
 function desconectar() {
@@ -729,7 +806,8 @@ const DB = {
 let alunoAtivo = null,
   calAno = new Date().getFullYear(),
   calMes = new Date().getMonth(),
-  presencaSel = "";
+  presencaSel = "",
+  _aulaSheetRowCount = null; // nº de linhas de dados realmente na planilha
 
 function navTo(id, btn) {
   document
@@ -982,7 +1060,7 @@ function setPresenca(v, cls) {
   document.getElementById("conteudo-wrap").style.display =
     v === "Presente" || v === "Avaliação" ? "" : "none";
 }
-function salvarAula() {
+async function salvarAula() {
   const aluno = document.getElementById("f-aluno").value;
   const data = document.getElementById("f-data").value;
   if (!aluno) {
@@ -1001,24 +1079,60 @@ function salvarAula() {
     data,
     aluno,
     presenca: presencaSel,
-    motivo: document.getElementById("f-motivo").value,
-    tipo: document.getElementById("f-tipo").value,
-    metodo: document.getElementById("f-metodo").value,
+    motivo:   document.getElementById("f-motivo").value,
+    tipo:     document.getElementById("f-tipo").value,
+    metodo:   document.getElementById("f-metodo").value,
     conteudo: document.getElementById("f-conteudo").value,
-    hino: document.getElementById("f-hino").value,
-    licao: document.getElementById("f-licao").value,
-    video: document.getElementById("f-video").value,
-    obs: document.getElementById("f-obs").value,
+    hino:     document.getElementById("f-hino").value,
+    licao:    document.getElementById("f-licao").value,
+    video:    document.getElementById("f-video").value,
+    obs:      document.getElementById("f-obs").value,
   };
   DB.aulas.push(nova);
-  DB.pending.push(nova);
-  // Auto-sync se conectado e toggle ligado
-  if (
-    document.getElementById("toggle-autosync").classList.contains("on") &&
-    localStorage.getItem("mpm_file_id")
-  ) {
-    sincronizarAgora();
+
+  const token = graphToken || (await obterToken());
+  const fileId = excelFileId || localStorage.getItem("mpm_file_id");
+
+  if (token && fileId) {
+    try {
+      // Se ainda não sincronizou nesta sessão, lê o total atual da planilha
+      if (_aulaSheetRowCount === null) {
+        const rCount = await fetch(
+          `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Diário de Aulas')/usedRange`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        const dCount = await rCount.json();
+        _aulaSheetRowCount = Math.max(0, (dCount.values || []).length - 2);
+      }
+      _aulaSheetRowCount++;
+      const rowIdx = _aulaSheetRowCount + 2;
+      const row = [[
+        nova.data, nova.aluno, nova.presenca,
+        nova.motivo || "", nova.tipo || "", nova.metodo || "",
+        nova.conteudo || "", nova.hino || "", nova.licao || "",
+        nova.video || "", nova.obs || "",
+      ]];
+      await fetch(
+        `${GRAPH_BASE}/me/drive/items/${fileId}/workbook/worksheets('Diário de Aulas')/range(address='A${rowIdx}:K${rowIdx}')`,
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ values: row }),
+        },
+      );
+      addLog("ok", `Aula salva — ${aluno} (${data})`);
+      const agora = new Date().toLocaleString("pt-BR");
+      document.getElementById("ultimo-sync").textContent = `Última escrita: ${agora}`;
+    } catch (e) {
+      _aulaSheetRowCount = null; // reset para re-ler na próxima tentativa
+      addLog("err", "Falha ao salvar na planilha — ficou pendente: " + e.message);
+      DB.pending.push(nova);
+    }
+  } else {
+    DB.pending.push(nova);
+    addLog("warn", `Sem conexão — aula salva localmente (${DB.pending.length} pendente(s))`);
   }
+
   showToast("Aula registrada! ✓", "success");
   ["f-conteudo", "f-hino", "f-licao", "f-obs", "f-motivo", "f-video"].forEach(
     (id) => (document.getElementById(id).value = ""),
