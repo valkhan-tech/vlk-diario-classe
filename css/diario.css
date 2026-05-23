@@ -80,6 +80,11 @@ body {
     transition: transform .15s
 }
 
+.nav-item.bloqueado {
+    opacity: .35;
+    pointer-events: none
+}
+
 .nav-item.active {
     color: var(--p-med)
 }
@@ -92,7 +97,7 @@ body {
 /* PAGE */
 .page {
     display: none;
-    padding: 0 0 calc(var(--nav-h)+16px);
+    padding: 0 0 calc(var(--nav-h) + 40px + env(safe-area-inset-bottom, 0px));
     min-height: 100vh;
     animation: fadeIn .2s ease
 }

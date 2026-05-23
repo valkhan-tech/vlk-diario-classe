@@ -10,6 +10,8 @@ const SCOPES = ["Files.ReadWrite", "User.Read"];
 const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
 const DEFAULT_CLIENT_ID = "1e727060-da1f-4cc2-bb6c-9a77aa3132cc";
 
+let appConectado = false;
+
 function getClientId() {
   return localStorage.getItem("mpm_client_id") || DEFAULT_CLIENT_ID;
 }
@@ -69,6 +71,8 @@ async function iniciarLogin() {
         name: result.account.name,
       }),
     );
+    appConectado = true;
+    atualizarNavBloqueio();
     setStatus("connected");
     addLog("ok", `Login: ${result.account.username}`);
     showToast("Conectado com sucesso! ✓", "success");
@@ -247,7 +251,7 @@ async function carregarDadosPlanilha() {
     );
     if (resAlunos.ok) {
       const dAlunos = await resAlunos.json();
-      const rowsAlunos = (dAlunos.values || []).slice(1);
+      const rowsAlunos = (dAlunos.values || []).slice(2); // pula 2 linhas de cabeçalho
       const parsed = rowsAlunos
         .filter((r) => r[1])
         .map((r, i) => ({
@@ -366,6 +370,10 @@ function desconectar() {
   document.getElementById("btn-desconectar-wrap").style.display = "none";
   atualizarPassos(1);
   atualizarSyncIndicator(false);
+  appConectado = false;
+  DB.alunos = [];
+  DB.aulas = [];
+  atualizarNavBloqueio();
   showToast("Conta desconectada");
 }
 
@@ -444,6 +452,8 @@ function restaurarEstado() {
   const acc = localStorage.getItem("mpm_account");
   document.getElementById("input-clientid").value = getClientId();
   if (acc) {
+    appConectado = true;
+    atualizarNavBloqueio();
     setStatus("connected");
     document.getElementById("secao-arquivo").style.display = "";
     atualizarSyncIndicator(true);
@@ -469,322 +479,8 @@ function restaurarEstado() {
 // ── DADOS ─────────────────────────────────────────────────────────────────
 const DB = {
   pending: [],
-  alunos: [
-    {
-      id: 1,
-      nome: "Ana Beatriz Ferreira",
-      nasc: "2010-03-15",
-      instrumento: "Piano",
-      horario: "Sábado 09:00",
-      mensalidade: 180,
-      inicio: "2025-11-01",
-      estagio: "Básico",
-      teoria: 25,
-      metodo: "Faber Vol.1",
-      pagina: "p. 6",
-      tecnica: { m1: "Concluído", m2: "Em andamento", ped: "Não iniciado" },
-      hinos: 2,
-      listahinos: "Grande é o Senhor, Ó Senhor (minha rocha)",
-      culto: {
-        jovens: "Em preparação",
-        adulto: "Não avaliado",
-        ofic: "Não avaliado",
-      },
-      obs: "Evolução constante. Coordenação das duas mãos em desenvolvimento.",
-    },
-    {
-      id: 2,
-      nome: "Lucas Mendes Oliveira",
-      nasc: "2008-07-22",
-      instrumento: "Piano e Órgão",
-      horario: "Quarta 17:00",
-      mensalidade: 200,
-      inicio: "2025-07-01",
-      estagio: "Apto — Culto Jovens",
-      teoria: 70,
-      metodo: "Faber Vol.2",
-      pagina: "p. 18",
-      tecnica: { m1: "Concluído", m2: "Concluído", ped: "Em andamento" },
-      hinos: 5,
-      listahinos:
-        "Way Maker, Good Good Father, Shout to the Lord, 10.000 Reasons, Oceans",
-      culto: { jovens: "Apto", adulto: "Em preparação", ofic: "Não avaliado" },
-      obs: "Aprovado culto jovens. Pedaleira em progresso para culto adulto.",
-    },
-    {
-      id: 3,
-      nome: "Fernanda Costa",
-      nasc: "1990-01-30",
-      instrumento: "Piano",
-      horario: "Terça 19:00",
-      mensalidade: 220,
-      inicio: "2024-11-01",
-      estagio: "Intermediário",
-      teoria: 60,
-      metodo: "Czerny Op.599",
-      pagina: "n. 8",
-      tecnica: { m1: "Concluído", m2: "Concluído", ped: "Não iniciado" },
-      hinos: 4,
-      listahinos:
-        "Quão Grande és Tu, 10.000 Reasons, Ainda Que a Figueira, How Great is Our God",
-      culto: {
-        jovens: "Em preparação",
-        adulto: "Em preparação",
-        ofic: "Não avaliado",
-      },
-      obs: "Pronta para avaliação de culto. Foco em performance e fluidez.",
-    },
-    {
-      id: 4,
-      nome: "Isabela Rocha Santos",
-      nasc: "2018-09-05",
-      instrumento: "Flauta",
-      horario: "Sábado 10:00",
-      mensalidade: 150,
-      inicio: "2026-01-01",
-      estagio: "Iniciante",
-      teoria: 10,
-      metodo: "Apostila própria — Prática",
-      pagina: "Módulo 2",
-      tecnica: { m1: "Em andamento", m2: "Não iniciado", ped: "Não iniciado" },
-      hinos: 0,
-      listahinos: "—",
-      culto: {
-        jovens: "Não avaliado",
-        adulto: "Não avaliado",
-        ofic: "Não avaliado",
-      },
-      obs: "Musicalização em andamento. Foco em percepção e técnica básica de flauta.",
-    },
-    {
-      id: 5,
-      nome: "Rafael Almeida",
-      nasc: "2001-04-18",
-      instrumento: "Piano e Órgão",
-      horario: "Quinta 18:30",
-      mensalidade: 240,
-      inicio: "2025-05-01",
-      estagio: "Apto — Culto Adulto",
-      teoria: 88,
-      metodo: "Berens — 100 Estudos",
-      pagina: "Est. 28",
-      tecnica: { m1: "Concluído", m2: "Concluído", ped: "Concluído" },
-      hinos: 8,
-      listahinos:
-        "Quão Grande és Tu, How Great is Our God, Este é o Dia, Aleluia, Oceans, Way Maker, Ainda Que a Figueira, 10.000 Reasons",
-      culto: { jovens: "Apto", adulto: "Apto", ofic: "Em preparação" },
-      obs: "Candidato à oficialização. Refinamento técnico em andamento.",
-    },
-  ],
-  aulas: [
-    {
-      data: "2025-11-08",
-      aluno: "Ana Beatriz Ferreira",
-      presenca: "Presente",
-      tipo: "Teórica",
-      conteudo: "Introdução às notas musicais, pauta e claves.",
-      hino: "",
-      licao: "Copiar as notas do caderno",
-    },
-    {
-      data: "2025-11-15",
-      aluno: "Ana Beatriz Ferreira",
-      presenca: "Presente",
-      tipo: "Prática",
-      conteudo: "Exercícios de posição de mão. Mão direita.",
-      hino: "Ó Senhor (minha rocha)",
-      licao: "Praticar Faber p.4",
-    },
-    {
-      data: "2025-11-22",
-      aluno: "Ana Beatriz Ferreira",
-      presenca: "Falta — Aluno (justificada)",
-      tipo: "",
-      conteudo: "",
-      hino: "",
-      licao: "",
-    },
-    {
-      data: "2025-11-25",
-      aluno: "Ana Beatriz Ferreira",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Revisão mão direita + introdução mão esquerda.",
-      hino: "Grande é o Senhor",
-      licao: "Praticar as duas mãos separadas",
-    },
-    {
-      data: "2025-12-06",
-      aluno: "Ana Beatriz Ferreira",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Duas mãos juntas — compassos 1-4.",
-      hino: "Grande é o Senhor",
-      licao: "Compassos 1-4 metrônomo 60bpm",
-    },
-    {
-      data: "2025-07-02",
-      aluno: "Lucas Mendes Oliveira",
-      presenca: "Presente",
-      tipo: "Teórica",
-      conteudo: "Revisão geral: figuras, compassos.",
-      hino: "",
-      licao: "Exercícios teoria p.8-10",
-    },
-    {
-      data: "2025-07-09",
-      aluno: "Lucas Mendes Oliveira",
-      presenca: "Presente",
-      tipo: "Prática",
-      conteudo: "Faber Vol.2 p.12 — oitavas e arpejo.",
-      hino: "Shout to the Lord",
-      licao: "Faber p.12-14",
-    },
-    {
-      data: "2025-08-06",
-      aluno: "Lucas Mendes Oliveira",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Duas mãos em gospel. Introdução à pedaleira.",
-      hino: "Way Maker",
-      licao: "Pedaleira sozinha",
-    },
-    {
-      data: "2025-09-03",
-      aluno: "Lucas Mendes Oliveira",
-      presenca: "Falta — Professora",
-      tipo: "",
-      conteudo: "",
-      hino: "",
-      licao: "",
-    },
-    {
-      data: "2025-10-01",
-      aluno: "Lucas Mendes Oliveira",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Repertório culto jovens.",
-      hino: "Way Maker + Good Good Father",
-      licao: "Gravar vídeo Way Maker",
-    },
-    {
-      data: "2024-11-05",
-      aluno: "Fernanda Costa",
-      presenca: "Presente",
-      tipo: "Teórica",
-      conteudo: "Retomada: leitura de partituras.",
-      hino: "",
-      licao: "Leitura p.1-5",
-    },
-    {
-      data: "2024-12-10",
-      aluno: "Fernanda Costa",
-      presenca: "Presente",
-      tipo: "Prática",
-      conteudo: "Czerny Op.599 n.1 e n.2.",
-      hino: "Quão Grande és Tu",
-      licao: "Czerny n.1-2 10min/dia",
-    },
-    {
-      data: "2025-02-04",
-      aluno: "Fernanda Costa",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Duas mãos Czerny n.5.",
-      hino: "10.000 Reasons",
-      licao: "Czerny n.5 + cifra",
-    },
-    {
-      data: "2025-04-01",
-      aluno: "Fernanda Costa",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Peças completas duas mãos.",
-      hino: "Quão Grande és Tu",
-      licao: "Czerny n.8 fluente",
-    },
-    {
-      data: "2025-05-06",
-      aluno: "Fernanda Costa",
-      presenca: "Falta — Aluno (sem aviso)",
-      tipo: "",
-      conteudo: "",
-      hino: "",
-      licao: "",
-    },
-    {
-      data: "2026-01-10",
-      aluno: "Isabela Rocha Santos",
-      presenca: "Presente",
-      tipo: "Musicalização",
-      conteudo: "Reconhecimento de sons. Imitação rítmica.",
-      hino: "",
-      licao: "Ouvir sons em casa",
-    },
-    {
-      data: "2026-01-17",
-      aluno: "Isabela Rocha Santos",
-      presenca: "Presente",
-      tipo: "Musicalização",
-      conteudo: "Introdução à flauta — postura e sopro.",
-      hino: "",
-      licao: "Soprar flauta 5min/dia",
-    },
-    {
-      data: "2026-02-07",
-      aluno: "Isabela Rocha Santos",
-      presenca: "Presente",
-      tipo: "Musicalização",
-      conteudo: "Notas Sol, Fá, Mi na flauta.",
-      hino: "",
-      licao: "Escala de Dó",
-    },
-    {
-      data: "2026-03-07",
-      aluno: "Isabela Rocha Santos",
-      presenca: "Falta — Aluno (justificada)",
-      tipo: "",
-      conteudo: "",
-      hino: "",
-      licao: "",
-    },
-    {
-      data: "2025-05-07",
-      aluno: "Rafael Almeida",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Hanon n.1-5. Revisão gospel.",
-      hino: "Ainda Que a Figueira",
-      licao: "Hanon n.6-7",
-    },
-    {
-      data: "2025-07-02",
-      aluno: "Rafael Almeida",
-      presenca: "Presente",
-      tipo: "Prática",
-      conteudo: "Berens 20-25. Órgão com pedaleira.",
-      hino: "How Great is Our God",
-      licao: "Berens 26 + pedaleira",
-    },
-    {
-      data: "2025-09-03",
-      aluno: "Rafael Almeida",
-      presenca: "Avaliação",
-      tipo: "Avaliação",
-      conteudo: "Avaliação formal: 3 hinos completos.",
-      hino: "Quão Grande és Tu + How Great + Este é o Dia",
-      licao: "Set 4 hinos",
-    },
-    {
-      data: "2025-11-05",
-      aluno: "Rafael Almeida",
-      presenca: "Presente",
-      tipo: "Mista",
-      conteudo: "Refinamento técnico. Preparação oficialização.",
-      hino: "Aleluia + Oceans",
-      licao: "Repertório oficialização",
-    },
-  ],
+  alunos: [],
+  aulas: [],
   listas: {
     metodos: [
       "Faber Vol.1",
@@ -809,7 +505,19 @@ let alunoAtivo = null,
   presencaSel = "",
   _aulaSheetRowCount = null; // nº de linhas de dados realmente na planilha
 
+function atualizarNavBloqueio() {
+  document.querySelectorAll(".nav-item").forEach((btn, i) => {
+    btn.classList.toggle("bloqueado", !appConectado && i < 4);
+  });
+}
+
 function navTo(id, btn) {
+  if (!appConectado && id !== "config") {
+    showToast("Conecte ao OneDrive primeiro", "warn");
+    const configBtn = document.querySelectorAll(".nav-item")[4];
+    navTo("config", configBtn);
+    return;
+  }
   document
     .querySelectorAll(".page")
     .forEach((p) => p.classList.remove("active"));
@@ -1287,7 +995,16 @@ function showToast(msg, type = "success") {
 
 // INIT
 restaurarEstado();
-renderHome();
-renderListaAlunos(DB.alunos);
-initLancamento();
-renderCalendario();
+atualizarNavBloqueio();
+if (!appConectado) {
+  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+  document.getElementById("page-config").classList.add("active");
+  document.querySelectorAll(".nav-item").forEach((b, i) => {
+    b.classList.toggle("active", i === 4);
+  });
+} else {
+  renderHome();
+  renderListaAlunos(DB.alunos);
+  initLancamento();
+  renderCalendario();
+}
