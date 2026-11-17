@@ -42,6 +42,16 @@ final class CobrancaServico
         return ['dados' => $itens, 'resumo' => self::resumir($itens)];
     }
 
+    /**
+     * Cobranças com competência entre $de e $ate (AAAA-MM), já apresentadas.
+     *
+     * @return list<array<string,mixed>>
+     */
+    public function listarPeriodo(string $de, string $ate): array
+    {
+        return array_map($this->apresentar(...), $this->cobrancas->listar(['de' => $de . '-01', 'ate' => $ate . '-01']));
+    }
+
     /** @return array<string,mixed> */
     public function obter(int $id): array
     {

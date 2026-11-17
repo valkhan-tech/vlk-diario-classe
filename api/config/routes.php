@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\AlunosController;
 use App\Http\Controllers\AulasController;
 use App\Http\Controllers\CobrancasController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\ListasController;
@@ -70,6 +71,9 @@ return static function (App $app): void {
                 $op->post('/cobrancas/{id:[0-9]+}/pagamentos', CobrancasController::class . ':pagar');
                 $op->delete('/pagamentos/{id:[0-9]+}', CobrancasController::class . ':estornar');
                 $op->get('/alunos/{id:[0-9]+}/ficha-financeira', CobrancasController::class . ':fichaFinanceira');
+
+                $op->get('/dashboards/financeiro', DashboardController::class . ':financeiro');
+                $op->get('/exportacoes/{tipo}.xlsx', DashboardController::class . ':exportar');
                 // {{OPERACAO}}
             })->add(Perfis::operacao());
         })->add(Autenticacao::class);

@@ -155,3 +155,12 @@ export interface FichaFinanceira {
   cobrancas: Cobranca[];
   resumo: ResumoFinanceiro;
 }
+
+export interface DashboardFinanceiro {
+  periodo: { de: string; ate: string };
+  kpis: { previsto: number; recebido: number; aberto: number; atrasado: number; inadimplencia: number; cobrancas: number; por_estado: Record<EstadoCobranca, number> };
+  por_mes: { competencia: string; previsto: number; recebido: number; aberto: number; atrasado: number }[];
+  por_forma: { forma: string; quantidade: number; valor: number }[];
+  envelhecimento: { faixa: string; quantidade: number; valor: number }[];
+  ranking: { aluno_id: number; aluno: string; cobrancas: number; saldo: number; maior_atraso: number }[];
+}
