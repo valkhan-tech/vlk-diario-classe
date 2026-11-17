@@ -21,7 +21,7 @@ final class Config
             return $this->sobrescritas[$chave];
         }
         $valor = $_ENV[$chave] ?? $_SERVER[$chave] ?? getenv($chave);
-        if ($valor === false || $valor === null || $valor === '') {
+        if ($valor === false || $valor === '') {
             return $padrao;
         }
         return (string) $valor;

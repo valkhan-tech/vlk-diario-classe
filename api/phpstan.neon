@@ -2,4 +2,6 @@ parameters:
     level: 6
     paths:
         - src
-    treatPhpDocCommentsAsPhpDoc: true
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics

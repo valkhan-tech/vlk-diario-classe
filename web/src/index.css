@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --color-marca-50: #eef2ff;
+  --color-marca-100: #e0e7ff;
+  --color-marca-500: #6366f1;
+  --color-marca-600: #4f46e5;
+  --color-marca-700: #4338ca;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* Foco visível em tudo que é interativo */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-marca-500);
+  outline-offset: 2px;
+}
+
+/* Alvos de toque confortáveis em tablet */
+button, [role="button"], select, input:not([type="checkbox"]):not([type="radio"]) {
+  min-height: 44px;
+}
+
+@media print {
+  .nao-imprimir {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .imprimir-pagina {
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
