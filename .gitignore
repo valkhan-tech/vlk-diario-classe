@@ -1,0 +1,23 @@
+# Saída do build do React (public/ guarda só api.php, .htaccess e dev-router.php versionados)
+/public/index.html
+/public/assets/
+/public/*.webmanifest
+/web/node_modules/
+/web/dist/
+
+# API
+/api/vendor/
+/api/.env
+/api/storage/openapi.json
+/api/storage/logs/*
+!/api/storage/logs/.gitkeep
+/api/.phpunit.cache/
+/api/.phpunit.result.cache
+
+# Pacotes de entrega
+/release/
+
+# Sistema/IDE
+.DS_Store
+Thumbs.db
+.idea/
