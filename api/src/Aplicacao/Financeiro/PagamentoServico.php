@@ -21,7 +21,7 @@ final class PagamentoServico
     }
 
     /**
-     * Baixa total ou parcial. Não aceita valor acima do saldo.
+     * Baixa total ou parcial. Valor acima do saldo é ACEITO: o excedente fica registrado na cobrança (campo excedente) e a tela alerta.
      *
      * @param array{valor:float|int|string,data_pagamento:string,forma_pagamento_id?:?int,observacoes?:?string} $dados
      * @return array<string,mixed> cobrança atualizada
@@ -29,15 +29,10 @@ final class PagamentoServico
     public function registrar(int $cobrancaId, array $dados): array
     {
         $this->servico->exigirAberta($cobrancaId);
-        $cobranca = $this->cobrancas->buscarComPago($cobrancaId);
-        $atual = $this->servico->apresentar($cobranca ?? []);
         $valor = Dinheiro::centavos($dados['valor']);
 
         if ($valor <= 0) {
             throw new ErroValidacao(['valor' => 'Informe um valor maior que zero.']);
-        }
-        if ($valor > Dinheiro::centavos($atual['saldo'])) {
-            throw new ErroValidacao(['valor' => 'O valor é maior que o saldo da cobrança.']);
         }
         if (!empty($dados['forma_pagamento_id']) && $this->listas->buscarDoTipo((int) $dados['forma_pagamento_id'], 'forma_pagamento') === null) {
             throw new ErroValidacao(['forma_pagamento_id' => 'Forma de pagamento inválida.']);

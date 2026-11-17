@@ -55,7 +55,7 @@ function VisaoDoMes() {
                 <Td>{moeda(c.valor_liquido)}</Td>
                 <Td>{moeda(c.pago)}</Td>
                 <Td>{moeda(c.saldo)}</Td>
-                <Td><BadgeEstado estado={c.estado} /></Td>
+                <Td><BadgeEstado estado={c.estado} excedente={c.excedente} /></Td>
                 <Td>
                   <div className="flex gap-1">
                     {c.saldo > 0 && c.situacao === 'aberta' && <Botao variante="fantasma" onClick={() => setPagar(c)}>Receber</Botao>}

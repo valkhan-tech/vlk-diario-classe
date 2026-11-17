@@ -119,9 +119,6 @@ final class FinanceiroTest extends TestCaseApi
         $this->assertSame('parcial', $parcial['estado']);
         $this->assertSame(100.0, $parcial['saldo']);
 
-        $acima = $this->requisicao('POST', "/api/v1/cobrancas/{$id}/pagamentos", ['valor' => 100.01, 'data_pagamento' => '2026-11-17'], $c);
-        $this->assertSame(422, $acima->getStatusCode(), 'não aceita valor acima do saldo');
-
         $p2 = $this->corpo($this->requisicao('POST', "/api/v1/cobrancas/{$id}/pagamentos", ['valor' => 100, 'data_pagamento' => '2026-11-18'], $c))['dados'];
         $this->assertSame('pago', $p2['estado']);
         $this->assertCount(2, $p2['pagamentos']);
@@ -130,6 +127,32 @@ final class FinanceiroTest extends TestCaseApi
         $this->assertSame('parcial', $estorno['estado'], 'estorno reabre a cobrança');
         $this->assertSame(2, (int) $this->db->escalar("SELECT COUNT(*) FROM sys_log WHERE tabela = 'pagamentos' AND operacao = 'INSERT'"));
         $this->assertSame(1, (int) $this->db->escalar("SELECT COUNT(*) FROM sys_log WHERE tabela = 'pagamentos' AND operacao = 'DELETE'"));
+    }
+
+    public function test_pagamento_acima_do_saldo_e_aceito_e_o_excedente_fica_registrado(): void
+    {
+        $c = $this->cookies();
+        $this->aluno($c, ['dia_vencimento' => 25]);
+        $this->gerar($c, '2026-11');
+        $id = (int) $this->db->escalar('SELECT id FROM cobrancas');
+        $this->requisicao('POST', "/api/v1/cobrancas/{$id}/pagamentos", ['valor' => 100, 'data_pagamento' => '2026-11-17'], $c);
+
+        $r = $this->requisicao('POST', "/api/v1/cobrancas/{$id}/pagamentos", ['valor' => 80, 'data_pagamento' => '2026-11-18'], $c);
+
+        $this->assertSame(201, $r->getStatusCode(), (string) $r->getBody());
+        $cobranca = $this->corpo($r)['dados'];
+        $this->assertSame('pago', $cobranca['estado']);
+        $this->assertSame(180.0, $cobranca['pago']);
+        $this->assertSame(0.0, $cobranca['saldo']);
+        $this->assertSame(30.0, $cobranca['excedente'], '150 cobrados, 180 pagos');
+        $lista = $this->corpo($this->requisicao('GET', '/api/v1/cobrancas?competencia=2026-11', null, $c));
+        $this->assertSame(30.0, $lista['resumo']['excedente']);
+        $this->assertSame(150.0, $lista['resumo']['previsto'], 'o excedente não aumenta o previsto');
+
+        $estorno = $this->corpo($this->requisicao('DELETE', '/api/v1/pagamentos/' . $cobranca['pagamentos'][1]['id'], null, $c))['dados'];
+        $this->assertSame(0.0, $estorno['excedente']);
+        $this->assertSame(50.0, $estorno['saldo']);
+        $this->assertSame(422, $this->requisicao('POST', "/api/v1/cobrancas/{$id}/pagamentos", ['valor' => 0, 'data_pagamento' => '2026-11-18'], $c)->getStatusCode(), 'valor zero continua inválido');
     }
 
     public function test_cobranca_vencida_sem_quitacao_fica_atrasada_e_deixa_de_estar_ao_pagar(): void

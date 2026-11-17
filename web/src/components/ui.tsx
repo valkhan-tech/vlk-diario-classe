@@ -99,11 +99,12 @@ export function Titulo({ children, acoes }: { children: ReactNode; acoes?: React
   );
 }
 
-export function Aviso({ tipo = 'erro', children }: { tipo?: 'erro' | 'sucesso' | 'info'; children: ReactNode }) {
+export function Aviso({ tipo = 'erro', children }: { tipo?: 'erro' | 'sucesso' | 'info' | 'alerta'; children: ReactNode }) {
   const estilos = {
     erro: 'border-red-200 bg-red-50 text-red-800',
     sucesso: 'border-emerald-200 bg-emerald-50 text-emerald-800',
     info: 'border-sky-200 bg-sky-50 text-sky-800',
+    alerta: 'border-amber-300 bg-amber-50 text-amber-900',
   }[tipo];
   return (
     <div role={tipo === 'erro' ? 'alert' : 'status'} className={cx('rounded-lg border px-3 py-2 text-sm', estilos)}>

@@ -69,7 +69,7 @@ Versões instaladas (as mais recentes disponíveis hoje): React 19, React Router
 ## 6. Pontos para você decidir / conferir
 
 1. **Cálculo do estágio:** implementado como combinado — nível do método (maior entre Iniciados/Concluídos), progresso geral por média ponderada. Se preferir o nível do método *atual*, muda uma função (`EstagioCalculado::de`).
-2. **Limite de pagamento:** a API recusa baixa acima do saldo (a suposição do escopo era permitir parcial; excesso não foi definido).
+2. **Pagamento acima do saldo:** aceito (decisão de 17/11/2026). A tela alerta antes de confirmar e a cobrança mostra "+R$ x a mais"; a API devolve o campo `excedente` (cobrança e resumo). O excedente não aumenta o previsto, não gera saldo negativo e some ao estornar o pagamento.
 3. **Seeder fora do pacote:** `bin/seed.php` e `src/Infra/Seed` não vão para produção.
 4. **Responsável (futuro):** o perfil existe e todas as rotas atuais o recusam; as telas dos pais ficam para a próxima fase.
 5. Os `.xlsx` do app antigo continuam em `legacy/`; o `README.md` da raiz descreve a nova estrutura.

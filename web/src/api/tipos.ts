@@ -133,6 +133,7 @@ export interface Cobranca {
   valor_liquido: number;
   pago: number;
   saldo: number;
+  excedente: number;
   vencimento: string;
   dias_atraso: number;
   situacao: 'aberta' | 'cancelada';
@@ -147,6 +148,7 @@ export interface ResumoFinanceiro {
   recebido: number;
   aberto: number;
   atrasado: number;
+  excedente?: number;
   por_estado: Record<EstadoCobranca, number>;
 }
 

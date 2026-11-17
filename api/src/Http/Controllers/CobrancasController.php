@@ -85,7 +85,8 @@ final class CobrancasController
 
     #[OA\Post(path: '/api/v1/cobrancas/{id}/pagamentos', summary: 'Registrar pagamento (baixa total ou parcial)', tags: ['Financeiro'],
         parameters: [new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
-        responses: [new OA\Response(response: 201, description: 'Cobrança atualizada'), new OA\Response(response: 422, description: 'Valor acima do saldo')])]
+        description: 'Valor acima do saldo é aceito: o excedente aparece no campo excedente da cobrança.',
+        responses: [new OA\Response(response: 201, description: 'Cobrança atualizada (com excedente, se houver)'), new OA\Response(response: 422, description: 'Dados inválidos')])]
     public function pagar(Request $request, Response $response, array $args): Response
     {
         $dados = Validador::validar(Validador::corpo($request->getParsedBody()), [

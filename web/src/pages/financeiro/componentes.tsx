@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { useLista } from '../../api/hooks';
 import { ESTADO_COBRANCA, TOM_ESTADO, type Cobranca, type EstadoCobranca, type ResumoFinanceiro } from '../../api/tipos';
@@ -9,7 +9,14 @@ import { AreaTexto, Aviso, Badge, Botao, Campo, Cartao, Modal, Selecao } from '.
 import { api, mensagemDeErro } from '../../lib/api';
 import { hoje, moeda } from '../../lib/format';
 
-export const BadgeEstado = ({ estado }: { estado: EstadoCobranca }) => <Badge tom={TOM_ESTADO[estado]}>{ESTADO_COBRANCA[estado]}</Badge>;
+export const BadgeEstado = ({ estado, excedente = 0 }: { estado: EstadoCobranca; excedente?: number }) => (
+  <>
+    <Badge tom={TOM_ESTADO[estado]}>{ESTADO_COBRANCA[estado]}</Badge>
+    {excedente > 0 && (
+      <span className="ml-1 text-xs font-medium text-amber-700" title="Pago a mais que o valor da cobrança">+{moeda(excedente)} a mais</span>
+    )}
+  </>
+);
 
 /** Invalida tudo que depende de cobranças/pagamentos. */
 export function useInvalidarFinanceiro() {
@@ -52,10 +59,12 @@ export function ModalPagamento({ cobranca, aoFechar }: { cobranca: Cobranca | nu
   const formas = useLista('forma_pagamento');
   const invalidar = useInvalidarFinanceiro();
   const [erro, setErro] = useState<string | null>(null);
-  const { register, handleSubmit, formState, reset } = useForm<EntradaPagamento, unknown, SaidaPagamento>({
+  const { register, handleSubmit, formState, reset, control } = useForm<EntradaPagamento, unknown, SaidaPagamento>({
     resolver: zodResolver(esquemaPagamento),
     values: cobranca ? { valor: cobranca.saldo, data_pagamento: hoje(), forma_pagamento_id: '', observacoes: '' } : undefined,
   });
+  const digitado = Number(useWatch({ control, name: 'valor' }) ?? 0);
+  const excesso = cobranca ? Math.round((digitado - cobranca.saldo) * 100) / 100 : 0;
   const salvar = useMutation({
     mutationFn: (d: SaidaPagamento) => api.post(`/cobrancas/${cobranca!.id}/pagamentos`, d),
     onSuccess: () => { invalidar(); reset(); setErro(null); aoFechar(); },
@@ -69,8 +78,14 @@ export function ModalPagamento({ cobranca, aoFechar }: { cobranca: Cobranca | nu
             <b>{cobranca.aluno}</b> — competência {cobranca.competencia} · saldo {moeda(cobranca.saldo)}
           </p>
           {erro && <Aviso>{erro}</Aviso>}
-          <Campo rotulo="Valor pago (R$)" type="number" step="0.01" min="0.01" max={cobranca.saldo}
-            dica="Pagamento parcial é permitido; não pode passar do saldo." erro={formState.errors.valor?.message} {...register('valor')} />
+          <Campo rotulo="Valor pago (R$)" type="number" step="0.01" min="0.01"
+            dica="Pagamento parcial é permitido; valor acima do saldo também é aceito (com alerta)." erro={formState.errors.valor?.message} {...register('valor')} />
+          {excesso > 0 && (
+            <Aviso tipo="alerta">
+              <b>Atenção:</b> o valor informado é {moeda(excesso)} maior que o saldo ({moeda(cobranca.saldo)}). O pagamento será aceito e o
+              excedente de {moeda(excesso)} ficará registrado nesta cobrança.
+            </Aviso>
+          )}
           <Campo rotulo="Data do pagamento" type="date" erro={formState.errors.data_pagamento?.message} {...register('data_pagamento')} />
           <Selecao rotulo="Forma de pagamento" {...register('forma_pagamento_id')}>
             <option value="">—</option>

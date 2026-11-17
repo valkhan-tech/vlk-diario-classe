@@ -260,7 +260,7 @@ Base `/api/v1`, JSON, erros `problem+json`, toda rota autenticada (exceto login/
 | 3 | Aula = **um aluno por registro** (sem aula coletiva), como no app antigo |
 | 4 | Mantidos os **3 campos de técnica** do legado (m1, m2, ped) em `progresso_aluno`; descartados: “% de teoria”, “nº de hinos”, “lista de hinos” (substituídos por métodos/lições) e “Atualizar progresso?” (a avaliação passa a ser feita na própria tela de aula) |
 | 5 | **Desconto** é um valor em R$ na cobrança; **sem** multa/juros |
-| 6 | Baixa **parcial** é permitida; estorno = exclusão lógica do pagamento |
+| 6 | Baixa **parcial** é permitida; **pagamento acima do saldo também é aceito** (a tela alerta e o excedente fica registrado na cobrança); estorno = exclusão lógica do pagamento |
 | 7 | O 1º administrador entra por **migração de semente** com senha temporária e troca obrigatória (hospedagem compartilhada pode não ter SSH) |
 | 8 | Tabelas técnicas têm **exclusão física** pelo cron; `sys_log` nunca é expurgado nesta fase |
 | 9 | Entrada em uso real **após a E3** |

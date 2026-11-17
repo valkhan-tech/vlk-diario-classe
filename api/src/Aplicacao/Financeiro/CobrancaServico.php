@@ -130,6 +130,7 @@ final class CobrancaServico
             'valor_liquido' => Dinheiro::numero($liquido),
             'pago' => Dinheiro::numero($pago),
             'saldo' => Dinheiro::numero(max(0, $liquido - $pago)),
+            'excedente' => Dinheiro::numero(max(0, $pago - $liquido)),
             'vencimento' => $c['vencimento'],
             'dias_atraso' => $estado === EstadoCobranca::ATRASADO ? (int) $vencimento->diff($hoje)->days : 0,
             'situacao' => $c['situacao'],
@@ -161,7 +162,7 @@ final class CobrancaServico
      */
     public static function resumir(array $itens): array
     {
-        $r = ['quantidade' => count($itens), 'previsto' => 0.0, 'recebido' => 0.0, 'aberto' => 0.0, 'atrasado' => 0.0, 'por_estado' => array_fill_keys(EstadoCobranca::todos(), 0)];
+        $r = ['quantidade' => count($itens), 'previsto' => 0.0, 'recebido' => 0.0, 'aberto' => 0.0, 'atrasado' => 0.0, 'excedente' => 0.0, 'por_estado' => array_fill_keys(EstadoCobranca::todos(), 0)];
         foreach ($itens as $c) {
             $r['por_estado'][$c['estado']]++;
             if ($c['estado'] === EstadoCobranca::CANCELADA) {
@@ -170,11 +171,12 @@ final class CobrancaServico
             $r['previsto'] += $c['valor_liquido'];
             $r['recebido'] += $c['pago'];
             $r['aberto'] += $c['saldo'];
+            $r['excedente'] += $c['excedente'];
             if ($c['estado'] === EstadoCobranca::ATRASADO) {
                 $r['atrasado'] += $c['saldo'];
             }
         }
-        foreach (['previsto', 'recebido', 'aberto', 'atrasado'] as $k) {
+        foreach (['previsto', 'recebido', 'aberto', 'atrasado', 'excedente'] as $k) {
             $r[$k] = round($r[$k], 2);
         }
         return $r;
