@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Aplicacao\Cadastros\AlunoServico;
+use App\Aplicacao\Progresso\ProgressoServico;
 use App\Dominio\Alunos\SituacaoAluno;
 use App\Http\Resposta;
 use App\Http\Validador;
@@ -15,7 +16,7 @@ use Respect\Validation\Validator as v;
 
 final class AlunosController
 {
-    public function __construct(private readonly AlunoServico $alunos)
+    public function __construct(private readonly AlunoServico $alunos, private readonly ProgressoServico $progresso)
     {
     }
 
@@ -37,7 +38,15 @@ final class AlunosController
             'situacao' => in_array($p['situacao'] ?? null, SituacaoAluno::valores(), true) ? $p['situacao'] : null,
             'incluir_encerrados' => ($p['incluir_encerrados'] ?? '') === '1',
         ];
-        return Resposta::json($response, ['dados' => $this->alunos->listar($filtros)]);
+        $lista = $this->alunos->listar($filtros);
+        $resumos = $this->progresso->resumoDosAlunos();
+        foreach ($lista as &$a) {
+            $r = $resumos[$a['id']] ?? null;
+            $a['estagio'] = $r['estagio'] ?? ['valor' => null, 'origem' => null, 'rotulo' => null];
+            $a['progresso_geral'] = $r['progresso_geral'] ?? null;
+        }
+        unset($a);
+        return Resposta::json($response, ['dados' => $lista]);
     }
 
     #[OA\Get(path: '/api/v1/alunos/{id}', summary: 'Obter aluno', tags: ['Alunos'],

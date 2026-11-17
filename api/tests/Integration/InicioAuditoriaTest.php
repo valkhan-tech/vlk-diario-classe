@@ -53,6 +53,46 @@ final class InicioAuditoriaTest extends TestCaseApi
         $this->assertSame(2, $estagios['sem_estagio']);
     }
 
+    public function test_painel_traz_numeros_do_mes_aniversariantes_e_notificacoes(): void
+    {
+        // hoje (relógio fixo) = 2026-11-17
+        $this->aluno(['nome' => 'Aniversário Hoje', 'data_nascimento' => '2010-11-17', 'dia_semana' => 2, 'hora_aula' => '09:00']);
+        $this->aluno(['nome' => 'Aniversário em 3 dias', 'data_nascimento' => '1990-11-20']);
+        $this->aluno(['nome' => 'Aniversário distante', 'data_nascimento' => '1990-12-30']);
+        $ana = $this->aluno(['nome' => 'Ana Concluída']);
+        $m = $this->corpo($this->requisicao('POST', '/api/v1/metodos', ['nome' => 'Mini', 'nivel' => 'basico'], $this->prof))['dados'];
+        $this->requisicao('POST', "/api/v1/metodos/{$m['id']}/licoes/lote", ['texto' => "A
+B"], $this->prof);
+        $licoes = $this->corpo($this->requisicao('GET', "/api/v1/metodos/{$m['id']}/licoes", null, $this->prof))['dados'];
+        $this->requisicao('POST', "/api/v1/alunos/{$ana['id']}/avaliacoes", ['avaliacoes' => array_map(static fn (array $l): array => ['licao_id' => $l['id'], 'status' => 'aprovado'], $licoes)], $this->prof);
+        $this->requisicao('POST', '/api/v1/cobrancas/gerar', ['competencia' => '2026-11'], $this->prof);
+
+        $p = $this->corpo($this->requisicao('GET', '/api/v1/inicio', null, $this->prof))['dados'];
+
+        $this->assertSame(['Aniversário Hoje', 'Aniversário em 3 dias'], array_column($p['aniversariantes'], 'aluno'));
+        $this->assertTrue($p['aniversariantes'][0]['hoje']);
+        $this->assertSame(16, $p['aniversariantes'][0]['idade']);
+        $this->assertSame(1, $p['kpis']['conclusoes_pendentes']);
+        $this->assertSame('2026-11', $p['mes']['competencia']);
+        $this->assertSame(400.0, $p['mes']['previsto']);
+        $titulos = array_column($p['notificacoes'], 'titulo');
+        $this->assertContains('Aula de hoje sem lançamento', $titulos);
+        $this->assertContains('Todas as lições aprovadas', $titulos);
+        $this->assertContains('Aniversário hoje', $titulos);
+    }
+
+    public function test_lista_de_alunos_traz_estagio_e_progresso(): void
+    {
+        $a = $this->aluno(['nome' => 'Com Estágio']);
+        $this->requisicao('PUT', "/api/v1/alunos/{$a['id']}/progresso", ['estagio_manual' => 'oficializado'], $this->prof);
+
+        $lista = $this->corpo($this->requisicao('GET', '/api/v1/alunos', null, $this->prof))['dados'];
+
+        $this->assertSame('oficializado', $lista[0]['estagio']['valor']);
+        $this->assertSame('Oficializado', $lista[0]['estagio']['rotulo']);
+        $this->assertArrayHasKey('progresso_geral', $lista[0]);
+    }
+
     public function test_auditoria_e_somente_do_administrador_e_filtra(): void
     {
         $this->aluno(['nome' => 'Ana']);
