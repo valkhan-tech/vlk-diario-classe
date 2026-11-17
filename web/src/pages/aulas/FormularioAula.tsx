@@ -5,7 +5,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 import { useLista } from '../../api/hooks';
-import { PRESENCA, type Aluno, type Aula } from '../../api/tipos';
+import { PRESENCA, type Aluno, type Aula, type ItemAvaliacao } from '../../api/tipos';
 import { AreaTexto, Aviso, Botao, Campo, Carregando, Cartao, Selecao, Titulo } from '../../components/ui';
 import { api, mensagemDeErro } from '../../lib/api';
 import { data as formatarData, hoje } from '../../lib/format';
@@ -36,6 +36,7 @@ export function PaginaFormularioAula() {
   const cliente = useQueryClient();
   const tipos = useLista('tipo_aula');
   const [erro, setErro] = useState<string | null>(null);
+  const [avaliacoes, setAvaliacoes] = useState<ItemAvaliacao[]>([]);
 
   const alunos = useQuery({
     queryKey: ['alunos', '', '', ''],
@@ -70,9 +71,15 @@ export function PaginaFormularioAula() {
   });
 
   const salvar = useMutation({
-    mutationFn: (dados: Saida) => (editando ? api.put<{ dados: Aula }>(`/aulas/${id}`, dados) : api.post<{ dados: Aula }>('/aulas', dados)),
+    mutationFn: async (dados: Saida) => {
+      const r = editando ? await api.put<{ dados: Aula }>(`/aulas/${id}`, dados) : await api.post<{ dados: Aula }>('/aulas', dados);
+      if (avaliacoes.length > 0) {
+        await api.post(`/alunos/${r.dados.aluno_id}/avaliacoes`, { avaliacoes, data: dados.data, aula_id: r.dados.id });
+      }
+      return r;
+    },
     onSuccess: (r) => {
-      for (const k of ['aulas', 'agenda', 'calendario', 'aula', 'aluno-aulas']) void cliente.invalidateQueries({ queryKey: [k] });
+      for (const k of ['aulas', 'agenda', 'calendario', 'aula', 'aluno-aulas', 'ficha-progresso', 'licoes-aluno', 'inicio']) void cliente.invalidateQueries({ queryKey: [k] });
       navegar(`/alunos/${r.dados.aluno_id}`);
     },
     onError: (e) => setErro(mensagemDeErro(e)),
@@ -136,7 +143,7 @@ export function PaginaFormularioAula() {
           </div>
         </Cartao>
 
-        {alunoId > 0 && presenca === 'presente' && <AvaliacaoNaAula alunoId={alunoId} data={dataAula} aulaId={editando ? Number(id) : undefined} />}
+        {alunoId > 0 && presenca === 'presente' && <AvaliacaoNaAula alunoId={alunoId} aoMudar={setAvaliacoes} />}
 
         <div className="flex justify-end gap-2">
           <Botao type="button" variante="secundario" onClick={() => navegar(-1)}>Cancelar</Botao>

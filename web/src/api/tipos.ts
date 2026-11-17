@@ -164,3 +164,100 @@ export interface DashboardFinanceiro {
   envelhecimento: { faixa: string; quantidade: number; valor: number }[];
   ranking: { aluno_id: number; aluno: string; cobrancas: number; saldo: number; maior_atraso: number }[];
 }
+
+export type Nivel = 'iniciante' | 'basico' | 'intermediario' | 'avancado';
+export const NIVEL: Record<Nivel, string> = { iniciante: 'Iniciante', basico: 'Básico', intermediario: 'Intermediário', avancado: 'Avançado' };
+
+export type EstagioValor = Nivel | 'apto_culto_jovens' | 'apto_culto_adulto' | 'oficializado';
+export const ESTAGIO: Record<EstagioValor, string> = {
+  ...NIVEL,
+  apto_culto_jovens: 'Apto — Culto Jovens',
+  apto_culto_adulto: 'Apto — Culto Adulto',
+  oficializado: 'Oficializado',
+};
+
+export type SituacaoMetodo = 'iniciado' | 'pausado' | 'concluido';
+export const SITUACAO_METODO: Record<SituacaoMetodo, string> = { iniciado: 'Iniciado', pausado: 'Pausado', concluido: 'Concluído' };
+
+export type StatusLicao = 'pendente' | 'aprovado' | 'reprovado';
+export const STATUS_LICAO: Record<StatusLicao, string> = { pendente: 'Pendente', aprovado: 'Aprovado', reprovado: 'Reprovado' };
+
+export type StatusTecnica = 'nao_iniciado' | 'em_andamento' | 'concluido';
+export const STATUS_TECNICA: Record<StatusTecnica, string> = { nao_iniciado: 'Não iniciado', em_andamento: 'Em andamento', concluido: 'Concluído' };
+
+export interface Metodo {
+  id: number;
+  nome: string;
+  tipo: 'metodo' | 'hinario';
+  nivel: Nivel | null;
+  instrumento_id: number | null;
+  instrumento: string | null;
+  ativo: boolean;
+  observacoes: string | null;
+  total_licoes: number;
+}
+
+export interface Licao {
+  id: number;
+  metodo_id: number;
+  ordem: number;
+  titulo: string;
+  observacoes: string | null;
+}
+
+export interface LicaoDoAluno extends Licao {
+  status: StatusLicao;
+  desde: string | null;
+  tentativas: number;
+  tempo_dias: number | null;
+  atual: boolean;
+}
+
+export interface LicaoAtual {
+  id: number;
+  ordem: number;
+  titulo: string;
+  status: StatusLicao;
+  desde: string | null;
+  tentativas: number;
+}
+
+export interface MetodoDoAluno {
+  metodo_id: number;
+  metodo: string;
+  tipo: 'metodo' | 'hinario';
+  nivel: Nivel | null;
+  situacao: SituacaoMetodo;
+  data_inicio: string;
+  data_situacao: string;
+  total_licoes: number;
+  aprovadas: number;
+  media: number | null;
+  concluir_sugerido: boolean;
+  licao_atual: LicaoAtual | null;
+}
+
+export interface FichaProgresso {
+  aluno: { id: number; nome: string; instrumento: string | null; situacao: SituacaoAluno };
+  estagio: { valor: EstagioValor | null; origem: 'manual' | 'calculado' | null; rotulo: string | null; calculado: EstagioValor | null; manual: EstagioValor | null };
+  progresso_geral: number | null;
+  aptidao: { jovens: boolean; adulto: boolean; oficializacao: boolean };
+  tecnica: { m1: StatusTecnica; m2: StatusTecnica; ped: StatusTecnica };
+  metodos: MetodoDoAluno[];
+  frequencia: ResumoFrequencia;
+}
+
+export interface ResultadoAvaliacao {
+  avaliacao_id: number;
+  licao_id: number;
+  status: StatusLicao;
+  data_tentativa: string;
+  fora_de_ordem: boolean;
+  licao_atual: LicaoAtual | null;
+  concluir_sugerido: boolean;
+}
+
+export interface ItemAvaliacao {
+  licao_id: number;
+  status: StatusLicao;
+}

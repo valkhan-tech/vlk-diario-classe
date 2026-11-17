@@ -7,6 +7,7 @@ import { api, mensagemDeErro } from '../../lib/api';
 import { DIAS_SEMANA, data, moeda } from '../../lib/format';
 import { AbaAulas } from './AbaAulas';
 import { AbaFinanceira } from './AbaFinanceira';
+import { AbaProgresso } from './AbaProgresso';
 import { tomSituacao } from './Alunos';
 
 function Linha({ rotulo, children }: { rotulo: string; children: React.ReactNode }) {
@@ -82,6 +83,7 @@ export function PaginaFicha() {
       <Abas
         abas={[
           { id: 'cadastro', rotulo: 'Cadastro', conteudo: <Cadastro aluno={aluno} /> },
+          { id: 'progresso', rotulo: 'Progresso', conteudo: <AbaProgresso aluno={aluno} /> },
           { id: 'aulas', rotulo: 'Aulas', conteudo: <AbaAulas aluno={aluno} /> },
           { id: 'financeira', rotulo: 'Financeira', conteudo: <AbaFinanceira aluno={aluno} /> },
         ]}

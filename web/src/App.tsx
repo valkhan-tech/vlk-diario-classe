@@ -10,6 +10,9 @@ import { PaginaFormularioAluno } from './pages/alunos/FormularioAluno';
 import { PaginaAulas } from './pages/aulas/Aulas';
 import { PaginaFormularioAula } from './pages/aulas/FormularioAula';
 import { PaginaFinanceiro } from './pages/financeiro/Financeiro';
+import { PaginaLicoesDoAluno } from './pages/progresso/LicoesDoAluno';
+import { PaginaMetodoDetalhe } from './pages/progresso/MetodoDetalhe';
+import { PaginaMetodos } from './pages/progresso/Metodos';
 import { PaginaListas } from './pages/listas/Listas';
 import { PaginaInicio } from './pages/inicio/Inicio';
 import { PaginaUsuarios } from './pages/usuarios/Usuarios';
@@ -34,6 +37,9 @@ export function App() {
             <Route path="/aulas/nova" element={<PaginaFormularioAula />} />
             <Route path="/aulas/:id/editar" element={<PaginaFormularioAula />} />
             <Route path="/financeiro" element={<PaginaFinanceiro />} />
+            <Route path="/metodos" element={<PaginaMetodos />} />
+            <Route path="/metodos/:id" element={<PaginaMetodoDetalhe />} />
+            <Route path="/alunos/:id/metodos/:metodoId" element={<PaginaLicoesDoAluno />} />
             <Route path="/listas" element={<PaginaListas />} />
           </Route>
           <Route element={<RotaProtegida perfis={['admin']} />}>

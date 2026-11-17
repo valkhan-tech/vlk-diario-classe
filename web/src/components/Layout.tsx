@@ -12,6 +12,7 @@ export const MENU: ItemMenu[] = [
   { para: '/alunos', rotulo: 'Alunos', perfis: OPERACAO },
   { para: '/aulas', rotulo: 'Aulas', perfis: OPERACAO },
   { para: '/financeiro', rotulo: 'Financeiro', perfis: OPERACAO },
+  { para: '/metodos', rotulo: 'Métodos', perfis: OPERACAO },
   { para: '/listas', rotulo: 'Listas', perfis: OPERACAO },
   { para: '/usuarios', rotulo: 'Usuários', perfis: ['admin'] },
 ];

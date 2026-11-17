@@ -8,6 +8,7 @@ use App\Http\Controllers\CobrancasController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\InicioController;
 use App\Http\Controllers\MetodosController;
 use App\Http\Controllers\ProgressoController;
 use App\Http\Controllers\ListasController;
@@ -41,6 +42,13 @@ return static function (App $app): void {
                 $g->put('/{id:[0-9]+}', UsuariosController::class . ':atualizar');
                 $g->post('/{id:[0-9]+}/senha', UsuariosController::class . ':definirSenha');
                 $g->delete('/{id:[0-9]+}', UsuariosController::class . ':excluir');
+            })->add(Perfis::admin());
+
+            // Auditoria (somente administrador)
+            $auth->group('/auditoria', function (RouteCollectorProxy $g): void {
+                $g->get('', InicioController::class . ':listarAuditoria');
+                $g->get('/{id:[0-9]+}', InicioController::class . ':obterAuditoria');
+                $g->get('/{id:[0-9]+}/verificar', InicioController::class . ':verificarAuditoria');
             })->add(Perfis::admin());
 
             // Operação do dia a dia: administrador e professora
@@ -98,6 +106,7 @@ return static function (App $app): void {
                 $op->get('/alunos/{id:[0-9]+}/licoes/{licaoId:[0-9]+}/avaliacoes', ProgressoController::class . ':historico');
                 $op->delete('/avaliacoes/{id:[0-9]+}', ProgressoController::class . ':excluirAvaliacao');
                 $op->put('/alunos/{id:[0-9]+}/progresso', ProgressoController::class . ':atualizar');
+                $op->get('/inicio', InicioController::class . ':painel');
                 // {{OPERACAO}}
             })->add(Perfis::operacao());
         })->add(Autenticacao::class);
