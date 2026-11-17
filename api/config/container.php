@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use App\Infra\Banco\Conexao;
 use App\Infra\Config;
+use App\Infra\Email\EmailEmMemoria;
+use App\Infra\Email\EmailEnviador;
+use App\Infra\Email\PhpMailerEnviador;
 use App\Infra\Relogio;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -29,6 +32,10 @@ return static function (Config $config): array {
                 'senha' => $config->get('DB_PASS', '') ?? '',
             ]);
         },
+
+        EmailEnviador::class => static fn (): EmailEnviador => $config->get('APP_ENV') === 'testing'
+            ? new EmailEmMemoria()
+            : new PhpMailerEnviador($config),
 
         Relogio::class => static fn (): Relogio => new Relogio($config->get('APP_TIMEZONE', 'America/Sao_Paulo') ?? 'America/Sao_Paulo'),
 

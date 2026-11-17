@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use App\Infra\Repositorios\UsuarioRepositorio;
 use App\Kernel;
 use Psr\Http\Message\ResponseInterface;
 use Slim\App;
@@ -52,6 +53,38 @@ abstract class TestCaseApi extends TestCaseBanco
                 ->withBody((new StreamFactory())->createStream(json_encode($json, JSON_THROW_ON_ERROR)));
         }
         return $this->app->handle($req);
+    }
+
+    /** @return array<string,mixed> usuário criado (com a senha em texto em 'senha_pura') */
+    protected function criarUsuario(string $perfil = 'professora', ?string $email = null, string $senha = 'Senha1234', bool $troca = false): array
+    {
+        static $n = 0;
+        $n++;
+        $repo = $this->container->get(UsuarioRepositorio::class);
+        $usuario = $repo->inserir([
+            'nome' => ucfirst($perfil) . " {$n}",
+            'email' => $email ?? "{$perfil}{$n}@ddc.test",
+            'senha_hash' => password_hash($senha, PASSWORD_DEFAULT, ['cost' => 4]),
+            'perfil' => $perfil,
+            'ativo' => 1,
+            'troca_senha_obrigatoria' => $troca ? 1 : 0,
+        ]);
+        $usuario['senha_pura'] = $senha;
+        return $usuario;
+    }
+
+    /**
+     * Faz login e devolve o cookie de sessão pronto para usar em requisicao().
+     *
+     * @param array<string,mixed> $usuario
+     * @return array<string,string>
+     */
+    protected function entrarComo(array $usuario): array
+    {
+        $r = $this->requisicao('POST', '/api/v1/sessao', ['email' => $usuario['email'], 'senha' => $usuario['senha_pura']]);
+        $this->assertSame(200, $r->getStatusCode(), 'login de teste falhou');
+        preg_match('/ddc_sessao=([0-9a-f]+)/', $r->getHeaderLine('Set-Cookie'), $m);
+        return ['ddc_sessao' => $m[1]];
     }
 
     /** @return array<string,mixed> */

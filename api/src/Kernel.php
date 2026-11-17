@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Http\Middleware\ContextoMiddleware;
+use App\Http\Middleware\CsrfMiddleware;
 use App\Http\TratadorErros;
 use App\Infra\Config;
 use DI\ContainerBuilder;
@@ -46,6 +47,7 @@ final class Kernel
         $app->setBasePath('/api');
 
         $app->add(ContextoMiddleware::class);
+        $app->add(CsrfMiddleware::class);
         $app->addBodyParsingMiddleware();
         $app->addRoutingMiddleware();
 
