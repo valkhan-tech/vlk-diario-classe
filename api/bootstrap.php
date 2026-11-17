@@ -2,13 +2,8 @@
 
 declare(strict_types=1);
 
-// PLACEHOLDER: o bootstrap real (Slim, container, middlewares, rotas) será criado
-// na primeira entrega. Por ora, responde 501 para deixar claro que a API não existe ainda.
+// Entrada da API (chamada por public/api.php). Toda a lógica está em src/.
 
-http_response_code(501);
-header('Content-Type: application/problem+json; charset=utf-8');
-echo json_encode([
-    'type' => 'about:blank',
-    'title' => 'API em construção',
-    'status' => 501,
-], JSON_UNESCAPED_UNICODE);
+require __DIR__ . '/vendor/autoload.php';
+
+\App\Kernel::executar();

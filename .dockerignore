@@ -1,0 +1,17 @@
+.git
+.gitignore
+.vscode
+.idea
+.claude
+node_modules
+web/node_modules
+web/dist
+api/vendor
+api/.env
+api/storage/*
+!api/storage/.gitkeep
+legacy
+docs
+*.log
+.DS_Store
+Thumbs.db

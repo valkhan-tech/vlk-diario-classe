@@ -1,0 +1,3 @@
+[client]
+; mysql/mysqldump do container nao validam o certificado autoassinado do MySQL 8 (dev)
+skip-ssl

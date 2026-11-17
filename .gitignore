@@ -21,3 +21,6 @@
 .DS_Store
 Thumbs.db
 .idea/
+
+# Variaveis do docker compose (portas)
+/.env

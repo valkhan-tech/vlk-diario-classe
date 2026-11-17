@@ -1,0 +1,90 @@
+# Ambiente de DESENVOLVIMENTO. Producao (HostGator) nao usa docker.
+name: ddc
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_ENV: local
+      APP_URL: http://localhost:8080
+      APP_TIMEZONE: America/Sao_Paulo
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: ddc_dev
+      DB_USER: ddc
+      DB_PASS: ddc
+      DB_NAME_TEST: ddc_test
+      SESSION_COOKIE: ddc_sessao
+      SESSION_TTL_MINUTES: "720"
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_USER: ""
+      SMTP_PASS: ""
+      SMTP_FROM: nao-responder@ddc.local
+      SMTP_FROM_NAME: "Diario de Classe"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    command: >-
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_0900_ai_ci
+      --default-time-zone=-03:00
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ddc
+      MYSQL_PASSWORD: ddc
+      TZ: America/Sao_Paulo
+    ports:
+      - "${DB_PORT_HOST:-3307}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    environment:
+      PMA_HOST: db
+      PMA_PORT: "3306"
+      UPLOAD_LIMIT: 64M
+    ports:
+      - "${PMA_PORT:-8081}:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    image: node:22-alpine
+    profiles: ["web"]
+    working_dir: /app/web
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_API_PROXY: http://app
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    volumes:
+      - .:/app
+    depends_on:
+      - app
+
+volumes:
+  db_data:
