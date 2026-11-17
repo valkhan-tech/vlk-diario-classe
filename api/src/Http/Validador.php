@@ -21,7 +21,8 @@ final class Validador
         $erros = [];
         $limpo = [];
         foreach ($regras as $campo => [$regra, $mensagem]) {
-            if ($parcial && !array_key_exists($campo, $dados)) {
+            // campo ausente: ignora em atualização parcial e quando a regra aceita ausência (opcional)
+            if (!array_key_exists($campo, $dados) && ($parcial || $regra->validate(null))) {
                 continue;
             }
             $valor = $dados[$campo] ?? null;

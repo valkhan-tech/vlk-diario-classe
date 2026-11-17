@@ -8,6 +8,8 @@ use App\Http\Controllers\CobrancasController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\MetodosController;
+use App\Http\Controllers\ProgressoController;
 use App\Http\Controllers\ListasController;
 use App\Http\Controllers\SenhaController;
 use App\Http\Controllers\SessaoController;
@@ -74,6 +76,28 @@ return static function (App $app): void {
 
                 $op->get('/dashboards/financeiro', DashboardController::class . ':financeiro');
                 $op->get('/exportacoes/{tipo}.xlsx', DashboardController::class . ':exportar');
+
+                $op->get('/metodos', MetodosController::class . ':listar');
+                $op->post('/metodos', MetodosController::class . ':criar');
+                $op->get('/metodos/{id:[0-9]+}', MetodosController::class . ':obter');
+                $op->put('/metodos/{id:[0-9]+}', MetodosController::class . ':atualizar');
+                $op->delete('/metodos/{id:[0-9]+}', MetodosController::class . ':excluir');
+                $op->get('/metodos/{id:[0-9]+}/licoes', MetodosController::class . ':licoes');
+                $op->post('/metodos/{id:[0-9]+}/licoes', MetodosController::class . ':criarLicao');
+                $op->post('/metodos/{id:[0-9]+}/licoes/lote', MetodosController::class . ':lote');
+                $op->put('/metodos/{id:[0-9]+}/licoes/ordem', MetodosController::class . ':reordenar');
+                $op->put('/licoes/{id:[0-9]+}', MetodosController::class . ':atualizarLicao');
+                $op->delete('/licoes/{id:[0-9]+}', MetodosController::class . ':excluirLicao');
+
+                $op->get('/alunos/{id:[0-9]+}/ficha-progresso', ProgressoController::class . ':ficha');
+                $op->get('/alunos/{id:[0-9]+}/metodos/{metodoId:[0-9]+}/licoes', ProgressoController::class . ':licoes');
+                $op->post('/alunos/{id:[0-9]+}/metodos', ProgressoController::class . ':associar');
+                $op->put('/alunos/{id:[0-9]+}/metodos/{metodoId:[0-9]+}', ProgressoController::class . ':situacao');
+                $op->delete('/alunos/{id:[0-9]+}/metodos/{metodoId:[0-9]+}', ProgressoController::class . ':desassociar');
+                $op->post('/alunos/{id:[0-9]+}/avaliacoes', ProgressoController::class . ':avaliar');
+                $op->get('/alunos/{id:[0-9]+}/licoes/{licaoId:[0-9]+}/avaliacoes', ProgressoController::class . ':historico');
+                $op->delete('/avaliacoes/{id:[0-9]+}', ProgressoController::class . ':excluirAvaliacao');
+                $op->put('/alunos/{id:[0-9]+}/progresso', ProgressoController::class . ':atualizar');
                 // {{OPERACAO}}
             })->add(Perfis::operacao());
         })->add(Autenticacao::class);
