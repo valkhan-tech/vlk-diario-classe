@@ -1,7 +1,11 @@
 # Saída do build do React (public/ guarda só api.php, .htaccess e dev-router.php versionados)
 /public/index.html
 /public/assets/
+# copiados de web/public/ no build (a fonte versionada é web/public/)
 /public/*.webmanifest
+/public/favicon*
+/public/apple-touch-icon.png
+/public/icone-*.png
 /web/node_modules/
 /web/dist/
 

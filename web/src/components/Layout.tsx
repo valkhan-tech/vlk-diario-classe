@@ -5,6 +5,7 @@ import { api } from '../lib/api';
 import type { PainelInicio } from '../api/tipos';
 import { useAuth, type Perfil } from '../auth/AuthContext';
 import { Icone, type NomeIcone } from './icones';
+import { Logo } from './Logo';
 import { Avatar, Botao, Modal, cx } from './ui';
 
 interface ItemMenu { para: string; rotulo: string; icone: NomeIcone; perfis: Perfil[]; fim?: boolean; principal?: boolean; grupo?: string }
@@ -91,7 +92,7 @@ export function Layout() {
       {/* Menu lateral colorido (tablet e computador) */}
       <aside className="app-lateral nao-imprimir sticky top-0 hidden h-screen flex-col px-3.5 pb-4 pt-5 text-white md:flex" style={{ background: 'var(--sb-bg)' }}>
         <div className="mb-5 flex items-center gap-2.5 px-1.5 md:justify-center lg:justify-start">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/15"><Icone nome="piano" className="h-6 w-6" /></span>
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#faf4ec] shadow"><Logo tamanho={36} /></span>
           <span className="hidden font-titulo text-xl font-semibold leading-tight lg:block">Diário de Classe</span>
         </div>
         <nav aria-label="Principal" className="flex flex-1 flex-col gap-1 overflow-y-auto">
@@ -127,7 +128,7 @@ export function Layout() {
       <div className="flex min-w-0 flex-col">
         {/* Barra superior */}
         <header className="nao-imprimir sticky top-0 z-40 flex items-center gap-3 border-b border-slate-200/70 bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] px-4 py-2.5 backdrop-blur md:px-7">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-white md:hidden" style={{ background: 'var(--sb-bg)' }}><Icone nome="piano" /></span>
+          <Logo tamanho={42} alt="Diário de Classe" className="md:hidden" />
           <form onSubmit={buscar} role="search" className="relative min-w-0 max-w-md flex-1">
             <Icone nome="busca" className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
             <input type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar aluno…" aria-label="Buscar aluno"

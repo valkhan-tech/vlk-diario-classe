@@ -5,7 +5,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuth } from '../../auth/AuthContext';
 import { PautaFundo } from '../../components/ArteMusical';
-import { Icone } from '../../components/icones';
+import { Logo } from '../../components/Logo';
 import { Aviso, Botao, Campo } from '../../components/ui';
 import { mensagemDeErro } from '../../lib/api';
 
@@ -38,7 +38,7 @@ export function PaginaLogin() {
     <div className="grid min-h-screen lg:grid-cols-[1.1fr_1fr]">
       <div className="relative hidden flex-col justify-center gap-5 overflow-hidden p-16 text-white lg:flex" style={{ background: 'var(--sb-bg)' }}>
         <div className="flex items-center gap-3 font-titulo text-2xl font-semibold">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/15"><Icone nome="piano" className="h-6 w-6" /></span>Diário de Classe
+          <span className="grid h-[68px] w-[68px] place-items-center rounded-2xl bg-[#faf4ec] shadow-lg"><Logo tamanho={56} /></span>Diário de Classe
         </div>
         <h2 className="max-w-md font-titulo text-5xl font-semibold leading-[1.08]">Cada aula, uma nota a mais na partitura.</h2>
         <p className="max-w-sm text-lg text-white/85">Acompanhe o progresso dos alunos, as lições aprovadas e o financeiro da turma em um só lugar.</p>
@@ -48,7 +48,7 @@ export function PaginaLogin() {
       <div className="grid place-items-center px-5 py-10">
         <div className="w-full max-w-sm">
           <div className="mb-8 flex flex-col items-center gap-3 text-center lg:hidden">
-            <span className="grid h-14 w-14 place-items-center rounded-2xl text-white" style={{ background: 'var(--sb-bg)' }}><Icone nome="piano" className="h-7 w-7" /></span>
+            <Logo tamanho={84} alt="Diário de Classe" />
             <span className="font-titulo text-2xl font-semibold text-marca-700">Diário de Classe</span>
           </div>
           <h1 className="font-titulo text-3xl font-semibold">Entrar</h1>

@@ -7,12 +7,18 @@ declare(strict_types=1);
 
 $raiz = dirname(__DIR__);
 $versao = $argv[1] ?? date('Ymd-His');
-$staging = $raiz . '/release/staging';
+// área de trabalho no disco do container (rápida e sem os problemas de apagar muitos arquivos no bind mount do Windows)
+$staging = sys_get_temp_dir() . '/ddc-staging-' . $versao;
 $zipPath = $raiz . "/release/ddc-{$versao}.zip";
 
 function rrmdir(string $d): void
 {
     if (!is_dir($d)) {
+        return;
+    }
+    if (PHP_OS_FAMILY !== 'Windows') {
+        // mais robusto que percorrer e apagar (o bind mount do Docker no Windows às vezes falha no meio)
+        exec('rm -rf ' . escapeshellarg($d));
         return;
     }
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($d, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $f) {
@@ -64,7 +70,8 @@ rrmdir($staging);
 @mkdir($raiz . '/release', 0775, true);
 
 // public/: front compilado + api.php + .htaccess (sem o router de desenvolvimento)
-copiar($raiz . '/public', $staging . '/public', ['dev-router.php']);
+// o logo original (1,1 MB) fica só no repositório; o app usa as versões otimizadas já copiadas no build
+copiar($raiz . '/public', $staging . '/public', ['dev-router.php', 'logo-diario-de-classe.png']);
 
 // api/: sem vendor de desenvolvimento, testes, .env, logs e arquivos de ferramentas
 copiar($raiz . '/api', $staging . '/api', [
