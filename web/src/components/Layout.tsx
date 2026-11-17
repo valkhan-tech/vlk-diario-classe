@@ -10,6 +10,7 @@ const OPERACAO: Perfil[] = ['admin', 'professora'];
 export const MENU: ItemMenu[] = [
   { para: '/', rotulo: 'Início', perfis: OPERACAO, fim: true },
   { para: '/alunos', rotulo: 'Alunos', perfis: OPERACAO },
+  { para: '/aulas', rotulo: 'Aulas', perfis: OPERACAO },
   { para: '/listas', rotulo: 'Listas', perfis: OPERACAO },
   { para: '/usuarios', rotulo: 'Usuários', perfis: ['admin'] },
 ];

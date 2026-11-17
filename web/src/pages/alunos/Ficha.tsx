@@ -5,6 +5,7 @@ import { SITUACAO_ALUNO, type Aluno } from '../../api/tipos';
 import { Abas, Aviso, Badge, Botao, Carregando, Cartao, Confirmar, Titulo } from '../../components/ui';
 import { api, mensagemDeErro } from '../../lib/api';
 import { DIAS_SEMANA, data, moeda } from '../../lib/format';
+import { AbaAulas } from './AbaAulas';
 import { tomSituacao } from './Alunos';
 
 function Linha({ rotulo, children }: { rotulo: string; children: React.ReactNode }) {
@@ -80,6 +81,7 @@ export function PaginaFicha() {
       <Abas
         abas={[
           { id: 'cadastro', rotulo: 'Cadastro', conteudo: <Cadastro aluno={aluno} /> },
+          { id: 'aulas', rotulo: 'Aulas', conteudo: <AbaAulas aluno={aluno} /> },
         ]}
       />
       <Confirmar aberto={excluir} aoFechar={() => setExcluir(false)} titulo="Excluir aluno"

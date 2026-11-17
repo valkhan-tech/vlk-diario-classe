@@ -7,6 +7,8 @@ import { PaginaTrocarSenha } from './pages/acesso/TrocarSenha';
 import { PaginaAlunos } from './pages/alunos/Alunos';
 import { PaginaFicha } from './pages/alunos/Ficha';
 import { PaginaFormularioAluno } from './pages/alunos/FormularioAluno';
+import { PaginaAulas } from './pages/aulas/Aulas';
+import { PaginaFormularioAula } from './pages/aulas/FormularioAula';
 import { PaginaListas } from './pages/listas/Listas';
 import { PaginaInicio } from './pages/inicio/Inicio';
 import { PaginaUsuarios } from './pages/usuarios/Usuarios';
@@ -27,6 +29,9 @@ export function App() {
             <Route path="/alunos/novo" element={<PaginaFormularioAluno />} />
             <Route path="/alunos/:id" element={<PaginaFicha />} />
             <Route path="/alunos/:id/editar" element={<PaginaFormularioAluno />} />
+            <Route path="/aulas" element={<PaginaAulas />} />
+            <Route path="/aulas/nova" element={<PaginaFormularioAula />} />
+            <Route path="/aulas/:id/editar" element={<PaginaFormularioAula />} />
             <Route path="/listas" element={<PaginaListas />} />
           </Route>
           <Route element={<RotaProtegida perfis={['admin']} />}>

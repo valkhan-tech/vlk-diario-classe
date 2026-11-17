@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AlunosController;
+use App\Http\Controllers\AulasController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\ListasController;
@@ -50,6 +51,16 @@ return static function (App $app): void {
                 $op->get('/alunos/{id:[0-9]+}', AlunosController::class . ':obter');
                 $op->put('/alunos/{id:[0-9]+}', AlunosController::class . ':atualizar');
                 $op->delete('/alunos/{id:[0-9]+}', AlunosController::class . ':excluir');
+
+                $op->get('/aulas', AulasController::class . ':listar');
+                $op->post('/aulas', AulasController::class . ':criar');
+                $op->get('/aulas/{id:[0-9]+}', AulasController::class . ':obter');
+                $op->put('/aulas/{id:[0-9]+}', AulasController::class . ':atualizar');
+                $op->delete('/aulas/{id:[0-9]+}', AulasController::class . ':excluir');
+                $op->get('/alunos/{id:[0-9]+}/aulas', AulasController::class . ':doAluno');
+                $op->get('/alunos/{id:[0-9]+}/aulas/anterior', AulasController::class . ':anterior');
+                $op->get('/calendario', AulasController::class . ':calendario');
+                $op->get('/agenda/hoje', AulasController::class . ':agendaHoje');
                 // {{OPERACAO}}
             })->add(Perfis::operacao());
         })->add(Autenticacao::class);

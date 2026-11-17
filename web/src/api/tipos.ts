@@ -36,3 +36,61 @@ export const SITUACAO_ALUNO: Record<SituacaoAluno, string> = {
   pausado: 'Pausado',
   encerrado: 'Encerrado',
 };
+
+export type Presenca = 'presente' | 'falta_aluno_justificada' | 'falta_aluno_sem_aviso' | 'falta_professora' | 'feriado_evento';
+
+export const PRESENCA: Record<Presenca, string> = {
+  presente: 'Presente',
+  falta_aluno_justificada: 'Falta — aluno (justificada)',
+  falta_aluno_sem_aviso: 'Falta — aluno (sem aviso)',
+  falta_professora: 'Falta — professora',
+  feriado_evento: 'Feriado / evento',
+};
+
+export const TOM_PRESENCA: Record<Presenca, 'verde' | 'amarelo' | 'vermelho' | 'azul' | 'neutro'> = {
+  presente: 'verde',
+  falta_aluno_justificada: 'amarelo',
+  falta_aluno_sem_aviso: 'vermelho',
+  falta_professora: 'azul',
+  feriado_evento: 'neutro',
+};
+
+export interface Aula {
+  id: number;
+  aluno_id: number;
+  aluno: string | null;
+  data: string;
+  presenca: Presenca;
+  motivo: string | null;
+  tipo_aula_id: number | null;
+  tipo_aula: string | null;
+  metodo_id: number | null;
+  conteudo: string | null;
+  hino: string | null;
+  licao_casa: string | null;
+  video_url: string | null;
+  observacoes: string | null;
+}
+
+export interface ResumoFrequencia {
+  aulas: number;
+  presentes: number;
+  faltas_aluno: number;
+  faltas_professora: number;
+  feriados: number;
+  frequencia: number | null;
+}
+
+export interface ItemAgenda {
+  aluno_id: number;
+  aluno: string;
+  hora: string | null;
+  aula_id: number | null;
+  presenca: Presenca | null;
+}
+
+export interface Calendario {
+  mes: string;
+  resumo: Omit<ResumoFrequencia, 'frequencia'>;
+  dias: Record<string, { id: number; aluno_id: number; aluno: string; presenca: Presenca }[]>;
+}
