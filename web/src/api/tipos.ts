@@ -94,3 +94,64 @@ export interface Calendario {
   resumo: Omit<ResumoFrequencia, 'frequencia'>;
   dias: Record<string, { id: number; aluno_id: number; aluno: string; presenca: Presenca }[]>;
 }
+
+export type EstadoCobranca = 'pendente' | 'parcial' | 'atrasado' | 'pago' | 'cancelada';
+
+export const ESTADO_COBRANCA: Record<EstadoCobranca, string> = {
+  pendente: 'Pendente',
+  parcial: 'Parcial',
+  atrasado: 'Atrasado',
+  pago: 'Pago',
+  cancelada: 'Cancelada',
+};
+
+export const TOM_ESTADO: Record<EstadoCobranca, 'amarelo' | 'azul' | 'vermelho' | 'verde' | 'neutro'> = {
+  pendente: 'amarelo',
+  parcial: 'azul',
+  atrasado: 'vermelho',
+  pago: 'verde',
+  cancelada: 'neutro',
+};
+
+export interface Pagamento {
+  id: number;
+  cobranca_id: number;
+  valor: number;
+  data_pagamento: string;
+  forma_pagamento_id: number | null;
+  forma: string | null;
+  observacoes: string | null;
+}
+
+export interface Cobranca {
+  id: number;
+  aluno_id: number;
+  aluno: string | null;
+  competencia: string;
+  valor: number;
+  desconto: number;
+  valor_liquido: number;
+  pago: number;
+  saldo: number;
+  vencimento: string;
+  dias_atraso: number;
+  situacao: 'aberta' | 'cancelada';
+  estado: EstadoCobranca;
+  observacoes: string | null;
+  pagamentos?: Pagamento[];
+}
+
+export interface ResumoFinanceiro {
+  quantidade: number;
+  previsto: number;
+  recebido: number;
+  aberto: number;
+  atrasado: number;
+  por_estado: Record<EstadoCobranca, number>;
+}
+
+export interface FichaFinanceira {
+  aluno: { id: number; nome: string; valor_mensalidade: number; dia_vencimento: number; situacao: SituacaoAluno };
+  cobrancas: Cobranca[];
+  resumo: ResumoFinanceiro;
+}

@@ -37,7 +37,7 @@ return static function (Config $config): array {
             ? new EmailEmMemoria()
             : new PhpMailerEnviador($config),
 
-        Relogio::class => static fn (): Relogio => new Relogio($config->get('APP_TIMEZONE', 'America/Sao_Paulo') ?? 'America/Sao_Paulo'),
+        Relogio::class => static fn (): Relogio => new Relogio($config->get('APP_TIMEZONE', 'America/Sao_Paulo') ?? 'America/Sao_Paulo', $config->get('RELOGIO_FIXO')),
 
         LoggerInterface::class => static function () use ($config): LoggerInterface {
             $logger = new Logger('ddc');

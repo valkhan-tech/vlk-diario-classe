@@ -33,7 +33,7 @@ abstract class TestCaseBanco extends TestCase
     /** @return array<string,string> */
     protected function sobrescritas(): array
     {
-        return ['DB_NAME' => self::nomeBancoTeste(), 'APP_ENV' => 'testing', 'LOG_FILE' => 'php://memory'];
+        return ['DB_NAME' => self::nomeBancoTeste(), 'APP_ENV' => 'testing', 'LOG_FILE' => 'php://memory', 'RELOGIO_FIXO' => '2026-11-17 09:00:00'];
     }
 
     public static function setUpBeforeClass(): void

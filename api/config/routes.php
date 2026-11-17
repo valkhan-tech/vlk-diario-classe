@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AlunosController;
 use App\Http\Controllers\AulasController;
+use App\Http\Controllers\CobrancasController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\ListasController;
@@ -61,6 +62,14 @@ return static function (App $app): void {
                 $op->get('/alunos/{id:[0-9]+}/aulas/anterior', AulasController::class . ':anterior');
                 $op->get('/calendario', AulasController::class . ':calendario');
                 $op->get('/agenda/hoje', AulasController::class . ':agendaHoje');
+
+                $op->get('/cobrancas', CobrancasController::class . ':listar');
+                $op->post('/cobrancas/gerar', CobrancasController::class . ':gerar');
+                $op->get('/cobrancas/{id:[0-9]+}', CobrancasController::class . ':obter');
+                $op->put('/cobrancas/{id:[0-9]+}', CobrancasController::class . ':atualizar');
+                $op->post('/cobrancas/{id:[0-9]+}/pagamentos', CobrancasController::class . ':pagar');
+                $op->delete('/pagamentos/{id:[0-9]+}', CobrancasController::class . ':estornar');
+                $op->get('/alunos/{id:[0-9]+}/ficha-financeira', CobrancasController::class . ':fichaFinanceira');
                 // {{OPERACAO}}
             })->add(Perfis::operacao());
         })->add(Autenticacao::class);
