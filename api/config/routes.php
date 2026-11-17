@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\SenhaController;
 use App\Http\Controllers\SessaoController;
@@ -36,4 +37,11 @@ return static function (App $app): void {
             })->add(Perfis::admin());
         })->add(Autenticacao::class);
     });
+
+    // Documentação da API (somente administrador)
+    $app->group('', function (RouteCollectorProxy $docs): void {
+        $docs->get('/docs', DocsController::class . ':pagina');
+        $docs->get('/docs/scalar.js', DocsController::class . ':script');
+        $docs->get('/openapi.json', DocsController::class . ':openapi');
+    })->add(Perfis::admin())->add(Autenticacao::class);
 };
