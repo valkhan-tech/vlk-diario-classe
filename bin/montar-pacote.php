@@ -70,6 +70,7 @@ copiar($raiz . '/public', $staging . '/public', ['dev-router.php']);
 copiar($raiz . '/api', $staging . '/api', [
     'vendor', 'tests', '.env', '.phpunit.cache', '.phpunit.result.cache', 'phpunit.xml', 'phpstan.neon',
     'storage/logs', 'storage/openapi.json', 'VERSION',
+    'bin/seed.php', 'src/Infra/Seed', // o seeder é só de desenvolvimento
 ]);
 @mkdir($staging . '/api/storage/logs', 0775, true);
 file_put_contents($staging . '/api/storage/logs/.gitkeep', '');

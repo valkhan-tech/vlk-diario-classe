@@ -29,7 +29,7 @@ final class DocsController
 </head>
 <body>
   <script id="api-reference" data-url="/api/openapi.json"
-          data-configuration='{"theme":"default","layout":"modern","hideDownloadButton":false,"defaultOpenAllTags":false}'></script>
+          data-configuration='{"theme":"default","layout":"modern","defaultOpenAllTags":false,"showDeveloperTools":"never","withDefaultFonts":false,"agent":{"disabled":true}}'></script>
   <script src="/api/docs/scalar.js"></script>
 </body>
 </html>

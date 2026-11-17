@@ -7,6 +7,7 @@ import { PaginaTrocarSenha } from './pages/acesso/TrocarSenha';
 import { PaginaAlunos } from './pages/alunos/Alunos';
 import { PaginaFicha } from './pages/alunos/Ficha';
 import { PaginaFormularioAluno } from './pages/alunos/FormularioAluno';
+import { PaginaAuditoria } from './pages/auditoria/Auditoria';
 import { PaginaAulas } from './pages/aulas/Aulas';
 import { PaginaFormularioAula } from './pages/aulas/FormularioAula';
 import { PaginaFinanceiro } from './pages/financeiro/Financeiro';
@@ -44,6 +45,7 @@ export function App() {
           </Route>
           <Route element={<RotaProtegida perfis={['admin']} />}>
             <Route path="/usuarios" element={<PaginaUsuarios />} />
+            <Route path="/auditoria" element={<PaginaAuditoria />} />
           </Route>
         </Route>
       </Route>

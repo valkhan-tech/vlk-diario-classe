@@ -29,6 +29,11 @@ button, [role="button"], select, input:not([type="checkbox"]):not([type="radio"]
   min-height: 44px;
 }
 
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
 @media print {
   .nao-imprimir {
     display: none !important;

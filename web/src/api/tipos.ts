@@ -261,3 +261,36 @@ export interface ItemAvaliacao {
   licao_id: number;
   status: StatusLicao;
 }
+
+export interface PainelInicio {
+  kpis: { alunos_ativos: number; aulas_hoje: number; aulas_hoje_lancadas: number; cobrancas_atrasadas: number; valor_atrasado: number; aptos_culto: number };
+  agenda: { data: string; itens: ItemAgenda[] };
+  por_estagio: { estagio: string; rotulo: string; quantidade: number }[];
+}
+
+export interface EntradaLog {
+  id: number;
+  quando: string;
+  usuario_id: number | null;
+  usuario: string | null;
+  perfil: string | null;
+  operacao: 'INSERT' | 'UPDATE' | 'DELETE';
+  tabela: string;
+  registro_id: number;
+  origem: string;
+  controller: string | null;
+  fingerprint: string;
+  ip: string | null;
+  user_agent?: string | null;
+  registro?: Record<string, unknown>;
+}
+
+export interface ResultadoVerificacao {
+  integro: boolean;
+  fingerprint_registrado: string;
+  fingerprint_calculado: string;
+  ultima_do_registro: boolean;
+  confere_com_banco: boolean | null;
+  fingerprint_atual: string | null;
+  registro_existe: boolean | null;
+}

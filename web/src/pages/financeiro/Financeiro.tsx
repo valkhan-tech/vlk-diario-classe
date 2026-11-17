@@ -1,12 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ESTADO_COBRANCA, type Cobranca, type EstadoCobranca, type ResumoFinanceiro } from '../../api/tipos';
 import { Abas, Aviso, Botao, Campo, Carregando, Cartao, Selecao, Tabela, Td, Titulo, Vazio } from '../../components/ui';
 import { api, mensagemDeErro, qs } from '../../lib/api';
 import { data, mesAtual, moeda } from '../../lib/format';
-import { PainelDashboard } from './Dashboard';
 import { BadgeEstado, ModalCobranca, ModalPagamento, ResumoCards, useInvalidarFinanceiro } from './componentes';
+
+const PainelDashboard = lazy(() => import('./Dashboard').then((m) => ({ default: m.PainelDashboard })));
 
 function VisaoDoMes() {
   const [competencia, setCompetencia] = useState(mesAtual());
@@ -78,7 +79,7 @@ export function PaginaFinanceiro() {
       <Titulo>Financeiro</Titulo>
       <Abas abas={[
         { id: 'mes', rotulo: 'Cobranças do mês', conteudo: <VisaoDoMes /> },
-        { id: 'dashboard', rotulo: 'Dashboard', conteudo: <PainelDashboard /> },
+        { id: 'dashboard', rotulo: 'Dashboard', conteudo: <Suspense fallback={<Carregando />}><PainelDashboard /></Suspense> },
       ]} />
     </>
   );

@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { SITUACAO_ALUNO, type Aluno } from '../../api/tipos';
 import { Abas, Aviso, Badge, Botao, Carregando, Cartao, Confirmar, Titulo } from '../../components/ui';
 import { api, mensagemDeErro } from '../../lib/api';
-import { DIAS_SEMANA, data, moeda } from '../../lib/format';
+import { DIAS_SEMANA, data, hoje, moeda } from '../../lib/format';
 import { AbaAulas } from './AbaAulas';
 import { AbaFinanceira } from './AbaFinanceira';
 import { AbaProgresso } from './AbaProgresso';
@@ -80,6 +80,7 @@ export function PaginaFicha() {
         {aluno.nome} <Badge tom={tomSituacao(aluno.situacao)}>{SITUACAO_ALUNO[aluno.situacao]}</Badge>
       </Titulo>
       {erro && <div className="mb-3"><Aviso>{erro}</Aviso></div>}
+      <p className="mb-2 hidden text-sm text-slate-600 print:block">Ficha de {aluno.nome} — impressa em {data(hoje())}</p>
       <Abas
         abas={[
           { id: 'cadastro', rotulo: 'Cadastro', conteudo: <Cadastro aluno={aluno} /> },

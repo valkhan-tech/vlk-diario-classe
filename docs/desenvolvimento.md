@@ -57,19 +57,58 @@ Resetar o banco (APAGA todos os dados e recria `ddc_dev`/`ddc_test`):
 docker compose down -v && docker compose up -d
 ```
 
-## Comandos dentro do container `app`
-
-O repositorio inteiro e montado em `/var/www/html` (bind mount); editar no host reflete na hora.
+## Primeiros passos (do zero até o sistema rodando com dados)
 
 ```bash
-docker compose exec app composer install        # instala api/vendor (rodar a partir da pasta api/ se o composer.json estiver la)
-docker compose exec app composer test           # suite de testes
-docker compose exec app php api/bin/migrar.php  # migracoes (serao criados)
-docker compose exec app php api/bin/seed.php    # dados iniciais (serao criados)
-docker compose exec app bash                    # shell
+docker compose up -d --build                                              # sobe app, db, mailpit, phpmyadmin
+docker compose exec app sh -c "cd api && composer install"                # dependências PHP
+docker compose exec app php api/bin/migrar.php                            # cria as tabelas em ddc_dev
+docker compose exec app php api/bin/seed.php --limpar                     # dados de demonstração
+cd web && npm install && npm run build && cd ..                           # compila o front para public/
 ```
 
-> `api/bin/migrar.php`, `api/bin/seed.php` e os scripts do Composer serao criados no desenvolvimento da API; ate la os comandos acima nao existem. Se o `composer.json` ficar em `api/`, use `docker compose exec -w /var/www/html/api app composer install`.
+Abra http://localhost:8080 e entre com um dos usuários de teste:
+
+| Perfil      | E-mail                  | Senha            |
+|-------------|-------------------------|------------------|
+| Administrador | `admin@ddc.local`     | `Admin@123`      |
+| Professora  | `professora@ddc.local`  | `Professora@123` |
+| Responsável (futuro) | `responsavel@ddc.local` | `Responsavel@123` |
+| Inativo (não entra)  | `inativo@ddc.local`     | `Inativo@123`    |
+
+- **Documentação da API** (só administrador): http://localhost:8080/api/docs
+- **E-mails** (recuperação de senha): http://localhost:8025
+- Para desenvolver o front com recarga automática: `cd web && npm run dev` (http://localhost:5173, com proxy de `/api` para o Docker).
+
+## Comandos do dia a dia
+
+```bash
+docker compose exec app sh -c "cd api && composer test"          # unitários + integração (banco ddc_test)
+docker compose exec app sh -c "cd api && composer test:unit"     # só unitários (sem banco)
+docker compose exec app sh -c "cd api && composer analyse"       # PHPStan
+docker compose exec app php api/bin/migrar.php                   # aplica migrações pendentes no ddc_dev
+docker compose exec app php api/bin/migrar.php --teste --zerar   # recria o ddc_test do zero
+docker compose exec app php api/bin/seed.php --limpar            # apaga os dados do ddc_dev e semeia de novo
+docker compose exec app php api/bin/cobrancas.php [AAAA-MM]      # gera as cobranças (o cron faz isso todo dia em produção)
+docker compose exec app php api/bin/limpeza.php                  # remove sessões/tokens/tentativas vencidos
+docker compose exec app php api/bin/gerar-openapi.php            # regenera api/storage/openapi.json
+cd web && npm test                                               # testes do front (Vitest)
+node bin/release.mjs                                             # testes + análise + build + pacote release/ddc-*.zip
+```
+
+### O que o seeder cria (`api/bin/seed.php`)
+
+Dados determinísticos (mesma semente → mesmos dados; as datas são relativas a "hoje"), gravados **pelos serviços da aplicação**, então as regras valem e o `sys_log` é gerado:
+
+- 4 usuários (admin, professora, responsável, inativo) e as listas (instrumentos, tipos de aula, formas de pagamento);
+- 16 alunos: 12 ativos, 2 pausados e 2 encerrados, todas as faixas etárias, horários semanais e dias de vencimento 5/10/15/28/30/31;
+- 8 métodos, incluindo **Hinário de Jovens (50)** e **Hinário Oficial (430)**, com 615 lições no total;
+- ~180 aulas das últimas 13 semanas, com as 5 presenças possíveis, lição de casa e conteúdo;
+- ~190 avaliações de lição (aprovações, reprovações repetidas com data inicial mantida, métodos Concluído e Pausado);
+- ~80 cobranças dos últimos 6 meses em **todos os estados** (pendente, parcial, atrasado, pago, cancelada), com desconto, pagamentos parciais e várias formas de pagamento — pausados e encerrados só têm cobranças dos meses em que estavam ativos;
+- aptidão para culto, estágios sobrescritos e técnica.
+
+O seeder se recusa a rodar com `APP_ENV=production` e **não vai no pacote de entrega**.
 
 ## Variaveis de ambiente do container
 
