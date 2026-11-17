@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Início (dashboard) — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html" class="cur">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Início (dashboard)</h1>
+<p class="lead">Primeira tela depois de conectar. Resumo do dia e da carteira de alunos. <span class="tag t-warn">Parcial</span></p>
+
+<h2>Blocos da tela</h2>
+<table><tr><th>Bloco</th><th>Como é calculado</th><th>Observação</th></tr>
+<tr><td>Cabeçalho + indicador de sync</td><td>Data por extenso; “Sync ativo/Offline” (clicável, leva à Config)</td><td>O indicador só reflete conexão, não pendências.</td></tr>
+<tr><td>KPI Alunos ativos</td><td><code>DB.alunos.length</code></td><td>Conta <b>todos</b> os alunos, não filtra por Status (P12).</td></tr>
+<tr><td>KPI Aulas este mês</td><td>Aulas “Presente” do mês corrente</td><td>Depende de datas ISO (P04).</td></tr>
+<tr><td>KPI Pendências</td><td><code>calcularPendencias()</code>: soma de |Saldo| de linhas Pendente/Atrasado</td><td>Atualiza também ao lançar pagamento.</td></tr>
+<tr><td>KPI Aptos para culto</td><td><b>Valor fixo 3</b> no HTML</td><td>Não é calculado. A regra definida é: contagem dos alunos ativos marcados como aptos pela professora (checkbox) — P12.</td></tr>
+<tr><td>Aulas de hoje</td><td>Aulas <i>já lançadas</i> com a data de hoje</td><td>Não é agenda por horário (P14).</td></tr>
+<tr><td>Alertas</td><td>(1) aluno sem aula há &gt; 14 dias; (2) hinos ≥ 4 e estágio Básico/Intermediário → “candidato à avaliação de culto”</td><td>O alerta (2) usa uma regra que ninguém definiu — a aptidão é decisão da professora. Não há alerta de pagamento nem de faltas.</td></tr>
+<tr><td>Estágios</td><td>Barras com a contagem de alunos por estágio</td><td>Cores por estágio (Iniciante cinza … Apto verde).</td></tr></table>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

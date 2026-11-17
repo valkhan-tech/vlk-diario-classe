@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatório PDF — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html" class="cur">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Relatório PDF</h1>
+<p class="lead">Botão <b>Gerar relatório PDF</b> na ficha do aluno. <span class="tag t-ok">Implementado</span></p>
+<p>Abre uma nova janela com HTML formatado e chama <code>window.print()</code>; o usuário escolhe “Salvar como PDF” no diálogo de impressão. Não há biblioteca de PDF.</p>
+<h2>Conteúdo</h2>
+<ul><li>Cabeçalho: nome, instrumento, “desde mês/ano”.</li>
+<li><b>Estágio e progresso</b>: estágio, teoria %, método e página, hinos dominados.</li>
+<li><b>Técnica</b> e <b>Prontidão para culto</b> com selos coloridos.</li>
+<li><b>Frequência</b>: total de registros, presenças e taxa (%).</li>
+<li><b>Hinos trabalhados</b> e <b>Observações da professora</b>; rodapé com data de geração.</li></ul>
+<h2>Limitações</h2>
+<ul><li>Não inclui histórico de aulas nem financeiro.</li><li>Depende de pop-up liberado; envio por WhatsApp ainda é roadmap.</li><li>“Desde …” depende de data ISO (P04); dados inseridos sem escape (P15).</li></ul>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

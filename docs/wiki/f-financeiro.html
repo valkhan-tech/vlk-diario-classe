@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financeiro — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html" class="cur">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Financeiro</h1>
+<p class="lead">Controle de mensalidades por aluno, dentro da ficha, mais o KPI de pendências na tela inicial. <span class="tag t-bad">Com problema</span></p>
+
+<h2>Na ficha do aluno</h2>
+<ul><li><b>Resumo</b>: “Pago em {ano}” (soma de valores pagos com status Pago no ano corrente) e “Pendências” (soma de |Saldo| de Pendente/Atrasado).</li>
+<li><b>Últimas 6 mensalidades</b>: mês/ano, forma e data de pagamento, valor cobrado e badge de status (Pago/Pendente/Atrasado).</li>
+<li><b>Lançar pagamento</b>: formulário recolhível com mês/ano, status, valor cobrado (pré-preenchido com a mensalidade do aluno), valor pago, data, forma e observação/desconto.</li></ul>
+
+<h2>Regras</h2>
+<table><tr><th>Item</th><th>Regra no código</th></tr>
+<tr><td>Saldo</td><td><code>pago − cobrado</code> (a planilha tem fórmula equivalente <code>=D−C</code>)</td></tr>
+<tr><td>Pendência (KPI)</td><td>Σ |saldo| onde status é Pendente ou Atrasado — a planilha real usa <b>Pendente / Inadimplente</b>, então “Inadimplente” não é contado (<a href="pendencias.html#P19">P19</a>)</td></tr>
+<tr><td>Conversão de data</td><td>Serial Excel → ISO: <code>new Date((serial − 25569) × 86400000)</code></td></tr>
+<tr><td>Gravação</td><td><code>PATCH</code> em <code>A{n}:I{n}</code> da aba Financeiro, com <code>n = linhas do usedRange + 1</code></td></tr></table>
+
+<div class="callout bad"><b>Problemas que afetam o resultado:</b>
+<ul><li><a href="pendencias.html#P06">P06</a> — o select de Status recebe as formas de pagamento.</li>
+<li><a href="pendencias.html#P07">P07</a> — cada pagamento cria uma linha nova (duplica a cobrança pendente que já existe na planilha), formato “2026-11” × “11/2026”, e fica fora dos intervalos do Dashboard do Excel.</li>
+<li>Não há edição/exclusão de lançamento nem visão geral por mês/inadimplente (<a href="pendencias.html#P14">P14</a>).</li></ul>
+<p><b>Evidência no arquivo real:</b> a linha 58 de <code>Financeiro</code> foi criada pelo app com mês <code>2026-05</code>, Status <code>Dinheiro</code> e Saldo fixo.</p></div>
+<div class="callout"><b>Regras de negócio:</b> a cobrança mensal deve ser <b>criada pelo app</b> (hoje não é) e <b>Atrasado</b> significa pagamento não confirmado na data de vencimento — e o vencimento é uma <b>data fixa por aluno, todo mês</b> (a planilha ainda não tem essa coluna). Ver <a href="regras.html">Regras de negócio</a> e <a href="roadmap.html">Roadmap</a>.</div>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

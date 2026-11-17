@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelo de dados e Excel — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html" class="cur">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Modelo de dados e Excel</h1>
+<p class="lead">O Excel é o banco de dados. Esta página mostra as abas do modelo do repositório, como o código as interpreta e o que fica no navegador.</p>
+
+<div class="callout"><b>Arquivo de referência:</b> o layout real é o de <code>Diario_Pedagogico_Musical_demo.xlsx</code> (confirmado pelo responsável). É idêntico ao modelo <code>Diario_Pedagogico_Musical.xlsx</code> nas abas Listas e Progresso; difere em: Diário (+2 aulas gravadas pelo app, linhas 26–27), Alunos (+1 aluno inserido a mão, linha 8), Financeiro (+1 linha criada pelo app, linha 58) e na validação do Status do Financeiro (<code>Pago, Pendente, Inadimplente</code>). A coluna L do Diário tem validação <code>Sim, Não</code>.</div>
+
+<h2>Abas da planilha (layout real)</h2>
+<table><tr><th>Aba</th><th>Dimensão</th><th>Conteúdo</th><th>Lida pelo app?</th></tr>
+<tr><td>Listas</td><td>A1:N15</td><td>Título (linha 1), instrução (2), <b>cabeçalhos na linha 4</b>, valores a partir da 5; 13 listas + coluna de fórmula</td><td>Sim (com erro de linha — P03)</td></tr>
+<tr><td>Diário de Aulas</td><td>A1:L25</td><td>Cabeçalho na linha 2; A–L (11 campos + “Atualizar Progresso?”)</td><td>Sim (A–K)</td></tr>
+<tr><td>Alunos</td><td>A1:M7</td><td>ID, Nome, Nascimento, Faixa Etária*, Instrumento, Contato, Responsável, Horário, Mensalidade, Início, Meses Ativos*, Status, Obs (*fórmulas)</td><td>Sim, <b>com layout diferente</b> (P02)</td></tr>
+<tr><td>Financeiro</td><td>A1:I57</td><td>Mês/Ano, Aluno, Cobrado, Pago, Status, Data Pagto, Forma, Desconto/Obs, Saldo*; 55 linhas pré-geradas</td><td>Sim</td></tr>
+<tr><td>Progresso</td><td>A1:P7</td><td>Estágio, teoria, método, página, técnica×3, hinos, culto×3, última atualização, observações</td><td><b>Não</b></td></tr>
+<tr><td>Dashboard</td><td>A1:J22</td><td>Fórmulas: alunos ativos, aulas/faltas do mês, receita e pendências, distribuição por estágio, prontidão</td><td>Não (cálculo próprio no app)</td></tr></table>
+<p>Validações de lista (dropdowns) existem no Excel para Diário, Alunos, Financeiro e Progresso, apontando para a aba Listas.</p>
+
+<h2>Mapeamento: o que o código espera por aba</h2>
+<h3>Diário de Aulas (linha 3 em diante)</h3>
+<table><tr><th>Coluna</th><th>Campo no objeto</th><th>Observação</th></tr>
+<tr><td>A</td><td><code>data</code></td><td>Excel entrega serial (P04)</td></tr><tr><td>B</td><td><code>aluno</code></td><td>vínculo por nome</td></tr><tr><td>C</td><td><code>presenca</code></td><td></td></tr><tr><td>D</td><td><code>motivo</code></td><td></td></tr><tr><td>E</td><td><code>tipo</code></td><td></td></tr><tr><td>F</td><td><code>metodo</code></td><td></td></tr><tr><td>G</td><td><code>conteudo</code></td><td></td></tr><tr><td>H</td><td><code>hino</code></td><td></td></tr><tr><td>I</td><td><code>licao</code></td><td></td></tr><tr><td>J</td><td><code>video</code></td><td></td></tr><tr><td>K</td><td><code>obs</code></td><td></td></tr><tr><td>L</td><td>—</td><td>“Atualizar Progresso?” ignorada</td></tr></table>
+
+<h3>Alunos — layout que o código assume (A–T)</h3>
+<table><tr><th>Col.</th><th>Campo</th><th>Col.</th><th>Campo</th></tr>
+<tr><td>A</td><td>id</td><td>K</td><td>pagina</td></tr>
+<tr><td>B</td><td>nome</td><td>L</td><td>hinos</td></tr>
+<tr><td>C</td><td>nasc</td><td>M</td><td>listahinos</td></tr>
+<tr><td>D</td><td>instrumento</td><td>N–P</td><td>tecnica m1, m2, ped</td></tr>
+<tr><td>E</td><td>horario</td><td>Q–S</td><td>culto jovens, adulto, ofic</td></tr>
+<tr><td>F</td><td>mensalidade</td><td>T</td><td>obs</td></tr>
+<tr><td>G</td><td>inicio</td><td></td><td></td></tr>
+<tr><td>H</td><td>estagio</td><td></td><td></td></tr>
+<tr><td>I</td><td>teoria</td><td></td><td></td></tr>
+<tr><td>J</td><td>metodo</td><td></td><td></td></tr></table>
+<div class="callout bad">Compare com o layout real do modelo (A–M, sem estágio/teoria/técnica/culto): <a href="pendencias.html#P02">P02</a>.</div>
+
+<h3>Financeiro (linha 3 em diante)</h3>
+<p>Status válidos hoje na planilha: <b>Pago · Pendente · Inadimplente</b>. Decisão: o termo passa a ser <b>Atrasado</b> (o que o código já usa) — a validação e o Dashboard da planilha precisarão ser ajustados (<a href="pendencias.html#P19">P19</a>). Não há coluna de data de vencimento. Mês/ano no formato <code>MM/AAAA</code> (o app grava <code>AAAA-MM</code>). Saldo é fórmula <code>=D−C</code> (o app grava número fixo). Dashboard soma apenas <code>Financeiro!C3:C57</code>.</p>
+<table><tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+<tr><td>mesAno</td><td>aluno</td><td>cobrado</td><td>pago</td><td>status</td><td>dataPag (serial→ISO)</td><td>forma</td><td>obs</td><td>saldo</td></tr></table>
+
+<h3>Listas (cabeçalho na linha 4)</h3>
+<p>INSTRUMENTOS · ESTÁGIOS · TIPO DE AULA · PRESENÇA · TÉCNICA · PRONTIDÃO CULTO · MÉTODOS / APOSTILAS · HINOS — BÁSICO · HINOS — INTERM. · HINOS — CULTO · PAGAMENTO · STATUS ALUNO · FAIXA ETÁRIA · (FÓRMULA / NÃO EDITAR).</p>
+
+<h2>Alterações propostas no layout</h2>
+<p>As decisões tomadas exigem mudanças na planilha real (nova coluna de vencimento, IDs, estágio manual, quatro abas de métodos e lições). Elas estão detalhadas, com colunas, validações, fórmulas e plano de migração, em <a href="layout.html"><b>Proposta de layout da planilha</b></a>. <b>Nada foi alterado no arquivo real</b>; aguardam sua aprovação.</p>
+
+<h2>Valores de domínio usados no código</h2>
+<table><tr><th>Domínio</th><th>Valores</th></tr>
+<tr><td>Presença</td><td>Presente · Falta — Aluno (justificada) · Falta — Aluno (sem aviso) · Falta — Professora</td></tr>
+<tr><td>Estágio</td><td>Iniciante · Básico · Intermediário · Apto — Culto Jovens · Apto — Culto Adulto · Oficializado</td></tr>
+<tr><td>Técnica</td><td>Não iniciado · Em andamento · Concluído</td></tr>
+<tr><td>Prontidão</td><td>Não avaliado · Em preparação · Apto · Não apto no momento</td></tr>
+<tr><td>Status financeiro</td><td>Pago · Pendente · Atrasado</td></tr>
+<tr><td>Status do aluno</td><td>Ativo · Pausado · Encerrado (planilha); o fallback do código usa Inativo/Concluído</td></tr>
+<tr><td>Status financeiro (planilha hoje)</td><td>Pago · Pendente · Inadimplente (decisão: trocar Inadimplente por Atrasado)</td></tr></table>
+
+<h2>No navegador (localStorage)</h2>
+<table><tr><th>Chave</th><th>Conteúdo</th></tr>
+<tr><td><code>mpm_account</code></td><td>usuário/nome da conta Microsoft</td></tr>
+<tr><td><code>mpm_file_id</code>, <code>mpm_file_name</code>, <code>mpm_file_path</code></td><td>arquivo Excel escolhido</td></tr>
+<tr><td><code>mpm_listas</code></td><td>cache das listas dinâmicas</td></tr>
+<tr><td><code>mpm_last_sync</code></td><td>data/hora da última leitura</td></tr>
+<tr><td><code>mpm_client_id</code></td><td>Client ID do Azure (sobrepõe o padrão)</td></tr>
+<tr><td>MSAL</td><td>cache de token da biblioteca (<code>cacheLocation: localStorage</code>)</td></tr></table>
+<p>Alunos, aulas e financeiro <b>não</b> são persistidos localmente, por decisão de projeto.</p>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

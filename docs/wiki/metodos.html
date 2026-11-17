@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avaliação: métodos e lições — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html" class="cur">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Avaliação: métodos e lições</h1>
+<p class="lead">Desejo da professora: cadastrar <b>métodos</b> e as <b>lições</b> de cada método para acompanhar o <b>status</b> de cada lição por aluno — Pendente, Aprovado ou Reprovado — e a <b>data</b> do status. Esta página avalia o encaixe, propõe um modelo de dados e lista o que falta decidir. Nada foi implementado.</p>
+
+<h2>Veredito</h2>
+<div class="callout"><b>Viável e recomendado.</b> É a forma concreta de cumprir a regra “progresso = métodos e lições” (P11) e elimina as barras heurísticas da ficha. É a <b>maior peça nova</b> do roadmap (esforço G): três abas novas, telas de cadastro e integração com o lançamento de aula. Funciona sobre o Excel atual, desde que a Fase 1 (chaves estáveis e fila offline) venha antes.</div>
+
+<h2>Respostas já recebidas</h2>
+<ul><li>Lições <b>via de regra sequenciais</b>, por método e por hinário.</li>
+<li>Lição reprovada <b>pode ser repetida</b>; em reprovações seguidas, a <b>data inicial se mantém</b> (mede o tempo na lição).</li>
+<li>O método associado ao aluno tem situação <b>Iniciado</b>, com <b>Pausado</b> e <b>Concluído</b> como adicionais.</li>
+<li>O <b>estágio calculado</b> usa métodos e hinário.</li>
+<li>A professora usa tablet, computador e o Excel direto — por isso as abas novas têm <b>ID estável</b> e toleram edição manual (ver <a href="pendencias.html#P22">P22</a>).</li></ul>
+
+<h2>Como se encaixa no que já existe</h2>
+<table><tr><th>Hoje</th><th>Com a proposta</th></tr>
+<tr><td>Lista “MÉTODOS / APOSTILAS” em Listas: só nomes (Faber Vol.1, Hanon, Hinário CCB…)</td><td>Passa a ser o catálogo de <b>Métodos</b>, cada um com suas <b>Lições</b>. A lista dos selects pode continuar sendo gerada a partir do catálogo.</td></tr>
+<tr><td><code>Progresso!E</code> método atual e <code>F</code> página/lição em texto livre</td><td>Derivados: método em andamento e primeira lição ainda não aprovada. Podem ficar como cópia de conveniência.</td></tr>
+<tr><td>Coluna “Atualizar Progresso?” (Sim/Não) do Diário</td><td>Ao marcar Sim, a aula pede a lição trabalhada e o status (Pendente/Aprovado/Reprovado); a data do status é a da aula (editável).</td></tr>
+<tr><td>Barras “Método” e “Hinos” da ficha (heurísticas)</td><td>% real = lições aprovadas ÷ total de lições do método.</td></tr>
+<tr><td>Catálogo de hinos ausente (P20)</td><td>Hinário tratado como método (a professora fala em “método/hinário”): <i>Hinos de jovens</i> (50 lições) e <i>Hinos do culto oficial</i> (430 lições), na mesma sequência e com o mesmo status e data. Alimenta o estágio calculado; a aptidão continua sendo checkbox dela.</td></tr></table>
+
+<h2>Modelo de dados proposto</h2>
+<p>Quatro abas novas (colunas exatas, validações e fórmulas na <a href="layout.html">Proposta de layout</a>):</p>
+<table><tr><th>Aba</th><th>Conteúdo</th><th>Observação</th></tr>
+<tr><td><b>Métodos</b></td><td>ID · Nome · Tipo (Método ou Hinário) · <b>Nível</b> (Iniciante, Básico, Intermediário, Avançado) · Instrumento (opcional) · Total de lições · Ativo</td><td>O <b>hinário</b> é um método do tipo Hinário.</td></tr>
+<tr><td><b>Lições</b></td><td>ID · ID do método · Ordem · Título/descrição</td><td>Cadastro um a um ou colando uma lista (essencial para os 430 hinos).</td></tr>
+<tr><td><b>Aluno × Método</b></td><td>ID · ID do aluno · ID do método · Data de início · <b>Situação</b> (Iniciado / Pausado / Concluído) · Data da situação</td><td>Um aluno pode ter vários métodos. Lições sem avaliação contam como <i>Pendente</i> (implícito), sem criar linhas.</td></tr>
+<tr><td><b>Avaliações de lição</b></td><td>ID · ID do aluno · ID da lição · Status (Pendente / Aprovado / Reprovado) · <b>Data da tentativa</b> · ID da aula (opcional) · Observação</td><td>Registro <b>só de acréscimo</b>: cada tentativa fica gravada com sua data real. Os valores vigentes são calculados.</td></tr></table>
+<div class="callout"><b>Regra da data (resposta da professora):</b> o status vigente de uma lição é o do último registro; a <b>data do status</b> é a do <i>primeiro</i> registro da sequência atual de mesmo status. Exemplo: Reprovado em 10/03, Reprovado em 24/03 → status Reprovado desde <b>10/03</b>, 2 tentativas. Aprovado em 07/04 → data do status 07/04 e <b>tempo na lição = 28 dias</b> (07/04 − 10/03). O histórico completo permanece disponível.</div>
+<div class="callout warn"><b>Por que só acréscimo:</b> preserva as datas de cada tentativa (necessário para a regra acima) e combina com a fila offline, pois cada operação é independente e idempotente, mesmo com tablet, computador e Excel gravando.</div>
+
+<h2>Comportamentos derivados</h2>
+<ul><li><b>% do método</b> = lições Aprovadas ÷ total de lições.</li>
+<li><b>Lição atual</b> = primeira lição (por ordem) que não está Aprovada.</li>
+<li><b>Tentativas</b> e <b>tempo na lição</b> a partir do histórico (regra da data acima).</li>
+<li><b>Situação do método</b>: começa Iniciado; o app <b>sugere</b> Concluído quando todas as lições estão Aprovadas (a professora confirma) e permite Pausado; método Pausado sai de “método atual” e do cálculo do estágio.</li>
+<li><b>Sequência</b>: via de regra as lições são sequenciais; o app orienta (sugere a próxima e avisa ao marcar fora de ordem, sem bloquear).</li>
+<li><b>Estágio calculado</b>: o nome (Iniciante, Básico, Intermediário, Avançado) vem do <b>nível cadastrado no método</b> (regra da professora); adotei o <b>maior nível entre os métodos Iniciados ou Concluídos</b> do aluno. A professora pode sobrescrever a qualquer momento.</li>
+<li><b>Progresso geral (%)</b> (regra da professora): média de cada método = aprovadas ÷ total de lições; depois, <b>média ponderada simples</b> das médias de todos os métodos associados (hinário incluído), peso = nº de lições. Só entram métodos Iniciados/Concluídos e com lições cadastradas.</li>
+<li><b>Pendência</b> = lições do método Iniciado sem avaliação ou com último status Pendente.</li></ul>
+
+<h2>Telas necessárias</h2>
+<table><tr><th>Tela</th><th>Função</th></tr>
+<tr><td>Métodos</td><td>Listar/criar/editar/desativar métodos; abrir as lições.</td></tr>
+<tr><td>Lições do método</td><td>Cadastrar lições em ordem; <i>colar uma lista</i> para criar várias de uma vez; reordenar.</td></tr>
+<tr><td>Ficha do aluno → “Métodos e lições”</td><td>Associar método ao aluno (Iniciado / Pausado / Concluído); ver as lições com status e data; marcar Aprovado/Reprovado/Pendente (data padrão = hoje, editável); sugere a próxima lição e avisa se for fora de ordem.</td></tr>
+<tr><td>Lançar aula</td><td>Com “Atualizar progresso? = Sim”: escolher método e lição(ões) e o status; a data da tentativa é a da aula.</td></tr>
+<tr><td>Relatório PDF</td><td>Seção de métodos e lições (percentuais e últimas aprovações).</td></tr></table>
+
+<h2>Esforço e faseamento (relativo)</h2>
+<table><tr><th>Etapa</th><th>Conteúdo</th><th>Esforço</th></tr>
+<tr><td>A</td><td>Abas Métodos e Lições + telas de cadastro (inclui importar lista colada)</td><td>M</td></tr>
+<tr><td>B</td><td>Atribuição ao aluno + avaliação de lição na ficha + % real</td><td>M</td></tr>
+<tr><td>C</td><td>Integração com o lançamento de aula (“Atualizar progresso?”)</td><td>P/M</td></tr>
+<tr><td>D</td><td>Relatório PDF e linha do tempo</td><td>M</td></tr>
+<tr><td>E</td><td>Hinário como método (50 + 430 hinos) e estágio calculado a partir de métodos e hinário</td><td>M — o custo maior é cadastrar os 480 itens, não o software</td></tr></table>
+
+<h2>Riscos e cuidados</h2>
+<ul><li><b>Trabalho de cadastro:</b> alguém precisa digitar/colar as lições. Importar de lista colada reduz muito.</li>
+<li><b>Volume:</b> alunos × lições com avaliações cresce, mas o histórico só de acréscimo e a Pendente implícita mantêm a planilha pequena.</li>
+<li><b>Dependência da Fase 1:</b> sem IDs estáveis e fila persistente, esta funcionalidade seria construída sobre a gravação por posição de linha, que já se mostrou frágil.</li>
+<li><b>Compatibilidade:</b> manter <code>Progresso!E/F</code> preenchidos (derivados) evita quebrar o Dashboard e o relatório atual.</li></ul>
+
+<h2>Padrões que adotei (corrija se quiser)</h2>
+<ul><li>Instrumento do método é <b>opcional</b> (em branco = vale para qualquer instrumento).</li>
+<li>Lições cadastradas <b>uma a uma ou colando uma lista</b>.</li>
+<li>“Pendente” = lição <b>sem avaliação</b> (implícito); a professora também pode marcar explicitamente.</li>
+<li>Método vira “Concluído” por <b>sugestão do app confirmada pela professora</b>.</li></ul>
+
+<h2>Perguntas em aberto</h2>
+<p>Nenhuma. Levantamento finalizado em 17/11/2026.</p>
+<div class="callout"><b>Peso aceito:</b> com peso = nº de lições, o hinário (480 lições) pesa mais no progresso geral. Ex.: método de 20 lições com 50% e hinário com 10% → 11,6%.</div>
+<p><b>Tempo na lição:</b> só informativo (decidido), sem regra associada.</p>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

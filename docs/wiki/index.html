@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visão geral — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html" class="cur">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>🎹 Diário Pedagógico Musical</h1>
+<p class="lead">Aplicativo web para professores de música registrarem aulas, acompanharem o progresso e controlarem a parte financeira dos alunos, usando uma planilha Excel no OneDrive como banco de dados.</p>
+
+<div class="callout"><b>Atenção:</b> esta Wiki foi escrita a partir do código atual (commit <code>813326d</code>). A página <a href="pendencias.html">Pendências e lacunas</a> lista 22 pontos encontrados — três deles são críticos (P01, P02 e P09). Veja também as <a href="regras.html">Regras de negócio</a> e o <a href="roadmap.html">Roadmap proposto</a>.</div>
+
+<div class="callout ok"><b>Levantamento finalizado em 17/11/2026.</b> Todas as perguntas de negócio foram respondidas e estão registradas em <a href="regras.html">Regras de negócio</a>; as suposições que tomei estão em <a href="pendencias.html">Pendências</a> para correção. Nenhum código do app e nenhum arquivo real foi alterado.</div>
+
+<h2>O que é</h2>
+<p>Um <b>app web estático</b> (HTML + CSS + JavaScript puro, sem framework e sem servidor próprio) pensado para o navegador de um tablet. Ele conversa direto com o <b>Microsoft Graph</b> para ler e escrever no arquivo <code>Diario_Pedagogico_Musical.xlsx</code> guardado no OneDrive pessoal da professora. É hospedado no GitHub Pages.</p>
+<p>Público: professora(es) de Piano, Órgão e Flauta (contexto de ensino musical ligado à igreja: hinos, “prontidão para culto”, oficialização).</p>
+
+<h2>Mapa da Wiki</h2>
+<div class="grid">
+<a class="card" href="instalacao.html"><b>Instalação e uso</b><span>Passo a passo: GitHub Pages, OneDrive, Azure, primeiro login e rotina diária.</span></a>
+<a class="card" href="f-conexao.html"><b>Conexão e sincronização</b><span>Login Microsoft, escolha do arquivo, “Atualizar tudo”, log.</span></a>
+<a class="card" href="f-home.html"><b>Início</b><span>KPIs, aulas de hoje, alertas e gráfico de estágios.</span></a>
+<a class="card" href="f-alunos.html"><b>Alunos</b><span>Lista, busca, ficha completa e edição.</span></a>
+<a class="card" href="f-lancamento.html"><b>Lançar aula</b><span>Presença, conteúdo, hinos, lição de casa.</span></a>
+<a class="card" href="f-financeiro.html"><b>Financeiro</b><span>Mensalidades por aluno e pendências.</span></a>
+<a class="card" href="f-calendario.html"><b>Calendário</b><span>Frequência mensal por dia.</span></a>
+<a class="card" href="f-relatorio.html"><b>Relatório PDF</b><span>Relatório de progresso para impressão.</span></a>
+<a class="card" href="f-listas.html"><b>Listas dinâmicas</b><span>Opções dos selects vindas da aba Listas.</span></a>
+<a class="card" href="regras.html"><b>Regras de negócio</b><span>Presença, progresso, aptidão para culto, cobrança e offline — conforme definido pelo responsável.</span></a>
+<a class="card" href="arquitetura.html"><b>Arquitetura</b><span>Módulos JS, ordem de carga, estado global, fluxos.</span></a>
+<a class="card" href="dados.html"><b>Modelo de dados</b><span>Abas do Excel, mapeamento de colunas, localStorage, endpoints.</span></a>
+<a class="card" href="pendencias.html"><b>Pendências e lacunas</b><span>Relatório de avaliação com evidências e decisões.</span></a>
+<a class="card" href="roadmap.html"><b>Roadmap proposto</b><span>Próximos passos: óbvios, necessários e desejáveis, em fases.</span></a>
+<a class="card" href="metodos.html"><b>Avaliação: métodos e lições</b><span>Proposta de cadastro de métodos/lições com status e data.</span></a>
+<a class="card" href="layout.html"><b>Proposta de layout da planilha</b><span>Colunas, abas, validações e fórmulas a aprovar, com plano de migração.</span></a>
+</div>
+
+<h2>Funcionalidades em uma tabela</h2>
+<table>
+<tr><th>Área</th><th>O que faz</th><th>Estado</th><th>Arquivo</th></tr>
+<tr><td>Conexão Microsoft</td><td>Login (MSAL popup), escolha do .xlsx, leitura completa, log de sincronização</td><td><span class="tag t-warn">Parcial</span></td><td><code>config.js</code>, <code>db.js</code></td></tr>
+<tr><td>Início</td><td>KPIs, aulas do dia, alertas, distribuição por estágio</td><td><span class="tag t-warn">Parcial</span></td><td><code>home.js</code></td></tr>
+<tr><td>Lista/ficha do aluno</td><td>Busca, progresso, técnica, prontidão para culto, histórico, financeiro</td><td><span class="tag t-warn">Parcial</span></td><td><code>alunos.js</code></td></tr>
+<tr><td>Editar aluno</td><td>Formulário completo gravando no Excel</td><td><span class="tag t-bad">Com problema</span></td><td><code>aluno-editar.js</code></td></tr>
+<tr><td>Lançar aula</td><td>Registro com 4 tipos de presença + conteúdo; fila de pendentes</td><td><span class="tag t-warn">Parcial</span></td><td><code>lancamento.js</code></td></tr>
+<tr><td>Financeiro</td><td>Resumo, últimas 6 mensalidades, lançar pagamento, KPI de pendências</td><td><span class="tag t-bad">Com problema</span></td><td><code>financeiro.js</code></td></tr>
+<tr><td>Calendário</td><td>Grade mensal com pontos coloridos, resumo e modal do dia</td><td><span class="tag t-warn">Parcial</span></td><td><code>calendario.js</code></td></tr>
+<tr><td>Relatório PDF</td><td>Impressão do progresso do aluno</td><td><span class="tag t-ok">Implementado</span></td><td><code>relatorio.js</code></td></tr>
+<tr><td>Listas dinâmicas</td><td>Selects alimentados pela aba Listas, com cache e fallback</td><td><span class="tag t-bad">Com problema</span></td><td><code>listas.js</code></td></tr>
+<tr><td>Loaders/toasts/log</td><td>Skeletons, spinner em botões, toasts, log</td><td><span class="tag t-ok">Implementado</span></td><td><code>ui.js</code></td></tr>
+<tr><td>Cadastro de novo aluno</td><td>—</td><td><span class="tag t-neu">Não existe</span></td><td>—</td></tr>
+<tr><td>Geração automática da cobrança mensal</td><td>Regra de negócio confirmada, sem implementação</td><td><span class="tag t-neu">Não existe</span></td><td>—</td></tr>
+<tr><td>Progresso por método/lição (com status e data) e aptidão para culto (checkbox)</td><td>Regra de negócio confirmada, sem implementação</td><td><span class="tag t-neu">Não existe</span></td><td>—</td></tr>
+<tr><td>Modo offline / PWA</td><td><b>Requisito de negócio</b>, sem implementação</td><td><span class="tag t-neu">Não existe</span></td><td>—</td></tr>
+</table>
+<p><b>Legenda:</b> <span class="tag t-ok">Implementado</span> funciona como descrito · <span class="tag t-warn">Parcial</span> funciona com limitações · <span class="tag t-bad">Com problema</span> há erro que afeta o resultado · <span class="tag t-neu">Não existe</span> previsto, não implementado. Os detalhes de cada “Parcial/Com problema” estão em <a href="pendencias.html">Pendências</a>.</p>
+
+<h2>Tecnologias</h2>
+<table>
+<tr><th>Item</th><th>Detalhe</th></tr>
+<tr><td>Front-end</td><td>HTML5 + CSS (<code>css/diario.css</code>, 1.438 linhas) + JavaScript puro em 12 arquivos <code>&lt;script&gt;</code></td></tr>
+<tr><td>Autenticação</td><td>MSAL.js 3.27.0 (carregado sob demanda do jsDelivr), <code>loginPopup</code>, authority <code>consumers</code> (contas pessoais), escopos <code>Files.ReadWrite</code> e <code>User.Read</code></td></tr>
+<tr><td>Dados</td><td>Microsoft Graph v1.0 — Excel Online (<code>workbook/worksheets/…/usedRange</code> e <code>range(address=…)</code>)</td></tr>
+<tr><td>Armazenamento local</td><td>Apenas <code>localStorage</code> para conta, arquivo escolhido, listas, Client ID e data da última sync</td></tr>
+<tr><td>Ícones / fontes</td><td>Tabler Icons 3.31 (CDN) · DM Sans / DM Mono (Google Fonts)</td></tr>
+<tr><td>Hospedagem</td><td>GitHub Pages (repositório público)</td></tr>
+</table>
+
+<h2>Estrutura do repositório</h2>
+<pre><code>vlk-diario-classe/
+├── index.html                      ← todas as telas (páginas e modais) em um só HTML
+├── css/diario.css                  ← design system (tokens de cor, componentes, skeleton)
+├── js/
+│   ├── config.js    ui.js    db.js    listas.js
+│   ├── home.js      alunos.js   aluno-editar.js   lancamento.js
+│   ├── financeiro.js   calendario.js   relatorio.js   app.js
+│   └── diario.js                   ← LEGADO (monolito antigo, não carregado)
+├── Diario_Pedagogico_Musical.xlsx       ← planilha-modelo (6 abas)
+├── Diario_Pedagogico_Musical_demo.xlsx  ← planilha REAL em uso no OneDrive (layout de referência)
+├── README.md   melhorias.md        ← guia de configuração e plano de ação
+└── docs/wiki/                      ← esta Wiki</code></pre>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

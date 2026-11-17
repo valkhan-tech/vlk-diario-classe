@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conexão OneDrive e sincronização — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html" class="cur">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Conexão OneDrive e sincronização</h1>
+<p class="lead">Tela <b>Config</b> — é a porta de entrada do app: sem conexão, as demais abas ficam bloqueadas. <span class="tag t-warn">Parcial</span></p>
+
+<h2>O que o usuário vê</h2>
+<ul><li><b>Status do OneDrive</b>: cartão Conectado / Conectando / Erro / Não conectado.</li>
+<li><b>Entrar com Microsoft</b> (e <b>Desconectar conta</b>).</li>
+<li><b>Arquivo Excel</b>: campo de caminho + <b>Buscar</b>, ou <b>Navegar no OneDrive</b> (lista numerada via <code>prompt()</code>); botão <b>Trocar</b> depois de escolhido.</li>
+<li><b>Sincronização</b>: <b>Atualizar tudo</b>, texto “Última leitura/escrita”, log colorido e toggle “Escrita automática”.</li>
+<li><b>Como configurar</b>: passo a passo de 5 etapas que acompanha o progresso (bolinhas viram ✓).</li></ul>
+
+<h2>Fluxo</h2>
+<div class="flow"><span class="box">Entrar com Microsoft</span><span class="arr">→</span><span class="box">loginPopup (MSAL)</span><span class="arr">→</span><span class="box">Buscar arquivo (<code>/me/drive/root:/caminho</code>)</span><span class="arr">→</span><span class="box"><code>carregarDadosPlanilha()</code></span><span class="arr">→</span><span class="box">renderiza Home, Alunos, Agenda, Lançar</span></div>
+
+<h2>Regras e comportamentos</h2>
+<ul><li><b>Bloqueio de navegação</b>: sem conexão, as 4 primeiras abas ficam <code>bloqueado</code> e o toque redireciona para Config (<code>navTo</code> em <code>app.js</code>).</li>
+<li><b>Atualizar tudo</b> (<code>atualizarTudo</code>): envia primeiro os registros pendentes de aulas e depois recarrega Diário, Alunos, Financeiro e Listas.</li>
+<li><b>Leitura</b> (<code>carregarDadosPlanilha</code>): mostra skeleton na lista de alunos, bloqueia o botão com spinner, registra cada etapa no log, grava a data/hora da leitura.</li>
+<li><b>Erro AADSTS70002</b>: o app reconhece e imprime no log o passo a passo de correção no Azure (SPA vs Web).</li>
+<li><b>Desconectar</b> limpa conta, arquivo e dados em memória.</li>
+<li><b>localStorage</b>: <code>mpm_account</code>, <code>mpm_file_id</code>, <code>mpm_file_name</code>, <code>mpm_file_path</code>, <code>mpm_last_sync</code>, <code>mpm_client_id</code>.</li></ul>
+
+<h2>Limitações conhecidas</h2>
+<ul><li><a href="pendencias.html#P01">P01</a> — restauração do estado comentada: ao reabrir, nada é lembrado.</li>
+<li><a href="pendencias.html#P08">P08</a> — token não é renovado; MSAL não é recriado após recarregar.</li>
+<li><a href="pendencias.html#P05">P05</a> — respostas de erro do Graph não são verificadas.</li>
+<li><a href="pendencias.html#P13">P13</a> — o toggle “Escrita automática” não tem efeito.</li>
+<li><code>desconectar()</code> não remove <code>mpm_file_name</code> e não limpa as listas em cache.</li></ul>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

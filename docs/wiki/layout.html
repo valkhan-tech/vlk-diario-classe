@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposta de layout da planilha — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html" class="cur">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Proposta de layout da planilha</h1>
+<p class="lead">Alterações necessárias no <code>Diario_Pedagogico_Musical_demo.xlsx</code> para cumprir as decisões tomadas. É uma <b>proposta para aprovação</b>: o arquivo real <b>não</b> foi alterado. A professora continuará podendo editar tudo à mão no Excel.</p>
+
+<div class="callout warn"><b>Princípios:</b> (1) não quebrar o que ela já usa — colunas existentes mantêm posição e significado; (2) só <i>acrescentar</i> colunas e abas; (3) fórmulas e validações existentes ficam; (4) o app nunca grava em colunas com fórmula; (5) toda linha que o app grava tem um identificador estável.</div>
+
+<h2>Resumo das mudanças</h2>
+<table><tr><th>Aba</th><th>Mudança</th><th>Por quê</th></tr>
+<tr><td>Alunos</td><td>+1 coluna: Dia de vencimento</td><td>Vencimento fixo por aluno (P19)</td></tr>
+<tr><td>Financeiro</td><td>+2 colunas: Vencimento e Situação (fórmula); novo Status; Dashboard ajustado</td><td>Atrasado e cobrança automática (P07, P19)</td></tr>
+<tr><td>Diário de Aulas</td><td>+1 coluna: ID</td><td>Gravar por chave, não por posição (P22)</td></tr>
+<tr><td>Progresso</td><td>+3 colunas: ID do aluno, Estágio (professora), Estágio (calculado); <code>C</code> vira fórmula</td><td>Estágio calculado + sobrescrita (P12)</td></tr>
+<tr><td>Listas</td><td>+4 listas (colunas O–R)</td><td>Selects e validações novos</td></tr>
+<tr><td>Métodos, Lições, Aluno × Método, Avaliações de lição</td><td>4 abas novas</td><td>Progresso por método/lição e hinário (P21, P20)</td></tr>
+<tr><td>Todas as abas de dados</td><td>Converter em Tabelas do Excel</td><td>Linhas novas herdam fórmulas e validações; intervalos crescem sozinhos</td></tr></table>
+
+<h2>Detalhamento por aba</h2>
+
+<h3>Alunos (A–M existentes)</h3>
+<table><tr><th>Col.</th><th>Cabeçalho</th><th>Tipo / validação</th><th>Quem preenche</th></tr>
+<tr><td>N <i>(nova)</i></td><td>Dia de Vencimento</td><td>Inteiro 1–31 (validação)</td><td>Professora (Excel ou app)</td></tr></table>
+<ul><li>Dia 29–31 em meses curtos → vence no último dia do mês.</li>
+<li>Status (<code>L</code>): <i>Ativo</i>, <i>Pausado</i>, <i>Encerrado</i> (já existem). <b>Só “Ativo” gera cobrança.</b></li>
+<li><code>D</code> (Faixa Etária) e <code>K</code> (Meses Ativos) continuam fórmulas; o app não as grava.</li></ul>
+
+<h3>Financeiro (A–I existentes)</h3>
+<table><tr><th>Col.</th><th>Cabeçalho</th><th>Tipo / fórmula</th></tr>
+<tr><td>A–H</td><td>(existentes)</td><td>Mês/Ano em <code>MM/AAAA</code>. Status (<code>E</code>): validação passa a <b>Pago, Pendente, Atrasado</b> (sai “Inadimplente”; hoje nenhuma linha usa esse valor).</td></tr>
+<tr><td>I</td><td>Saldo (R$)</td><td>Fórmula <code>=D−C</code> (mantém; o app não grava)</td></tr>
+<tr><td>J <i>(nova)</i></td><td>Vencimento</td><td>Data. Gravada pelo app ao criar a cobrança (mês + dia de vencimento do aluno). Mudar o dia do aluno só afeta cobranças futuras.</td></tr>
+<tr><td>K <i>(nova)</i></td><td>Situação</td><td>Fórmula: <code>=SE(E3="Pendente";SE(E(J3&lt;&gt;"";J3&lt;HOJE());"Atrasado";"Pendente");E3)</code></td></tr></table>
+<ul><li><b>Chave natural:</b> aluno + Mês/Ano é <b>único</b> (uma cobrança por aluno por mês). O app não cria duplicata e dá baixa na linha existente.</li>
+<li><b>Atrasado</b> = Status Pendente com Vencimento anterior a hoje. A professora também pode marcar “Atrasado” à mão no Status.</li>
+<li><b>Dashboard</b> (hoje <code>Financeiro!C3:C57</code>): trocar por intervalos que cresçam (ou referências de tabela). Pendências = Valor Cobrado − Valor Pago onde Situação for Pendente ou Atrasado; Receita do mês = soma de Valor Pago com Status Pago e Mês/Ano do mês corrente.</li></ul>
+
+<h3>Diário de Aulas (A–L existentes)</h3>
+<table><tr><th>Col.</th><th>Cabeçalho</th><th>Tipo</th></tr>
+<tr><td>M <i>(nova)</i></td><td>ID</td><td>Texto único gerado pelo app (ex.: data-hora + sufixo aleatório do aparelho). Linhas inseridas à mão podem ficar sem ID: o app atribui um na primeira leitura.</td></tr></table>
+<ul><li><code>L</code> “Atualizar Progresso?” (Sim/Não) passa a ser usada: Sim → o app pede a lição e o status.</li></ul>
+
+<h3>Progresso (A–P existentes)</h3>
+<table><tr><th>Col.</th><th>Cabeçalho</th><th>Tipo / fórmula</th></tr>
+<tr><td>Q <i>(nova)</i></td><td>ID Aluno</td><td>Relaciona com Alunos!A (hoje a relação é pelo nome na coluna <code>A</code>)</td></tr>
+<tr><td>R <i>(nova)</i></td><td>Estágio (professora)</td><td>Lista ESTÁGIOS. Vazio = usar o calculado. A professora pode digitar aqui no Excel ou escolher no app.</td></tr>
+<tr><td>S <i>(nova)</i></td><td>Estágio (calculado)</td><td>Gravado pelo app: maior nível entre os métodos Iniciados ou Concluídos do aluno</td></tr>
+<tr><td>C</td><td>Estágio Atual</td><td><b>Passa a ser fórmula</b>: <code>=SE(R3&lt;&gt;"";R3;S3)</code>. O Dashboard continua contando <code>C</code> sem mudança.</td></tr>
+<tr><td>L, M, N</td><td>Culto Jovens / Adulto / Oficialização</td><td>Continuam texto com a lista PRONTIDÃO CULTO. O checkbox do app grava <b>Apto</b> (marcado) ou <b>Não avaliado</b> (desmarcado); “Em preparação” e “Não apto no momento” antigos aparecem como desmarcado.</td></tr>
+<tr><td>E, F</td><td>Método atual / Página-lição</td><td>Passam a ser <b>derivados</b> (preenchidos pelo app a partir de Aluno × Método e Lições), por conveniência e compatibilidade.</td></tr>
+<tr><td>O</td><td>Última Atualização</td><td>Atualizada pelo app a cada mudança de progresso</td></tr></table>
+
+<h3>Listas (cabeçalhos na linha 4; coluna <code>N</code> é fórmula)</h3>
+<table><tr><th>Col.</th><th>Cabeçalho</th><th>Valores</th></tr>
+<tr><td>O <i>(nova)</i></td><td>SITUAÇÃO MÉTODO</td><td>Iniciado · Pausado · Concluído</td></tr>
+<tr><td>P <i>(nova)</i></td><td>STATUS LIÇÃO</td><td>Pendente · Aprovado · Reprovado</td></tr>
+<tr><td>Q <i>(nova)</i></td><td>STATUS PAGAMENTO</td><td>Pago · Pendente · Atrasado</td></tr>
+<tr><td>R <i>(nova)</i></td><td>TIPO MÉTODO</td><td>Método · Hinário</td></tr>
+<tr><td>S <i>(nova)</i></td><td>NÍVEL MÉTODO</td><td>Iniciante · Básico · Intermediário · Avançado</td></tr></table>
+<p>A lista <b>ESTÁGIOS</b> (coluna B) ganha o valor <b>Avançado</b>, entre Intermediário e “Apto — Culto Jovens” (posição escolha minha).</p>
+<p>O app ignora a coluna <code>N</code> (“FÓRMULA / NÃO EDITAR”) ao montar as listas dinâmicas.</p>
+
+<h3>Abas novas</h3>
+<table><tr><th>Aba</th><th>Colunas</th></tr>
+<tr><td><b>Métodos</b></td><td>A ID · B Nome · C Tipo (lista TIPO MÉTODO) · D Nível (lista NÍVEL MÉTODO) · E Instrumento (opcional) · F Total de Lições (fórmula <code>=CONT.SE(Lições[ID Método];A2)</code>) · G Ativo (Sim/Não) · H Observações</td></tr>
+<tr><td><b>Lições</b></td><td>A ID · B ID Método · C Ordem (número) · D Título/Descrição · E Observações</td></tr>
+<tr><td><b>Aluno × Método</b></td><td>A ID · B ID Aluno · C ID Método · D Data Início · E Situação (lista SITUAÇÃO MÉTODO) · F Data da Situação · G Observação</td></tr>
+<tr><td><b>Avaliações de lição</b></td><td>A ID · B ID Aluno · C ID Lição · D Status (lista STATUS LIÇÃO) · E Data da Tentativa · F ID Aula (opcional) · G Observação</td></tr></table>
+<ul><li><b>Avaliações de lição</b> é um registro só de acréscimo: cada tentativa fica com sua data real. A <i>data do status</i> exibida é a do primeiro registro da sequência atual de mesmo status (regra da professora); o tempo na lição vem dessas datas.</li>
+<li>Lição sem nenhum registro conta como <b>Pendente</b> para os métodos que o aluno tem Iniciados.</li>
+<li>Hinário = método do tipo <i>Hinário</i> (50 lições de jovens, 430 do culto oficial). Para cadastrar em lote, o app aceita uma lista colada.</li></ul>
+
+<p><i>Nota:</i> as fórmulas acima estão com os nomes de função do Excel em português (SE, E, HOJE, CONT.SE) e separador “;”; o arquivo guarda internamente os nomes em inglês (IF, AND, TODAY, COUNTIF).</p>
+
+<h2>Tabelas do Excel</h2>
+<p>Recomendo converter cada aba de dados em uma <b>Tabela do Excel</b> (Inserir → Tabela): o filtro e a ordenação continuam como hoje, as validações e fórmulas são herdadas por linhas novas, e o Microsoft Graph consegue acrescentar linhas na tabela com as colunas calculadas preenchidas. Os intervalos fixos do Dashboard (<code>C3:C57</code>) deixam de ser problema. <i>Pendência de verificação:</i> testar a convivência com os dois cabeçalhos (título + cabeçalho) que as abas têm hoje; pode ser necessário mover o título para fora da tabela.</p>
+
+<h2>Plano de migração dos dados atuais</h2>
+<table><tr><th>#</th><th>Ação</th><th>Observação</th></tr>
+<tr><td>1</td><td>Fazer cópia de segurança do arquivo e testar tudo numa <b>cópia (v2)</b></td><td>Posso gerar o arquivo v2 se você quiser.</td></tr>
+<tr><td>2</td><td>Financeiro: resolver a duplicidade da aluna com cobrança <code>05/2026</code> — linha 9 (Pendente) e linha 58 (<code>2026-05</code>, Status “Dinheiro”, Pago 180)</td><td>Passar a baixa para a linha 9 (Status Pago, data e forma Dinheiro, Saldo por fórmula) e apagar a linha 58.</td></tr>
+<tr><td>3</td><td>Financeiro: preencher <b>Vencimento</b> das 55 linhas existentes</td><td>Mês/Ano + Dia de Vencimento do aluno.</td></tr>
+<tr><td>4</td><td>Alunos: preencher <b>Dia de Vencimento</b> de cada aluno</td><td>Inclui o aluno inserido à mão (linha 8).</td></tr>
+<tr><td>5</td><td>Diário: remover os 2 registros de teste (linhas 26–27) e preencher a coluna <b>ID</b></td><td>O app pode atribuir os IDs na primeira leitura.</td></tr>
+<tr><td>6</td><td>Progresso: preencher <b>ID Aluno</b>; transformar <code>C</code> em fórmula; mover o estágio atual para <b>R</b> (Estágio professora) se quiser preservar o valor definido à mão</td><td>Evita perder o que a professora já definiu.</td></tr>
+<tr><td>7</td><td>Listas: acrescentar as quatro listas novas; atualizar validação do Status do Financeiro</td><td>—</td></tr>
+<tr><td>8</td><td>Criar as quatro abas novas (vazias) e cadastrar o primeiro método para validar o fluxo</td><td>Os dados de métodos atuais (texto em Progresso!E/F) podem ser migrados depois.</td></tr></table>
+
+<h2>Compatibilidade e riscos</h2>
+<ul><li>Nenhuma coluna existente muda de posição; o Excel continua utilizável sem o app.</li>
+<li>O Dashboard precisa de ajuste de fórmulas (Financeiro) — fórmulas novas estão descritas acima.</li>
+<li>Se a professora inserir linhas ou ordenar à mão, o app localiza por ID e continua correto (P22).</li>
+<li>As colunas novas ficam à direita; quem abrir o arquivo antigo no app antigo não é afetado, mas o app atual (com os defeitos P02/P06/P07) <b>não deve ser usado</b> contra o arquivo alterado.</li></ul>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

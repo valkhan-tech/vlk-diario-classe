@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alunos, ficha e edição — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html" class="cur">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Alunos, ficha e edição</h1>
+<p class="lead">Aba <b>Alunos</b>: lista com busca → ficha detalhada → tela de edição. As três ficam dentro de <code>#page-alunos</code>. <span class="tag t-warn">Parcial</span></p>
+
+<h2>Lista de alunos</h2>
+<ul><li>Cada item: avatar com iniciais (cor derivada do nome), nome, instrumento, data da última aula e badge do estágio.</li>
+<li>Busca por <b>nome</b> (contém, sem distinguir maiúsculas).</li>
+<li>Estado vazio “Nenhum aluno encontrado” e skeleton durante carregamento.</li></ul>
+
+<h2>Ficha do aluno</h2>
+<table><tr><th>Seção</th><th>Conteúdo</th></tr>
+<tr><td>Cabeçalho</td><td>Nome, instrumento · horário · “Desde mês/ano”, estágio atual</td></tr>
+<tr><td>Progresso técnico</td><td>Barras de Teoria, Hinos e Método + método e página atuais</td></tr>
+<tr><td>Habilidades</td><td>Pílulas 1 mão / 2 mãos / Pedaleira (Concluído, Em andamento, Não iniciado) e lista de hinos</td></tr>
+<tr><td>Prontidão para culto</td><td>Pílulas Jovens / Adulto / Oficialização</td></tr>
+<tr><td>Financeiro</td><td>Ver <a href="f-financeiro.html">Financeiro</a></td></tr>
+<tr><td>Últimas aulas</td><td>As 4 aulas mais recentes com tag Presente / Falta / Justificada / Cancelada</td></tr>
+<tr><td>Ações</td><td><b>Lançar nova aula</b> (pré-seleciona o aluno), <b>Editar aluno</b>, <b>Gerar relatório PDF</b></td></tr></table>
+<div class="callout warn">As barras “Hinos” (<code>hinos × 12</code>%) e “Método” (62% ou 35% conforme a teoria) são heurísticas, não dados reais (P12).</div>
+
+<h2>Edição do aluno</h2>
+<p>Tela própria (<code>#editar-aluno</code>) com cartões: <b>Dados gerais</b> (nome, nascimento, horário, instrumento, início, mensalidade, status), <b>Progresso</b> (estágio, teoria %, método, página, hinos, lista), <b>Técnica</b> e <b>Prontidão para culto</b> (selects alimentados pelas listas), <b>Observações</b>.</p>
+<ol><li><code>abrirEdicao()</code> preenche os campos e popula os selects com <code>populateSelect</code>.</li>
+<li><code>salvarEdicaoAluno()</code> atualiza o objeto em memória e faz <code>PATCH</code> da faixa <code>A{linha}:T{linha}</code> da aba <b>Alunos</b>, com <code>linha = id + 2</code>.</li>
+<li>Botão com spinner durante a gravação; toast de sucesso/erro; volta para a ficha.</li></ol>
+<div class="callout bad"><b>Layout confirmado como incompatível:</b> o arquivo real tem a aba Alunos com 13 colunas (A–M) e o progresso na aba Progresso; esta gravação sobrescreve A:T e destruiria contato, responsável e as fórmulas (<a href="pendencias.html#P02">P02</a>). Veja também <a href="pendencias.html#P10">P10</a> (status não persistido, vínculo por nome) e <a href="pendencias.html#P11">P11</a> (progresso por método/lição).</div>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

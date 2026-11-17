@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendário — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html" class="cur">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Calendário</h1>
+<p class="lead">Aba <b>Agenda</b>: frequência mensal de todos os alunos. <span class="tag t-warn">Parcial</span></p>
+<ul><li>Grade de 7 colunas (Dom–Sáb) com navegação por setas entre meses; o dia de hoje fica destacado.</li>
+<li>Cada aula do dia vira um ponto colorido: verde (presente), vermelho (falta sem aviso), amarelo (justificada), cinza (cancelada pela professora).</li>
+<li><b>Resumo do mês</b>: presenças, faltas de alunos, canceladas e total de registros.</li>
+<li><b>Modal do dia</b>: lista de aulas (aluno, tipo, presença, conteúdo, hino). Se vazio, oferece o botão <b>Lançar aula</b>.</li></ul>
+<div class="callout warn">A comparação de datas é por texto ISO (<code>YYYY-MM-DD</code>); aulas vindas do Excel com data serial não aparecem (<a href="pendencias.html#P04">P04</a>). O contador “Faltas alunos” usa <code>includes("Falta")</code>, o que também conta “Falta — Professora” (já exibida em “Canceladas”).</div>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

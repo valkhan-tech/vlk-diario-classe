@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html" class="cur">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Regras de negócio</h1>
+<p class="lead">O que o sistema <b>deve</b> fazer segundo o responsável pelo produto, e como isso está (ou não) refletido hoje no app. Fonte: respostas do responsável em 17/11/2026 e análise do código e das planilhas.</p>
+
+<div class="callout">Legenda de origem: <span class="tag t-ok">Informado</span> definido pelo responsável · <span class="tag t-neu">Observado</span> deduzido do código/planilha · <span class="tag t-warn">Proposta</span> sugestão minha, ainda não validada. A lista de interpretações que fiz das respostas está em <a href="pendencias.html">Pendências</a>.</div>
+
+<h2>1. Fonte de dados e usuário</h2>
+<ul><li><span class="tag t-ok">Informado</span> A planilha em uso é <code>Diario_Pedagogico_Musical_demo.xlsx</code> no OneDrive, com o layout descrito em <a href="dados.html">Modelo de dados</a>.</li>
+<li><span class="tag t-ok">Informado</span> <b>Apenas a professora</b> grava dados.</li>
+<li><span class="tag t-ok">Informado</span> Ela usa o app em <b>mais de um aparelho (tablet e computador)</b> e <b>também edita o Excel diretamente</b>. O app precisa conviver com as três vias (ver seção 7).</li>
+<li><span class="tag t-neu">Observado</span> O Excel acumula papéis de banco de dados e de relatório (Dashboard com fórmulas). Tudo que o app grava precisa respeitar fórmulas e validações existentes.</li></ul>
+
+<h2>2. Aulas e presença</h2>
+<ul><li><span class="tag t-neu">Observado</span> Quatro situações: Presente; Falta — Aluno (justificada); Falta — Aluno (sem aviso); Falta — Professora (aula cancelada).</li>
+<li><span class="tag t-ok">Informado</span> <b>Comparecer ou faltar não gera progresso.</b> Presença é registro de frequência.</li>
+<li><span class="tag t-neu">Observado</span> Faltas justificadas costumam virar reposição (no demo: “Reagendada para 25/11”) — hoje em texto livre.</li></ul>
+
+<h2>3. Progresso: métodos, hinário e lições</h2>
+<ul><li><span class="tag t-ok">Informado</span> O progresso vem dos <b>métodos e lições</b> que o aluno avança.</li>
+<li><span class="tag t-ok">Informado</span> A professora quer <b>cadastrar métodos e as lições de cada método</b> e acompanhar o <b>status de cada lição</b> — <i>Pendente</i>, <i>Aprovado</i> ou <i>Reprovado</i> — com a <b>data do status</b>.</li>
+<li><span class="tag t-ok">Informado</span> As lições são, <b>via de regra, sequenciais</b>, por método e por <b>hinário</b> (tratados do mesmo modo).</li>
+<li><span class="tag t-warn">Proposta</span> Sequência como <b>orientação</b>: o app sugere a próxima lição na ordem e avisa ao marcar fora de ordem, sem impedir (“via de regra” admite exceções).</li>
+<li><span class="tag t-ok">Informado</span> Uma lição <b>reprovada pode ser tentada de novo</b>. Se for reprovada outra vez na mesma lição, <b>a data inicial é mantida</b>, assim se sabe há quanto tempo o aluno está nessa lição.</li>
+<li><span class="tag t-ok">Informado</span> O método associado ao aluno tem situação <b>Iniciado</b>, com <b>Pausado</b> e <b>Concluído</b> como adicionais.</li>
+<li><span class="tag t-warn">Proposta</span> Data do status = data do <i>primeiro</i> registro da sequência atual de mesmo status (ex.: Reprovado em 10/03 e de novo em 24/03 → continua 10/03, com 2 tentativas); cada tentativa fica registrada com sua data real. Aprovada em 07/04 → tempo na lição = 28 dias.</li>
+<li><span class="tag t-ok">Informado</span> O <b>tempo na lição é só informativo</b>: não entra em nenhuma regra.</li>
+<li><span class="tag t-warn">Proposta</span> O aluno pode ter <b>vários métodos</b> ao mesmo tempo, cada um com sua situação; o app sugere “Concluído” quando todas as lições estão aprovadas e a professora confirma.</li>
+<li><span class="tag t-neu">Observado</span> A planilha já tem a aba <b>Progresso</b> (método atual, página/lição em texto livre, técnica) e a coluna <b>“Atualizar Progresso?” (Sim/Não)</b> no Diário.</li>
+<li><b>Hoje no app:</b> não lê nem grava Progresso; a ficha mostra barras por heurística (<a href="pendencias.html#P11">P11</a>, <a href="pendencias.html#P21">P21</a>). Avaliação detalhada em <a href="metodos.html">métodos e lições</a>.</li></ul>
+
+<h2>4. Aptidão para culto</h2>
+<ul><li><span class="tag t-ok">Informado</span> <b>Quem define é a professora</b>, sem regra rígida: se ela diz que está apto, está. É um <b>checkbox</b>, também para a Oficialização.</li>
+<li><span class="tag t-ok">Informado</span> Os números de referência dela (jovens: 50 hinos; noite: um percentual dos 430) <b>não</b> são critério automático do app.</li>
+<li><span class="tag t-warn">Proposta</span> Três checkboxes (jovens, adulto, oficialização), marcado/não marcado. Gravar “Apto” quando marcado e “Não avaliado” quando desmarcado, que são os valores que o Dashboard do Excel já conta; valores antigos (“Em preparação”, “Não apto no momento”) continuam legíveis.</li>
+<li><span class="tag t-warn">Proposta</span> KPI “Aptos para culto” = alunos <b>Ativos</b> com algum checkbox marcado.</li></ul>
+
+<h2>5. Estágio do aluno</h2>
+<ul><li><span class="tag t-ok">Informado</span> O estágio tem um valor <b>calculado a partir dos métodos e do hinário</b> e um valor <b>sobrescrito</b> pela professora. Ela pode sobrescrever ou voltar ao calculado a qualquer momento.</li>
+<li><span class="tag t-neu">Observado</span> Estágios hoje: Iniciante → Básico → Intermediário → Apto — Culto Jovens → Apto — Culto Adulto → Oficializado, digitados à mão.</li>
+<li><span class="tag t-warn">Proposta</span> <b>Efetivo = manual se preenchido, senão calculado</b>. A tela mostra a origem (“calculado” ou “definido pela professora”) e um botão “voltar ao calculado”. Para o Dashboard do Excel continuar funcionando, a coluna <code>Progresso!C</code> guarda o estágio efetivo e uma coluna nova guarda a sobrescrita.</li>
+<li><span class="tag t-warn">Proposta</span> Entram no cálculo os métodos <b>Iniciados</b> e <b>Concluídos</b> (Concluído = 100%); método <b>Pausado</b> fica de fora.</li>
+<li><span class="tag t-ok">Informado</span> <b>Nome do estágio:</b> Iniciante, Básico, Intermediário e Avançado estão <b>associados ao método</b> — cada método (e o hinário) tem um nível.</li>
+<li><span class="tag t-ok">Informado</span> <b>Progresso:</b> métodos e hinário são material de estudo associado ao aluno. Em cada um, <i>média = (lições − lições não realizadas) ÷ lições</i>; depois, <b>média ponderada simples</b> das médias de todos os métodos associados.</li>
+<li><span class="tag t-warn">Proposta</span> <b>Estágio calculado = maior nível entre os métodos Iniciados ou Concluídos do aluno</b>; a média ponderada é o <b>progresso geral (%)</b>, exibido ao lado. “Avançado” entra na lista de estágios entre Intermediário e “Apto — Culto Jovens”.</li>
+<li><span class="tag t-warn">Proposta</span> Peso = nº de lições do método (aceito pela professora; equivale a somar aprovadas ÷ somar lições). Exemplo: método de 20 lições com 10 aprovadas (50%) + hinário de 480 com 48 aprovadas (10%) → (20×50% + 480×10%) ÷ 500 = <b>11,6%</b>. Com esse peso o hinário pesa mais no progresso geral, o que foi aceito.</li>
+<li><span class="tag t-warn">Proposta</span> Método sem lições cadastradas fica fora do cálculo; aluno sem método associado não tem estágio calculado (vale o da professora). Os estágios “Apto — Culto …” e “Oficializado” não são calculados: vêm dos checkboxes ou da sobrescrita.</li>
+</ul>
+
+<h2>6. Cobrança e financeiro</h2>
+<ul><li><span class="tag t-ok">Informado</span> <b>O app deve criar a cobrança mensal.</b></li>
+<li><span class="tag t-ok">Informado</span> O <b>vencimento é uma data fixa por aluno, todo mês</b>.</li>
+<li><span class="tag t-ok">Informado</span> <b>Atrasado</b> = pagamento <b>não confirmado na data de vencimento</b>.</li>
+<li><span class="tag t-neu">Observado</span> Valor da mensalidade: <code>Alunos!I</code>. Linha de cobrança: Mês/Ano (<code>MM/AAAA</code>), Aluno, Valor Cobrado, Valor Pago, Status, Data, Forma, Obs, Saldo (<code>=Pago−Cobrado</code>). A planilha <b>não tem</b> dia nem data de vencimento.</li>
+<li><span class="tag t-warn">Proposta</span> Coluna <b>“Dia de vencimento”</b> em Alunos; cada cobrança criada grava a <b>data de vencimento</b> (mês + dia do aluno) em coluna nova de Financeiro, de modo que mudar o dia só afeta cobranças futuras. Dias 29–31 em meses curtos vencem no último dia do mês (escolha minha).</li>
+<li><span class="tag t-warn">Proposta</span> Ciclo: <i>Pendente</i> (criada) → <i>Pago</i> (baixa na mesma linha). <i>Atrasado</i> é derivado: Pendente com vencimento já passado. Como a professora também usa o Excel, uma coluna auxiliar com a fórmula equivalente mantém as duas visões iguais; a validação do Status troca <i>Inadimplente</i> por <i>Atrasado</i> e o Dashboard soma Pendente + Atrasado.</li>
+<li><b>Hoje no app:</b> só cria linhas avulsas ao “lançar pagamento” (<a href="pendencias.html#P06">P06</a>, <a href="pendencias.html#P07">P07</a>, <a href="pendencias.html#P19">P19</a>).</li>
+<li><span class="tag t-ok">Informado</span> Aluno <b>Pausado ou Encerrado não é cobrado</b>, e <b>não há mensalidade proporcional</b>. O app gera cobrança só para alunos <b>Ativos</b>.</li></ul>
+
+<h2>7. Offline e convivência com o Excel</h2>
+<ul><li><span class="tag t-ok">Informado</span> O <b>modo offline é requisito do modelo de negócio</b>, para evitar problemas de sincronismo no formato atual.</li>
+<li><span class="tag t-ok">Informado</span> A professora usa o app <b>e</b> edita o Excel diretamente, e usa <b>tablet e computador</b>.</li>
+<li><span class="tag t-neu">Observado</span> Com dois aparelhos, cada um terá a sua cópia local e a sua fila de operações; ao reconectar, ambos sincronizam com a planilha. IDs criados offline não podem colidir entre aparelhos.</li>
+<li><span class="tag t-neu">Observado</span> Consequências para o app: (a) o Excel pode mudar sem o app saber; (b) linhas inseridas, apagadas ou ordenadas à mão tornam a posição de linha pouco confiável (já há um aluno inserido manualmente no arquivo real); (c) datas e textos digitados à mão chegam em formatos variados; (d) fórmulas e validações não podem ser sobrescritas; (e) operações feitas offline podem desfazer uma correção manual feita no Excel nesse meio-tempo.</li>
+<li><span class="tag t-warn">Proposta</span> Identificadores estáveis em todas as abas gravadas; localizar a linha pelo ID na hora de gravar; reler e comparar com o valor conhecido antes de gravar; gravar só as células alteradas; ao detectar mudança externa, avisar e perguntar. Ver <a href="pendencias.html#P22">P22</a>.</li>
+<li><b>Tensão com uma decisão anterior:</b> <code>melhorias.md</code> decidiu não guardar alunos/aulas localmente “para evitar dados desatualizados”. Com o requisito offline é preciso uma réplica local controlada (com data da última sincronização e fila de operações). Essa decisão deve ser <b>revista e registrada</b>.</li>
+<li><b>Hoje no app:</b> sem Service Worker, sem fila persistente, gravação por posição de linha (<a href="pendencias.html#P09">P09</a>, <a href="pendencias.html#P22">P22</a>).</li></ul>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

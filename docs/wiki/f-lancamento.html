@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lançar aula — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html" class="cur">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Lançar aula</h1>
+<p class="lead">Registro rápido do diário de classe: uma linha na aba <b>Diário de Aulas</b> por aula. <span class="tag t-warn">Parcial</span></p>
+
+<h2>Campos</h2>
+<table><tr><th>Campo</th><th>Origem das opções</th><th>Coluna no Excel</th></tr>
+<tr><td>Aluno</td><td><code>DB.alunos</code></td><td>B</td></tr>
+<tr><td>Data (padrão hoje)</td><td>—</td><td>A</td></tr>
+<tr><td>Horário (padrão agora)</td><td>—</td><td><i>não gravado</i></td></tr>
+<tr><td>Presença (4 botões)</td><td>Fixa no código (valores = lista PRESENÇA)</td><td>C</td></tr>
+<tr><td>Motivo (se não presente)</td><td>texto livre</td><td>D</td></tr>
+<tr><td>Tipo de aula</td><td>Lista <code>TIPO DE AULA</code></td><td>E</td></tr>
+<tr><td>Método</td><td>Lista <code>MÉTODOS / APOSTILAS</code></td><td>F</td></tr>
+<tr><td>Conteúdo / Repertório</td><td>texto livre</td><td>G</td></tr>
+<tr><td>Hino(s)</td><td>texto livre</td><td>H</td></tr>
+<tr><td>Lição de casa</td><td>texto livre</td><td>I</td></tr>
+<tr><td>Link de vídeo</td><td>URL</td><td>J</td></tr>
+<tr><td>Observações</td><td>texto livre</td><td>K</td></tr>
+<tr><td><i>Atualizar progresso?</i></td><td>—</td><td>L — <b>não usado</b></td></tr></table>
+
+<h2>Presença e comportamento</h2>
+<table><tr><th>Botão</th><th>Valor gravado</th><th>Cor no calendário</th></tr>
+<tr><td>Presente</td><td><code>Presente</code></td><td>verde</td></tr>
+<tr><td>Justificada</td><td><code>Falta — Aluno (justificada)</code></td><td>amarelo</td></tr>
+<tr><td>Sem aviso</td><td><code>Falta — Aluno (sem aviso)</code></td><td>vermelho</td></tr>
+<tr><td>Professora</td><td><code>Falta — Professora</code></td><td>cinza</td></tr></table>
+<ul><li>Quando <b>não</b> é “Presente”, aparece o campo Motivo e o bloco de conteúdo é ocultado.</li>
+<li>Validações: aluno, data e presença são obrigatórios.</li>
+<li>Ao salvar: acrescenta em <code>DB.aulas</code> e faz <code>PATCH</code> em <code>A{n}:K{n}</code>. A próxima linha vem de um contador (<code>_aulaSheetRowCount</code>) calculado na primeira gravação.</li>
+<li>Se falhar a rede ou não houver conexão, a aula entra em <code>DB.pending</code> e é reenviada em <b>Atualizar tudo</b>.</li>
+<li>Depois de salvar, limpa os campos de texto e a seleção de presença.</li></ul>
+<div class="callout warn">Pontos de atenção: a data gravada como texto ISO é convertida corretamente pelo Excel (verificado no arquivo real), mas a <i>leitura</i> posterior falha (<a href="pendencias.html#P04">P04</a>); resposta HTTP não verificada (<a href="pendencias.html#P05">P05</a>), fila só em memória (<a href="pendencias.html#P09">P09</a>), horário sem efeito (<a href="pendencias.html#P13">P13</a>); “Atualizar progresso?” ainda não é tratado (<a href="pendencias.html#P11">P11</a>). Pela regra de negócio, <b>presença ou falta não gera progresso</b> — só o avanço no método/lição.</div>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

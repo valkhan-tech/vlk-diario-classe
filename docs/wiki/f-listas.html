@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listas dinâmicas — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html" class="cur">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Listas dinâmicas</h1>
+<p class="lead">As opções dos dropdowns vêm da aba <b>Listas</b> do Excel, para que novos métodos, hinos ou instrumentos sejam adicionados sem mexer no código. <span class="tag t-bad">Com problema</span></p>
+
+<h2>Como foi desenhado</h2>
+<ol><li>Cada coluna da aba Listas é uma lista; o nome da lista é o cabeçalho da coluna.</li>
+<li><code>carregarListasPlanilha()</code> converte as colunas em <code>{ "NOME": [valores…] }</code> e salva em <code>localStorage["mpm_listas"]</code>.</li>
+<li><code>restaurarListas()</code> recupera o cache no início (sem rede) — hoje <b>não executa</b> (P01).</li>
+<li><code>getLista(nome)</code> devolve a lista da planilha ou, se vazia, o <code>LISTAS_FALLBACK</code> embutido.</li>
+<li><code>populateSelect(id, nome)</code> monta as <code>&lt;option&gt;</code> mantendo o valor atual.</li></ol>
+
+<h2>Listas e onde são usadas</h2>
+<table><tr><th>Lista (cabeçalho)</th><th>Campo</th></tr>
+<tr><td>INSTRUMENTOS</td><td>Edição do aluno</td></tr>
+<tr><td>ESTÁGIOS</td><td>Edição do aluno</td></tr>
+<tr><td>TIPO DE AULA</td><td>Lançar aula</td></tr>
+<tr><td>PRESENÇA</td><td>(valores replicados nos botões; lista não é usada na tela)</td></tr>
+<tr><td>TÉCNICA</td><td>Edição: 1 mão, 2 mãos, pedaleira</td></tr>
+<tr><td>PRONTIDÃO CULTO</td><td>Edição: jovens, adulto, oficialização</td></tr>
+<tr><td>MÉTODOS / APOSTILAS</td><td>Lançar aula e edição do aluno</td></tr>
+<tr><td>PAGAMENTO</td><td>Forma de pagamento (e, por engano, Status — P06). Não existe lista de <i>status</i> de cobrança; a planilha usa validação fixa Pago/Pendente/Inadimplente.</td></tr>
+<tr><td>STATUS ALUNO</td><td>Edição do aluno (não persiste — P10)</td></tr>
+<tr><td>HINOS — BÁSICO / INTERM. / CULTO, FAIXA ETÁRIA</td><td>Existem na planilha, <b>ainda não usadas</b> pelo app (hinos são texto livre)</td></tr></table>
+
+<div class="callout bad"><b>Importante:</b> o cabeçalho é lido de <code>values[2]</code> (linha 3), mas na planilha está na linha 4 — portanto as listas da planilha provavelmente nunca são carregadas e o fallback é que está em uso (<a href="pendencias.html#P03">P03</a>).</div>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

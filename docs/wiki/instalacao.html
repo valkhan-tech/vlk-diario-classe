@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instalação e uso — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html" class="cur">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Instalação e uso</h1>
+<p class="lead">Resumo do guia de configuração (README) e da rotina diária. Faz-se uma única vez; depois o app é só abrir no tablet.</p>
+<div class="callout warn"><b>Atenção:</b> por causa do item <a href="pendencias.html#P01">P01</a>, hoje o app não lembra a conta/arquivo entre aberturas — será necessário entrar e escolher o arquivo de novo até ser corrigido.</div>
+
+<h2>1. Publicar no GitHub Pages</h2>
+<ol><li>Criar conta no GitHub e um repositório <b>público</b> (ex.: <code>diario-musical</code>).</li>
+<li>Enviar os arquivos do projeto (<code>index.html</code>, pastas <code>css/</code> e <code>js/</code>). O README antigo cita só <code>index.html</code>, mas hoje o app precisa das três partes.</li>
+<li>Em <b>Settings → Pages</b>: <i>Deploy from a branch</i> → <code>main</code> → <code>/ (root)</code>.</li>
+<li>O endereço será <code>https://SEU-USUARIO.github.io/diario-musical/</code>.</li>
+<li>No Chrome do tablet: menu ⋮ → <b>Adicionar à tela inicial</b>.</li></ol>
+
+<h2>2. Colocar o Excel no OneDrive</h2>
+<p>Enviar a planilha para o OneDrive pessoal. O arquivo em uso hoje é <code>Diario_Pedagogico_Musical_demo.xlsx</code>; o campo do app vem preenchido com <code>/Documentos/Diario_Pedagogico_Musical.xlsx</code>, então é preciso digitar o caminho/nome real (ou usar <b>Navegar no OneDrive</b>). O arquivo <b>não</b> deve ficar no GitHub.</p>
+
+<h2>3. Registrar o app no Azure (uma vez)</h2>
+<table><tr><th>Campo</th><th>Valor</th></tr>
+<tr><td>Nome</td><td>Diário Pedagógico Musical</td></tr>
+<tr><td>Tipos de conta</td><td>Somente contas pessoais Microsoft</td></tr>
+<tr><td>Plataforma</td><td><b>Single-page application (SPA)</b> com o URI do GitHub Pages (usar “Web” causa o erro <code>AADSTS70002</code>, tratado no log do app)</td></tr>
+<tr><td>Permissões (Graph, delegadas)</td><td><code>Files.ReadWrite</code> e <code>User.Read</code></td></tr></table>
+<p>O <b>Client ID</b> padrão já está no código (<code>DEFAULT_CLIENT_ID</code> em <code>config.js</code>); o campo para trocá-lo existe no HTML mas está oculto.</p>
+
+<h2>4. Primeira conexão</h2>
+<ol><li>Aba <b>Config</b> → <b>Entrar com Microsoft</b> (aviso “app não verificado” → Informações avançadas → continuar).</li>
+<li>Informar o caminho do arquivo e tocar em <b>Buscar</b> (ou <b>Navegar no OneDrive</b>, que lista os .xlsx da raiz).</li>
+<li>O app lê a planilha automaticamente. Depois, <b>Atualizar tudo</b> reenvia pendências e recarrega os dados.</li></ol>
+
+<h2>5. Rotina diária</h2>
+<table><tr><th>Tarefa</th><th>Como</th></tr>
+<tr><td>Lançar uma aula</td><td>Lançar → aluno → data → presença (Presente / Justificada / Sem aviso / Professora) → conteúdo → <b>Salvar registro</b></td></tr>
+<tr><td>Ver ficha do aluno</td><td>Alunos → toque no nome (progresso, técnica, culto, financeiro, histórico)</td></tr>
+<tr><td>Editar aluno</td><td>Ficha → <b>Editar aluno</b> → <b>Salvar alterações</b></td></tr>
+<tr><td>Registrar pagamento</td><td>Ficha → card Financeiro → <b>Lançar pagamento</b></td></tr>
+<tr><td>Frequência do mês</td><td>Agenda → setas de mês → toque no dia</td></tr>
+<tr><td>Relatório</td><td>Ficha → <b>Gerar relatório PDF</b> (abre janela de impressão)</td></tr>
+<tr><td>Novas opções nas listas</td><td>Editar a aba Listas no Excel → Config → <b>Atualizar tudo</b></td></tr></table>
+
+<h2>Solução de problemas</h2>
+<table><tr><th>Sintoma</th><th>Causa provável / ação</th></tr>
+<tr><td>Erro <code>AADSTS70002</code> no login</td><td>URI cadastrado como “Web” — mover para “Single-page application”.</td></tr>
+<tr><td>“Arquivo não encontrado”</td><td>Caminho diferencia maiúsculas/minúsculas e deve começar com <code>/</code>.</td></tr>
+<tr><td>Dados não aparecem após reabrir</td><td>Esperado hoje (P01/P08): conectar e usar <b>Atualizar tudo</b>.</td></tr>
+<tr><td>Salvou mas não aparece no Excel</td><td>Pode ser token expirado com falso “sucesso” (P05/P08): reconectar e conferir o log.</td></tr>
+<tr><td>Janela do relatório não abre</td><td>Navegador bloqueou pop-up (P14): permitir pop-ups para o site.</td></tr>
+<tr><td>Versão antiga carregando</td><td>Limpar cache do navegador (não há Service Worker controlando versão).</td></tr></table>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

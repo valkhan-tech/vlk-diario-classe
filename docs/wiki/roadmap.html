@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap proposto — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html" class="cur">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Roadmap proposto</h1>
+<p class="lead">Próximos passos avaliados a partir do que o projeto contempla hoje, das regras de negócio confirmadas e dos problemas encontrados. Esta é uma proposta para <b>sua priorização</b>; nada foi implementado.</p>
+
+<h2>Como ler</h2>
+<table><tr><th>Categoria</th><th>Critério</th></tr>
+<tr><td><b>Pré-requisito</b></td><td>Corrigir o que já existe e está incorreto. Sem isso, novos recursos gravam dados errados na planilha real.</td></tr>
+<tr><td><b>Óbvias</b></td><td>Qualquer professor(a) esperaria que o app tivesse; a falta já atrapalha o uso básico.</td></tr>
+<tr><td><b>Necessárias</b></td><td>Decorrem diretamente das regras de negócio confirmadas (offline, cobrança, progresso, aptidão para culto).</td></tr>
+<tr><td><b>Desejáveis</b></td><td>Agregam valor e reaproveitam dados existentes, mas o app funciona sem elas.</td></tr></table>
+<p>*Esforço é uma estimativa relativa minha (P pequeno, M médio, G grande), não um prazo.</p>
+
+<h2>Pré-requisito: estabilizar o que existe</h2>
+<p>Itens da página <a href="pendencias.html">Pendências</a> que corrigem comportamento já documentado como pronto:</p>
+<ul><li><b>P01</b> init comentado · <b>P02</b> layout de Alunos/Progresso · <b>P03</b> linha das listas · <b>P04</b> datas na leitura · <b>P05</b> verificação de respostas · <b>P06</b> status do pagamento · <b>P08</b> sessão Microsoft · <b>P19</b> vocabulário Inadimplente.</li></ul>
+<div class="callout bad">Atenção: o arquivo real já contém dados gravados pelo app com esses defeitos (linha 58 do Financeiro). Convém decidir como tratá-los antes de seguir.</div>
+
+<h2>Óbvias</h2>
+<table><tr><th>Item</th><th>Por que</th><th>Depende de</th><th>Esforço*</th></tr><tr><td>Cadastrar novo aluno (Alunos + linha em Progresso, ID automático)</td><td>Hoje só se cadastra editando o Excel (há um aluno inserido a mão no arquivo real).</td><td>Fase 0 e 1</td><td>M</td></tr><tr><td>Inativar / encerrar aluno e esconder inativos por padrão</td><td>Status existe na planilha mas a edição não o grava (P10); KPIs contam todos.</td><td>P10</td><td>P</td></tr><tr><td>Corrigir/excluir uma aula ou pagamento lançado por engano</td><td>Qualquer lançamento errado hoje só se corrige no Excel.</td><td>Fase 1 (chave por registro)</td><td>M</td></tr><tr><td>Filtros na lista de alunos (instrumento, estágio, status)</td><td>Só há busca por nome.</td><td>—</td><td>P</td></tr><tr><td>Aulas de hoje por horário (agenda semanal)</td><td>“Aulas de hoje” só mostra o que já foi lançado; a planilha tem Horário Semanal (texto livre, ex.: “Sábado 09:00”).</td><td>Estruturar dia/hora</td><td>M</td></tr><tr><td>Indicador visível de pendências de sincronização</td><td>Quem trabalha offline precisa saber o que ainda não subiu.</td><td>Fase 1</td><td>P</td></tr><tr><td>Visão financeira geral (mês, inadimplentes, previsto × recebido)</td><td>Hoje o financeiro só existe dentro da ficha de cada aluno.</td><td>Fase 2</td><td>M</td></tr></table>
+
+<h2>Necessárias</h2>
+<table><tr><th>Item</th><th>Por que</th><th>Depende de</th><th>Esforço*</th></tr><tr><td>Camada de acesso a dados única (helper Graph com validação de resposta, renovação de token e leitura tolerante de datas)</td><td>Base de tudo: corrige P04, P05, P08 e evita repetir fetch em cada módulo.</td><td>Fase 0</td><td>M</td></tr><tr><td>Convivência com tablet, computador e Excel direto: IDs estáveis em todas as abas (sem colisão entre aparelhos), localizar linha pelo ID, reler e comparar antes de gravar, gravar só células alteradas, detectar mudança externa</td><td>A professora grava por três vias (P22). Sem isso, inserir/ordenar linhas à mão ou sincronizar dois aparelhos corrompe dados.</td><td>Fase 0; aprovação de layout</td><td>G</td></tr><tr><td>Modo offline por aparelho: réplica local + fila persistente de operações + PWA (manifest, Service Worker)</td><td>Requisito de negócio. Cada aparelho tem a sua cópia e a sua fila; operações idempotentes.</td><td>Fase 0</td><td>G</td></tr><tr><td>Aplicar a Proposta de layout na planilha (colunas, abas, validações, fórmulas) e migrar os dados existentes</td><td>Pré-requisito de cobrança, vencimento, métodos e estágio. Inclui corrigir a duplicidade da linha 58.</td><td>Aprovação da proposta</td><td>M</td></tr><tr><td>Ler e gravar a aba Progresso e alinhar Alunos ao layout real (A–M)</td><td>Pré-requisito para qualquer regra de progresso; corrige P02.</td><td>Fase 0</td><td>M</td></tr><tr><td>Geração automática da cobrança mensal (só alunos Ativos, sem proporcional) e baixa de pagamento na mesma linha</td><td>Regra de negócio. Uma cobrança por aluno e mês (única), valor de Alunos!I, Status Pendente; regularizar meses sem cobrança.</td><td>Fase 1; layout</td><td>G</td></tr><tr><td>Dia de vencimento por aluno, data de vencimento gravada em cada cobrança e Atrasado derivado (Pendente + vencimento passado); Dashboard somando Pendente + Atrasado</td><td>Decisão tomada: vencimento fixo por aluno, todo mês; Atrasado = não confirmado no vencimento (P19).</td><td>Layout aprovado</td><td>M</td></tr><tr><td>Catálogo de métodos e lições com status por aluno (Pendente / Aprovado / Reprovado), data da tentativa e situação do método (Iniciado / Pausado / Concluído)</td><td>Desejo da professora e veículo da regra de progresso (P11/P21). Inclui nova tentativa com data inicial mantida e tempo na lição.</td><td>Progresso lido/gravado; layout</td><td>G</td></tr><tr><td>Sequência como orientação (sugere a próxima lição, avisa se fora de ordem) e registro do avanço a partir da aula (“Atualizar Progresso?”)</td><td>Liga o diário ao progresso sem que presença gere progresso.</td><td>Catálogo de métodos e lições</td><td>M</td></tr><tr><td>Hinário como método (50 de jovens + 430 do culto oficial), cadastrado em lote</td><td>A professora trata hinário como método e o estágio calculado usa os dois (P20). Não é bloqueante: sem ele o estágio é definido à mão.</td><td>Catálogo de métodos e lições</td><td>G</td></tr><tr><td>Aptidão para culto como checkbox da professora (jovens, adulto, oficialização) e KPI “Aptos” = contagem real</td><td>Decisão: sem regra rígida. Substitui o “3” fixo e o alerta “hinos ≥ 4”.</td><td>Progresso lido/gravado</td><td>P</td></tr><tr><td>Estágio calculado a partir de métodos e hinário, com sobrescrita manual a qualquer momento</td><td>Decisão: manter ambos; efetivo = manual se preenchido, senão calculado. O nome vem do nível do método; o progresso geral (%) é a média ponderada simples das médias dos métodos associados.</td><td>Métodos e lições (com nível)</td><td>M</td></tr><tr><td>Relacionamentos por ID (não por nome)</td><td>Renomear aluno hoje quebra histórico.</td><td>IDs estáveis</td><td>M</td></tr><tr><td>Escape de HTML em todos os dados exibidos</td><td>Segurança/estabilidade com texto livre vindo do Excel (P15).</td><td>—</td><td>P</td></tr></table>
+
+<h2>Desejáveis</h2>
+<table><tr><th>Item</th><th>Por que</th><th>Depende de</th><th>Esforço*</th></tr><tr><td>Alertas: faltas consecutivas, aluno sem aula, cobrança atrasada, aniversariantes</td><td>Dados já existem (presença, nascimento, financeiro).</td><td>Fases 2 e 4</td><td>M</td></tr><tr><td>Mostrar a lição de casa da aula anterior ao lançar a próxima</td><td>Valoriza o campo já gravado e ajuda o acompanhamento.</td><td>—</td><td>P</td></tr><tr><td>Reposição de aulas (falta justificada → remarcação)</td><td>Hoje fica em texto livre nas observações.</td><td>Agenda estruturada</td><td>M</td></tr><tr><td>Contato direto: abrir WhatsApp/ligar pelo contato e responsável da ficha</td><td>Contato e Responsável já estão na planilha.</td><td>Layout real de Alunos</td><td>P</td></tr><tr><td>Relatório PDF ampliado (histórico, métodos e lições, financeiro) e envio por WhatsApp</td><td>Hoje é só um resumo; envio está no roadmap original.</td><td>Métodos e lições</td><td>M</td></tr><tr><td>Recibo de pagamento</td><td>Complementa a cobrança automática.</td><td>Fase 2</td><td>P</td></tr><tr><td>Linha do tempo de evolução por aluno (lições aprovadas ao longo do tempo)</td><td>Visualiza o progresso real.</td><td>Métodos e lições</td><td>M</td></tr><tr><td>Dashboard financeiro (receita do mês, atrasados, projeção)</td><td>Substitui e amplia o Dashboard do Excel.</td><td>Fase 2</td><td>M</td></tr><tr><td>Data da marcação de aptidão (quando a professora marcou)</td><td>Histórico simples do checkbox.</td><td>Aptidão como checkbox</td><td>P</td></tr><tr><td>Acessibilidade e usabilidade em tablet (zoom, botões, seletor de arquivo)</td><td>P18.</td><td>—</td><td>P</td></tr><tr><td>Testes automatizados das regras (datas, cobrança, estágio) e pipeline simples</td><td>As regras ficam críticas; P01 mostrou o risco de regressão.</td><td>Regras implementadas</td><td>M</td></tr><tr><td>Exportação/backup dos dados</td><td>Segurança extra para um app cujo banco é uma planilha editada à mão.</td><td>—</td><td>P</td></tr></table>
+
+<h2>Ordem sugerida</h2>
+<table><tr><th>Fase</th><th>Objetivo</th><th>Entrega</th></tr>
+<tr><td>0</td><td>Estabilização</td><td>Correções P01–P08 e P19; camada única de acesso ao Graph; leitura de Alunos (A–M) + Progresso.</td></tr>
+<tr><td>1</td><td>Fundação offline e convivência (tablet, computador, Excel)</td><td>Aplicar o layout aprovado; réplica local e fila por aparelho, IDs estáveis sem colisão, reler/comparar antes de gravar, detecção de mudança externa, PWA, indicador de pendências.</td></tr>
+<tr><td>2</td><td>Financeiro</td><td>Geração automática de cobrança (só Ativos, sem proporcional), dia de vencimento por aluno, Atrasado derivado, baixa na mesma linha, visão geral e KPI.</td></tr>
+<tr><td>3</td><td>Progresso e culto</td><td>Métodos e lições com status e data, hinário como método, registro de avanço pela aula, aptidão como checkbox, estágio calculado + sobrescrita, KPIs reais.</td></tr>
+<tr><td>4</td><td>Cadastro e agenda</td><td>Novo aluno, inativar, corrigir lançamentos, filtros, aulas por horário.</td></tr>
+<tr><td>5</td><td>Desejáveis</td><td>Alertas, relatórios ampliados, WhatsApp, recibo, testes, exportação.</td></tr></table>
+
+<h3>Por que esta ordem</h3>
+<ul><li>O requisito offline muda a forma de ler e gravar. Construir cobrança e progresso antes dele significaria refazer a gravação depois (hoje é por posição de linha, incompatível com sincronização tardia).</li>
+<li>Cobrança vem antes de progresso porque tem regra já definida e impacto direto no caixa; métodos e lições são a maior peça nova (três abas, telas de cadastro) e dependem das respostas às perguntas da avaliação.</li>
+<li>As “óbvias” de cadastro dependem das chaves estáveis da Fase 1; por isso ficam depois dela, embora sejam simples.</li></ul>
+
+<h2>Risco estrutural a acompanhar</h2>
+<p>Usar uma planilha Excel via Microsoft Graph como banco não é transacional: não há bloqueio de linha, e edições diretas no Excel enquanto o app sincroniza podem conflitar. Só a professora grava, mas por três vias: tablet, computador e Excel direto; portanto o risco é entre as vias, não entre pessoas (P22). Cenários típicos: ela insere, apaga ou ordena linhas à mão; corrige uma célula no Excel enquanto um aparelho tem uma operação antiga na fila; ou lança algo no tablet offline e outra coisa no computador. Mitigações para a Fase 1: IDs estáveis, localizar a linha pelo ID, reler e comparar o valor anterior antes de gravar, gravar só as células alteradas (nunca a faixa inteira), deixar fórmulas fora do alcance do app e avisar ao detectar mudança externa. Se o volume de alunos ou de dispositivos crescer, vale reavaliar o armazenamento — <i>sem urgência para o cenário atual</i>.</p>
+
+<h2>Decisões em aberto que desbloqueiam o roadmap</h2>
+<p>Nenhuma pergunta de negócio em aberto: o levantamento foi finalizado em 17/11/2026. Antes de iniciar a Fase 1, o layout da planilha ainda precisa da sua aprovação (<a href="layout.html">Proposta de layout</a>), sem a qual nada é alterado no arquivo real.</p>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>

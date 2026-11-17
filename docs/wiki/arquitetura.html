@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arquitetura e módulos — Wiki Diário Musical</title>
+<meta name="description" content="Wiki do projeto Diário Pedagógico Musical">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><button class="burger" id="burger" aria-label="Menu">☰</button><span class="t">🎹 Diário Musical</span><span class="s">Wiki do projeto</span></header>
+<div class="layout">
+<nav class="side" id="side" aria-label="Navegação da Wiki">
+<input id="q" type="search" placeholder="Filtrar páginas…" aria-label="Filtrar páginas">
+<h4>Começar</h4>
+<a href="index.html">Visão geral</a>
+<a href="instalacao.html">Instalação e uso</a>
+<h4>Funcionalidades</h4>
+<a href="f-conexao.html">Conexão OneDrive e sincronização</a>
+<a href="f-home.html">Início (dashboard)</a>
+<a href="f-alunos.html">Alunos, ficha e edição</a>
+<a href="f-lancamento.html">Lançar aula</a>
+<a href="f-financeiro.html">Financeiro</a>
+<a href="f-calendario.html">Calendário</a>
+<a href="f-relatorio.html">Relatório PDF</a>
+<a href="f-listas.html">Listas dinâmicas</a>
+<h4>Negócio</h4>
+<a href="regras.html">Regras de negócio</a>
+<h4>Referência técnica</h4>
+<a href="arquitetura.html" class="cur">Arquitetura e módulos</a>
+<a href="dados.html">Modelo de dados e Excel</a>
+<h4>Avaliação</h4>
+<a href="pendencias.html">Pendências e lacunas<span class="n">22</span></a>
+<a href="roadmap.html">Roadmap proposto</a>
+<a href="metodos.html">Avaliação: métodos e lições</a>
+<a href="layout.html">Proposta de layout da planilha</a>
+</nav>
+<main>
+
+<h1>Arquitetura e módulos</h1>
+<p class="lead">Aplicação de página única, sem framework: um <code>index.html</code> com todas as telas, scripts globais carregados em ordem e um objeto <code>DB</code> em memória como fonte de dados.</p>
+
+<h2>Visão em camadas</h2>
+<div class="flow"><span class="box"><b>Telas</b> index.html + diario.css</span><span class="arr">→</span><span class="box"><b>Módulos de tela</b> home, alunos, lançamento…</span><span class="arr">→</span><span class="box"><b>Estado</b> DB + variáveis globais</span><span class="arr">→</span><span class="box"><b>Acesso a dados</b> db.js / config.js</span><span class="arr">→</span><span class="box"><b>Microsoft Graph</b> → Excel no OneDrive</span></div>
+
+<h2>Módulos JavaScript</h2>
+<table><tr><th>Arquivo</th><th>Linhas</th><th>Responsabilidade</th><th>Funções principais</th></tr>
+<tr><td><code>ui.js</code></td><td>112</td><td>Helpers de interface</td><td><code>showToast</code>, <code>addLog</code>, <code>setStatus</code>, <code>atualizarPassos</code>, <code>skeletonList</code>, <code>avatarH</code>, <code>badgeE</code>, <code>pTag</code></td></tr>
+<tr><td><code>config.js</code></td><td>190</td><td>Autenticação e arquivo</td><td><code>iniciarLogin</code>, <code>obterToken</code>, <code>validarArquivo</code>, <code>abrirFilePicker</code>, <code>desconectar</code>, Client ID</td></tr>
+<tr><td><code>db.js</code></td><td>191</td><td>Estado e sincronização</td><td><code>DB</code>, <code>carregarDadosPlanilha</code>, <code>atualizarTudo</code></td></tr>
+<tr><td><code>listas.js</code></td><td>77</td><td>Listas dinâmicas</td><td><code>restaurarListas</code>, <code>carregarListasPlanilha</code>, <code>getLista</code>, <code>populateSelect</code></td></tr>
+<tr><td><code>home.js</code></td><td>54</td><td>Tela Início</td><td><code>renderHome</code></td></tr>
+<tr><td><code>alunos.js</code></td><td>72</td><td>Lista e ficha</td><td><code>renderListaAlunos</code>, <code>filtrarAlunos</code>, <code>abrirFicha</code>, <code>voltarLista</code>, <code>irLancamento</code></td></tr>
+<tr><td><code>aluno-editar.js</code></td><td>143</td><td>Edição do aluno</td><td><code>abrirEdicao</code>, <code>fecharEdicao</code>, <code>salvarEdicaoAluno</code></td></tr>
+<tr><td><code>lancamento.js</code></td><td>99</td><td>Lançar aula</td><td><code>initLancamento</code>, <code>setPresenca</code>, <code>salvarAula</code></td></tr>
+<tr><td><code>financeiro.js</code></td><td>123</td><td>Financeiro</td><td><code>calcularPendencias</code>, <code>renderFinanceiro</code>, <code>toggleFinForm</code>, <code>salvarPagamento</code></td></tr>
+<tr><td><code>calendario.js</code></td><td>59</td><td>Agenda</td><td><code>renderCalendario</code>, <code>navMes</code>, <code>abrirDia</code>, <code>fecharModal</code></td></tr>
+<tr><td><code>relatorio.js</code></td><td>36</td><td>PDF</td><td><code>gerarRelatorio</code></td></tr>
+<tr><td><code>app.js</code></td><td>74</td><td>Estado global, navegação e init</td><td><code>navTo</code>, <code>atualizarNavBloqueio</code>, <code>restaurarEstado</code>, bloco de inicialização</td></tr>
+<tr><td><code>diario.js</code></td><td>1010</td><td><b>Legado</b> (monolito anterior à modularização; não é carregado)</td><td>—</td></tr></table>
+
+<h2>Ordem de carga (index.html)</h2>
+<pre><code>ui → config → db → listas → home → alunos → aluno-editar
+   → lancamento → calendario → relatorio → financeiro → app</code></pre>
+<p>Não há módulos ES: tudo é global. As dependências cruzadas só são resolvidas em tempo de execução (por exemplo, <code>config.js</code> usa <code>appConectado</code>, declarada em <code>app.js</code>, que carrega por último). O init em <code>app.js</code> precisa que todos os anteriores estejam carregados.</p>
+
+<h2>Estado global</h2>
+<table><tr><th>Variável</th><th>Onde</th><th>Uso</th></tr>
+<tr><td><code>DB</code> = {pending, alunos, aulas, listas, financeiro}</td><td>db.js</td><td>Dados em memória</td></tr>
+<tr><td><code>graphToken</code>, <code>msalInstance</code>, <code>userInfo</code>, <code>excelFileId</code></td><td>config.js</td><td>Sessão Microsoft</td></tr>
+<tr><td><code>appConectado</code>, <code>alunoAtivo</code>, <code>calAno/calMes</code>, <code>presencaSel</code>, <code>_aulaSheetRowCount</code></td><td>app.js</td><td>Estado de UI e controle de gravação</td></tr></table>
+
+<h2>Fluxo de leitura</h2>
+<div class="flow"><span class="box">usedRange: Diário</span><span class="arr">→</span><span class="box">usedRange: Alunos</span><span class="arr">→</span><span class="box">usedRange: Financeiro</span><span class="arr">→</span><span class="box">usedRange: Listas</span><span class="arr">→</span><span class="box">renderHome + Alunos + Calendário + Lançar</span></div>
+<p>Cada aba é lida inteira (<code>usedRange</code>) e transformada em objetos. Linhas de título/cabeçalho são puladas por posição fixa (<code>slice(2)</code>).</p>
+
+<h2>Fluxo de escrita</h2>
+<table><tr><th>Operação</th><th>Endpoint (Graph)</th><th>Posição da linha</th></tr>
+<tr><td>Nova aula</td><td><code>PATCH …/worksheets('Diário de Aulas')/range(address='A{n}:K{n}')</code></td><td>contador <code>_aulaSheetRowCount + 2</code></td></tr>
+<tr><td>Aluno editado</td><td><code>PATCH …/worksheets('Alunos')/range(address='A{r}:T{r}')</code></td><td><code>id + 2</code></td></tr>
+<tr><td>Pagamento</td><td><code>PATCH …/worksheets('Financeiro')/range(address='A{n}:I{n}')</code></td><td><code>usedRange.length + 1</code></td></tr>
+<tr><td>Pendentes</td><td>idem Nova aula</td><td><code>usedRange.length + 1</code></td></tr></table>
+<div class="callout warn">Todas usam <code>fetch</code> direto, repetido em cada módulo, sem tratamento central de erro/token (<a href="pendencias.html#P05">P05</a>, <a href="pendencias.html#P08">P08</a>).</div>
+
+<h2>Decisões de projeto registradas</h2>
+<ul><li>JS puro multi-arquivo, sem bundler (<code>melhorias.md</code>).</li>
+<li>Somente as <b>listas</b> são cacheadas em <code>localStorage</code>; alunos, aulas e financeiro sempre vêm da planilha para evitar dados desatualizados.</li>
+<li>Edição de aluno e pagamentos gravam imediatamente via Graph.</li>
+<li>Financeiro usa a aba já existente no modelo.</li></ul>
+
+<div class="foot">Wiki gerada a partir do código no commit 813326d · última atualização 17/11/2026 · <a href="index.html">Voltar ao início</a></div>
+</main>
+<aside class="toc" id="toc" aria-label="Nesta página"></aside>
+</div>
+<script src="wiki.js"></script>
+</body>
+</html>
