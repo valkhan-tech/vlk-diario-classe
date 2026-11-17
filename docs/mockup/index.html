@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="pt-BR" data-paleta="quente">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mockup — Diário de Classe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mockup.css">
+</head>
+<body data-tela="inicio">
+
+<!-- Ícones -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14c2.7 0 4.5 1.8 4.5 4.5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-nota" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+  <symbol id="i-carteira" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h12v4"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M16 14h2"/></symbol>
+  <symbol id="i-livro" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 013 3v13a2 2 0 00-2-2H4z"/><path d="M20 4h-6a3 3 0 00-3 3v13a2 2 0 012-2h7z"/></symbol>
+  <symbol id="i-escudo" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-lista" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></symbol>
+  <symbol id="i-sino" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 1112 0v5l2 2H4z"/><path d="M10 21h4"/></symbol>
+  <symbol id="i-busca" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+  <symbol id="i-mais" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-seta" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-relogio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-lixeira" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="i-editar" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+  <symbol id="i-imprimir" viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="9" rx="2"/><path d="M7 14h10v7H7z"/></symbol>
+  <symbol id="i-baixar" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></symbol>
+  <symbol id="i-sair" viewBox="0 0 24 24"><path d="M9 4H5a2 2 0 00-2 2v12a2 2 0 002 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/></symbol>
+  <symbol id="i-grade" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+  <symbol id="i-paleta" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18c1.5 0 2-1 1.5-2-.6-1.3.3-2.5 1.7-2.5H18a3 3 0 003-3c0-5-4-10.5-9-10.5z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></symbol>
+  <symbol id="i-alca" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></symbol>
+  <symbol id="i-piano" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M8 13v6M12 13v6M16 13v6"/><path d="M7 5v8h2V5M11 5v8h2V5M15 5v8h2V5" fill="currentColor"/></symbol>
+  <symbol id="i-fingerprint" viewBox="0 0 24 24"><path d="M12 11v3a7 7 0 01-1 3.5M8 14a4 4 0 018 0c0 2-.4 3.8-1.2 5.3M5 13a7 7 0 0114 0c0 1.5-.1 2.8-.4 4M3 10a10 10 0 0118 0"/></symbol>
+</svg>
+
+<!-- Barra do mockup (fora do app) -->
+<div class="mock-bar">
+  <div class="linha-flex" style="gap:14px">
+    <b>MOCKUP · Diário de Classe</b>
+    <span class="paletas" role="group" aria-label="Paleta de cores">
+      <button class="paleta-btn" data-paleta="quente" aria-pressed="true"><span class="sw"><i style="background:#8c4a2f"></i><i style="background:#d9902f"></i><i style="background:#3f9a8c"></i></span>A · Madeira &amp; Âmbar</button>
+      <button class="paleta-btn" data-paleta="neutra" aria-pressed="false"><span class="sw"><i style="background:#3e6b52"></i><i style="background:#d8963a"></i><i style="background:#3f9585"></i></span>B · Sálvia &amp; Mel</button>
+      <button class="paleta-btn" data-paleta="fria" aria-pressed="false"><span class="sw"><i style="background:#1f5f7a"></i><i style="background:#e08a5b"></i><i style="background:#2f9aa0"></i></span>C · Maré</button>
+    </span>
+  </div>
+  <div class="linha-flex" style="gap:14px">
+    <span class="notas" title="As 7 cores das notas na paleta atual"><i style="background:var(--n1)">dó</i><i style="background:var(--n2)">ré</i><i style="background:var(--n3);color:#4a3800">mi</i><i style="background:var(--n4)">fá</i><i style="background:var(--n5)">sol</i><i style="background:var(--n6)">lá</i><i style="background:var(--n7)">si</i></span>
+    <button class="paleta-btn" data-ir="login" style="padding:5px 12px">Ver tela de login</button>
+  </div>
+</div>
+
+<!-- Login -->
+<div class="login-fundo">
+  <div class="login-arte">
+    <div class="logo" style="padding:0;font-size:24px"><span class="marca"><svg class="i"><use href="#i-piano"/></svg></span>Diário de Classe</div>
+    <h1>Cada aula, uma nota a mais na partitura.</h1>
+    <p>Acompanhe o progresso dos alunos, as lições aprovadas e o financeiro da turma em um só lugar.</p>
+    <svg class="pauta" viewBox="0 0 560 220" fill="none" stroke="currentColor" stroke-width="3"><path d="M0 60h560M0 90h560M0 120h560M0 150h560M0 180h560"/><circle cx="120" cy="150" r="14" fill="currentColor"/><path d="M134 150V70M240 120a14 14 0 100 .1M254 120V40M350 90a14 14 0 100 .1M364 90V10"/></svg>
+  </div>
+  <div class="login-form">
+    <form onsubmit="event.preventDefault(); irPara('inicio'); toast('Bem-vinda de volta, Helena!','ok')">
+      <div><h2 style="font-size:30px">Entrar</h2><p class="muted">Use seu e-mail e senha.</p></div>
+      <div class="campo"><label for="l-email">E-mail</label><input id="l-email" type="email" value="professora@ddc.local" autocomplete="username"></div>
+      <div class="campo"><label for="l-senha">Senha</label><input id="l-senha" type="password" value="senha-exemplo" autocomplete="current-password"></div>
+      <button class="btn btn-p" type="submit">Entrar</button>
+      <a href="#" onclick="event.preventDefault(); toast('Enviamos um link de recuperação por e-mail.','info')" style="text-align:center;font-size:14px">Esqueci minha senha</a>
+    </form>
+  </div>
+</div>
+
+<div class="app">
+  <!-- Menu lateral colorido -->
+  <aside class="sidebar">
+    <div class="logo"><span class="marca"><svg class="i"><use href="#i-piano"/></svg></span><span>Diário de Classe</span></div>
+    <nav aria-label="Principal">
+      <button class="nav-item" data-ir="inicio"><svg class="i"><use href="#i-home"/></svg><span>Início</span></button>
+      <button class="nav-item" data-ir="alunos"><svg class="i"><use href="#i-users"/></svg><span>Alunos</span></button>
+      <button class="nav-item" data-ir="aulas"><svg class="i"><use href="#i-cal"/></svg><span>Aulas</span><span class="contagem">3</span></button>
+      <button class="nav-item" data-ir="financeiro"><svg class="i"><use href="#i-carteira"/></svg><span>Financeiro</span></button>
+      <button class="nav-item" data-ir="metodos"><svg class="i"><use href="#i-livro"/></svg><span>Métodos</span></button>
+      <div class="nav-grupo">Administração</div>
+      <button class="nav-item" data-ir="admin"><svg class="i"><use href="#i-escudo"/></svg><span>Usuários e auditoria</span></button>
+      <button class="nav-item" data-ir="componentes"><svg class="i"><use href="#i-paleta"/></svg><span>Guia de estilo</span></button>
+    </nav>
+    <div class="sb-usuario"><span class="av c3">HM</span><div>Helena Martins<small>Professora</small></div><button class="icone-btn" style="margin-left:auto;background:transparent;border-color:rgba(255,255,255,.3);color:inherit" data-ir="login" aria-label="Sair"><svg class="i"><use href="#i-sair"/></svg></button></div>
+  </aside>
+
+  <div class="principal">
+    <header class="topbar">
+      <div class="busca"><svg class="i"><use href="#i-busca"/></svg><input type="search" placeholder="Buscar aluno, lição, cobrança…" aria-label="Buscar"></div>
+      <span class="espaco"></span>
+      <div style="position:relative">
+        <button class="icone-btn" id="btn-notif" aria-label="Notificações" aria-expanded="false"><svg class="i"><use href="#i-sino"/></svg><span class="ponto"></span></button>
+        <div class="painel-notif" id="painel-notif" role="dialog" aria-label="Notificações">
+          <header><h3 style="font-size:18px">Notificações</h3><button class="btn btn-g btn-sm" onclick="document.querySelectorAll('.notif.nova').forEach(n=>n.classList.remove('nova'));document.querySelector('.ponto').remove()">Marcar como lidas</button></header>
+          <div class="notif nova"><span class="ico s-bad"><svg class="i"><use href="#i-alerta"/></svg></span><div><b>3 cobranças venceram ontem</b><small>R$ 540,00 em aberto · há 2 h</small></div></div>
+          <div class="notif nova"><span class="ico s-info"><svg class="i"><use href="#i-cal"/></svg></span><div><b>Aula de hoje sem lançamento</b><small>Heitor Costa · 14:00 · há 25 min</small></div></div>
+          <div class="notif nova"><span class="ico s-ok"><svg class="i"><use href="#i-check"/></svg></span><div><b>Todas as lições aprovadas</b><small>Ana Beatriz concluiu “Faber Vol.1” — confirme a conclusão</small></div></div>
+          <div class="notif"><span class="ico s-neutro"><svg class="i"><use href="#i-escudo"/></svg></span><div><b>Backup de acesso renovado</b><small>Ontem às 22:10</small></div></div>
+        </div>
+      </div>
+      <div class="perfil"><span class="av c3">HM</span><div>Helena Martins<small>Professora</small></div></div>
+    </header>
+
+    <main class="conteudo">
+
+<!-- =============================== INÍCIO =============================== -->
+<section class="tela" data-tela="inicio">
+  <div class="cab"><div><div class="trilha">Terça-feira, 17 de novembro</div><h1>Início</h1></div><div class="acoes"><button class="btn btn-s" data-ir="financeiro"><svg class="i"><use href="#i-baixar"/></svg>Exportar Excel</button><button class="btn btn-p" data-ir="lancar"><svg class="i"><use href="#i-mais"/></svg>Lançar aula</button></div></div>
+  <div class="empilha">
+    <div class="boas-vindas">
+      <div>
+        <h2>Bom dia, Helena!</h2>
+        <p>Você tem <b>3 aulas</b> hoje e a próxima começa às <b>08:00</b> com Ana Beatriz.</p>
+        <div class="linha"><span><svg class="i"><use href="#i-relogio"/></svg>Próxima: 08:00 · Piano</span><span><svg class="i"><use href="#i-alerta"/></svg>3 cobranças vencidas</span><span><svg class="i"><use href="#i-check"/></svg>2 conclusões a confirmar</span></div>
+      </div>
+      <svg class="arte" viewBox="0 0 330 170" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-opacity=".4" stroke-width="2"><path d="M10 22h310M10 38h310M10 54h310M10 70h310M10 86h310"/></g>
+        <g fill="currentColor"><ellipse cx="62" cy="70" rx="11" ry="8" transform="rotate(-20 62 70)"/><rect x="71" y="18" width="3.5" height="54"/><ellipse cx="128" cy="54" rx="11" ry="8" transform="rotate(-20 128 54)"/><rect x="137" y="6" width="3.5" height="50"/><ellipse cx="196" cy="86" rx="11" ry="8" transform="rotate(-20 196 86)"/><rect x="205" y="30" width="3.5" height="58"/><ellipse cx="250" cy="70" rx="11" ry="8" transform="rotate(-20 250 70)"/><rect x="259" y="14" width="3.5" height="58"/><path d="M205 30l54-16v8l-54 16z"/></g>
+        <g><rect x="10" y="108" width="310" height="58" rx="8" fill="#fff" fill-opacity=".75"/>
+          <g stroke="currentColor" stroke-opacity=".25"><path d="M54 108v58M98 108v58M142 108v58M186 108v58M230 108v58M274 108v58"/></g>
+          <rect x="10" y="108" width="44" height="8" fill="var(--n1)"/><rect x="54" y="108" width="44" height="8" fill="var(--n2)"/><rect x="98" y="108" width="44" height="8" fill="var(--n3)"/><rect x="142" y="108" width="44" height="8" fill="var(--n4)"/><rect x="186" y="108" width="44" height="8" fill="var(--n5)"/><rect x="230" y="108" width="44" height="8" fill="var(--n6)"/><rect x="274" y="108" width="46" height="8" fill="var(--n7)"/>
+          <g fill="currentColor"><rect x="42" y="108" width="24" height="34" rx="3"/><rect x="86" y="108" width="24" height="34" rx="3"/><rect x="174" y="108" width="24" height="34" rx="3"/><rect x="218" y="108" width="24" height="34" rx="3"/><rect x="262" y="108" width="24" height="34" rx="3"/></g></g>
+      </svg>
+    </div>
+
+    <div class="grade g4">
+      <div class="card kpi"><span class="ico t6"><svg class="i"><use href="#i-users"/></svg></span><div><small>Alunos ativos</small><strong>12</strong><em>2 pausados · 2 encerrados</em></div></div>
+      <div class="card kpi"><span class="ico t5"><svg class="i"><use href="#i-cal"/></svg></span><div><small>Aulas hoje</small><strong>3</strong><em>1 já lançada</em></div></div>
+      <div class="card kpi"><span class="ico t1"><svg class="i"><use href="#i-alerta"/></svg></span><div><small>Cobranças atrasadas</small><strong>16</strong><em>R$ 1.990,00</em></div></div>
+      <div class="card kpi"><span class="ico t4"><svg class="i"><use href="#i-check"/></svg></span><div><small>Aptos para culto</small><strong>3</strong><em>marcados pela professora</em></div></div>
+    </div>
+
+    <div class="grade g-7-5">
+      <div class="card">
+        <header><h2>Agenda de hoje</h2><button class="btn btn-g btn-sm" data-ir="aulas">Ver calendário <svg class="i"><use href="#i-seta"/></svg></button></header>
+        <div class="lista">
+          <div class="item"><span class="hora">08:00</span><span class="av c1">AB</span><div class="corpo"><b>Ana Beatriz Lima</b><small>Piano · Faber Vol.2 · lição 3</small></div><span class="selo s-ok">Presente</span></div>
+          <div class="item"><span class="hora">11:30</span><span class="av c5">LT</span><div class="corpo"><b>Lucas Teixeira</b><small>Órgão · Hinário de Jovens</small></div><button class="btn btn-p btn-sm" data-ir="lancar">Lançar</button></div>
+          <div class="item"><span class="hora">14:00</span><span class="av c6">GA</span><div class="corpo"><b>Gabriela Alves</b><small>Flauta · Flauta doce — Básico</small></div><button class="btn btn-p btn-sm" data-ir="lancar">Lançar</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <header><h2>Alunos por estágio</h2><span class="selo s-neutro">ativos</span></header>
+        <div class="horiz">
+          <div class="linha"><span>Iniciante</span><div class="barra" style="--cor:var(--n4)"><i style="width:34%"></i></div><b>2</b></div>
+          <div class="linha"><span>Básico</span><div class="barra" style="--cor:var(--n5)"><i style="width:34%"></i></div><b>2</b></div>
+          <div class="linha"><span>Intermediário</span><div class="barra" style="--cor:var(--n6)"><i style="width:68%"></i></div><b>4</b></div>
+          <div class="linha"><span>Avançado</span><div class="barra" style="--cor:var(--n7)"><i style="width:34%"></i></div><b>2</b></div>
+          <div class="linha"><span>Apto — Culto Jovens</span><div class="barra" style="--cor:var(--n3)"><i style="width:17%"></i></div><b>1</b></div>
+          <div class="linha"><span>Oficializado</span><div class="barra" style="--cor:var(--n2)"><i style="width:17%"></i></div><b>1</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grade g3">
+      <div class="card"><header><h3>Frequência do mês</h3><span class="selo s-ok">+4%</span></header><div class="anel-bloco"><div class="anel" style="--v:82;--cor:var(--n5)"><b>82<small>%</small></b></div><div class="muted" style="font-size:14px">184 aulas lançadas.<br>Faltas da professora e feriados ficam fora do cálculo.</div></div></div>
+      <div class="card"><header><h3>Recebido no mês</h3><span class="selo s-info">novembro</span></header><div class="anel-bloco"><div class="anel" style="--v:61;--cor:var(--n4)"><b>61<small>%</small></b></div><div class="muted" style="font-size:14px"><b style="color:var(--ink)">R$ 1.650</b> de R$ 2.700 previstos.<br>R$ 540 vencidos.</div></div></div>
+      <div class="card"><header><h3>Quem faz aniversário</h3><span class="selo s-marca">esta semana</span></header><div class="lista"><div class="item"><span class="av c2">MD</span><div class="corpo"><b>Mariana Duarte</b><small>completa 14 anos · quinta</small></div></div><div class="item"><span class="av c7">JP</span><div class="corpo"><b>João Pedro Rocha</b><small>completa 19 anos · sábado</small></div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== ALUNOS =============================== -->
+<section class="tela" data-tela="alunos">
+  <div class="cab"><div><div class="trilha">Cadastros</div><h1>Alunos</h1></div><div class="acoes"><button class="btn btn-s"><svg class="i"><use href="#i-baixar"/></svg>Exportar</button><button class="btn btn-p" onclick="toast('Abriria o formulário de novo aluno.','info')"><svg class="i"><use href="#i-mais"/></svg>Novo aluno</button></div></div>
+  <div class="card">
+    <div class="barra-ferr">
+      <div class="campo" style="flex:1;min-width:220px"><label for="f-busca">Buscar por nome</label><input id="f-busca" type="search" placeholder="Digite o nome…"></div>
+      <div class="campo"><label for="f-ins">Instrumento</label><select id="f-ins"><option>Todos</option><option>Piano</option><option>Órgão</option><option>Flauta</option></select></div>
+      <div class="campo"><label for="f-sit">Situação</label><select id="f-sit"><option>Ativos e pausados</option><option>Ativo</option><option>Pausado</option><option>Encerrado</option></select></div>
+      <div class="campo"><label>Visualização</label><div class="segmentos" data-seg="vista"><button aria-pressed="true" data-vista="tabela">Tabela</button><button aria-pressed="false" data-vista="cartoes">Cartões</button></div></div>
+    </div>
+    <div id="vista-tabela" class="tabela-rolagem">
+      <table class="tb"><thead><tr><th>Aluno</th><th>Instrumento</th><th>Horário</th><th>Estágio</th><th class="num">Mensalidade</th><th>Situação</th><th></th></tr></thead><tbody>
+        <tr data-ir="ficha" style="cursor:pointer"><td><div class="celula-aluno"><span class="av c1">AB</span><div>Ana Beatriz Lima<small>Adulto (18+)</small></div></div></td><td>Piano</td><td>Terça 08:00</td><td><span class="selo s-info">Intermediário</span></td><td class="num">R$ 180,00 <small class="muted">dia 5</small></td><td><span class="selo s-ok">Ativo</span></td><td><svg class="i muted"><use href="#i-seta"/></svg></td></tr>
+        <tr data-ir="ficha" style="cursor:pointer"><td><div class="celula-aluno"><span class="av c2">BC</span><div>Bruno Carvalho<small>Infantil (8-12)</small></div></div></td><td>Piano</td><td>Quarta 09:30</td><td><span class="selo s-ok">Básico</span></td><td class="num">R$ 150,00 <small class="muted">dia 10</small></td><td><span class="selo s-ok">Ativo</span></td><td><svg class="i muted"><use href="#i-seta"/></svg></td></tr>
+        <tr data-ir="ficha" style="cursor:pointer"><td><div class="celula-aluno"><span class="av c5">CM</span><div>Carla Mendes<small>Adolescente (13-17)</small></div></div></td><td>Flauta</td><td>Quinta 10:00</td><td><span class="selo s-marca">Apto — Culto Jovens</span></td><td class="num">R$ 120,00 <small class="muted">dia 15</small></td><td><span class="selo s-ok">Ativo</span></td><td><svg class="i muted"><use href="#i-seta"/></svg></td></tr>
+        <tr data-ir="ficha" style="cursor:pointer"><td><div class="celula-aluno"><span class="av c6">DO</span><div>Davi Oliveira<small>Adulto (18+)</small></div></div></td><td>Piano e Órgão</td><td>Sábado 08:30</td><td><span class="selo s-neutro">Oficializado</span></td><td class="num">R$ 200,00 <small class="muted">dia 28</small></td><td><span class="selo s-warn">Pausado</span></td><td><svg class="i muted"><use href="#i-seta"/></svg></td></tr>
+        <tr data-ir="ficha" style="cursor:pointer"><td><div class="celula-aluno"><span class="av c3">ES</span><div>Eduarda Souza<small>Musicalização (0-7)</small></div></div></td><td>Piano</td><td>Sexta 15:00</td><td><span class="selo s-ok">Iniciante</span></td><td class="num">R$ 150,00 <small class="muted">dia 30</small></td><td><span class="selo s-ok">Ativo</span></td><td><svg class="i muted"><use href="#i-seta"/></svg></td></tr>
+        <tr data-ir="ficha" style="cursor:pointer"><td><div class="celula-aluno"><span class="av c7">FR</span><div>Felipe Ramos<small>Adulto (18+)</small></div></div></td><td>Órgão</td><td>—</td><td><span class="selo s-neutro">Sem estágio</span></td><td class="num">R$ 180,00 <small class="muted">dia 31</small></td><td><span class="selo s-neutro">Encerrado</span></td><td><svg class="i muted"><use href="#i-seta"/></svg></td></tr>
+      </tbody></table>
+    </div>
+    <div id="vista-cartoes" class="grade g3" style="display:none">
+      <div class="card" data-ir="ficha" style="cursor:pointer"><div class="linha-flex"><span class="av m c1">AB</span><div><b>Ana Beatriz Lima</b><div class="muted" style="font-size:13px">Piano · Terça 08:00</div></div></div><div style="margin:14px 0 6px;display:flex;justify-content:space-between;font-size:13px"><span class="muted">Progresso geral</span><b>15,8%</b></div><div class="barra"><i style="width:16%"></i></div><div class="linha-flex" style="margin-top:12px"><span class="selo s-info">Intermediário</span><span class="selo s-ok">Ativo</span></div></div>
+      <div class="card" data-ir="ficha" style="cursor:pointer"><div class="linha-flex"><span class="av m c5">CM</span><div><b>Carla Mendes</b><div class="muted" style="font-size:13px">Flauta · Quinta 10:00</div></div></div><div style="margin:14px 0 6px;display:flex;justify-content:space-between;font-size:13px"><span class="muted">Progresso geral</span><b>48%</b></div><div class="barra"><i style="width:48%"></i></div><div class="linha-flex" style="margin-top:12px"><span class="selo s-marca">Apto — Culto Jovens</span><span class="selo s-ok">Ativo</span></div></div>
+      <div class="card" data-ir="ficha" style="cursor:pointer"><div class="linha-flex"><span class="av m c3">ES</span><div><b>Eduarda Souza</b><div class="muted" style="font-size:13px">Piano · Sexta 15:00</div></div></div><div style="margin:14px 0 6px;display:flex;justify-content:space-between;font-size:13px"><span class="muted">Progresso geral</span><b>6,7%</b></div><div class="barra"><i style="width:7%"></i></div><div class="linha-flex" style="margin-top:12px"><span class="selo s-ok">Iniciante</span><span class="selo s-ok">Ativo</span></div></div>
+    </div>
+    <div class="paginacao"><span>6 de 16 alunos</span><div class="linha-flex"><button class="btn btn-s btn-sm" disabled>Anterior</button><span>Página 1 de 3</span><button class="btn btn-s btn-sm">Próxima</button></div></div>
+  </div>
+</section>
+
+<!-- =============================== FICHA DO ALUNO =============================== -->
+<section class="tela" data-tela="ficha">
+  <div class="cab"><div><div class="trilha"><a href="#" data-ir="alunos">Alunos</a> / Ficha</div><h1>Ana Beatriz Lima</h1></div>
+    <div class="acoes"><button class="btn btn-s" onclick="window.print()"><svg class="i"><use href="#i-imprimir"/></svg>Imprimir</button><button class="btn btn-s"><svg class="i"><use href="#i-editar"/></svg>Editar</button><button class="btn btn-d" data-abrir="m-excluir"><svg class="i"><use href="#i-lixeira"/></svg>Excluir</button></div></div>
+  <div class="card" style="margin-bottom:18px"><div class="linha-flex" style="gap:20px;flex-wrap:wrap"><span class="av g c1">AB</span>
+    <div style="flex:1;min-width:240px"><div class="linha-flex"><h2 style="font-size:26px">Ana Beatriz Lima</h2><span class="selo s-ok">Ativo</span><span class="selo s-info">Intermediário</span></div><p class="muted" style="margin-top:4px">Piano · Terça 08:00 · desde 12/03/2026 (8 meses) · Adulto (18+)</p>
+      <div class="linha-flex" style="margin-top:12px"><button class="btn btn-s btn-sm"><svg class="i"><use href="#i-tel"/></svg>Ligar</button><button class="btn btn-s btn-sm">WhatsApp</button><button class="btn btn-p btn-sm" data-ir="lancar"><svg class="i"><use href="#i-mais"/></svg>Lançar aula</button></div></div>
+    <div class="anel-bloco"><div class="anel p" style="--v:16;--cor:var(--brand)"><b>16<small>%</small></b></div><div class="anel p" style="--v:77;--cor:var(--n5)"><b>77<small>%</small></b></div></div>
+    <div class="muted" style="font-size:12px;line-height:1.7">● progresso geral<br>● frequência</div></div></div>
+
+  <div class="abas" role="tablist" data-abas="ficha">
+    <button class="aba" role="tab" aria-selected="false" data-aba="cad">Cadastro</button>
+    <button class="aba" role="tab" aria-selected="true" data-aba="prog">Progresso</button>
+    <button class="aba" role="tab" aria-selected="false" data-aba="aulas">Aulas</button>
+    <button class="aba" role="tab" aria-selected="false" data-aba="fin">Financeira</button>
+  </div>
+
+  <div class="painel-aba" data-painel="ficha:cad"><div class="card"><div class="form-grade">
+    <div class="campo"><label>Nome</label><input value="Ana Beatriz Lima"></div><div class="campo"><label>Data de nascimento</label><input type="date" value="1998-04-12"></div>
+    <div class="campo"><label>Instrumento</label><select><option>Piano</option></select></div><div class="campo"><label>Contato</label><input value="(85) 98000-1000"></div>
+    <div class="campo"><label>Dia da aula</label><select><option>Terça</option></select></div><div class="campo"><label>Horário</label><input type="time" value="08:00"></div>
+    <div class="campo"><label>Mensalidade (R$)</label><input value="180,00"></div><div class="campo"><label>Dia de vencimento</label><input value="5"><span class="dica">Fixo todo mês. Dias 29–31 vencem no último dia em meses curtos.</span></div>
+    <div class="campo todo"><label>Observações</label><textarea>Muito dedicada. Meta: culto adulto.</textarea></div>
+    <div class="todo acoes" style="justify-content:flex-end"><button class="btn btn-s">Cancelar</button><button class="btn btn-p" onclick="toast('Aluno salvo com sucesso.','ok')">Salvar alterações</button></div>
+  </div></div></div>
+
+  <div class="painel-aba ativo" data-painel="ficha:prog">
+    <div class="grade g-8-4" style="margin-bottom:18px">
+      <div class="card"><header><h2>Estágio e progresso</h2><span class="selo s-neutro">calculado</span></header>
+        <div class="linha-flex" style="gap:28px;flex-wrap:wrap"><div class="anel" style="--v:16;--cor:var(--brand)"><b>15,8<small>%</small></b></div>
+          <div style="flex:1;min-width:230px"><div class="muted" style="font-size:13px">Estágio atual</div><div style="font:600 30px var(--font-titulo)">Intermediário</div><p class="muted" style="font-size:13px;margin:4px 0 12px">Nível do método mais alto em andamento ou concluído.</p>
+          <div class="campo"><label for="est">Estágio definido pela professora</label><select id="est"><option>Usar o calculado (Intermediário)</option><option>Avançado</option><option>Apto — Culto Jovens</option><option>Oficializado</option></select></div></div></div></div>
+      <div class="card"><header><h2>Apto para culto</h2></header><div class="empilha" style="gap:6px">
+        <label class="interruptor"><input type="checkbox" checked onchange="toast(this.checked?'Marcado como apto (jovens).':'Marcação removida.','ok')"><span class="trilho"></span>Culto de jovens</label>
+        <label class="interruptor"><input type="checkbox"><span class="trilho"></span>Culto adulto</label><label class="interruptor"><input type="checkbox"><span class="trilho"></span>Oficialização</label></div>
+        <p class="muted" style="font-size:12px;margin-top:8px">Decisão da professora; cada marcação fica no log.</p></div>
+    </div>
+    <div class="grade g-7-5">
+      <div class="card"><header><h2>Métodos e hinário</h2><button class="btn btn-p btn-sm" data-abrir="m-associar"><svg class="i"><use href="#i-mais"/></svg>Associar método</button></header>
+        <div class="metodo"><div class="topo"><div class="linha-flex"><b>Faber Vol.2</b><span class="selo s-info">Iniciado</span><span class="muted" style="font-size:12px">nível Intermediário</span></div><b>6,7%</b></div><div class="barra"><i style="width:7%"></i></div><p class="muted" style="font-size:13px;margin-top:8px">2 de 30 lições · atual: <b style="color:var(--ink)">3. Leitura rítmica</b></p><div class="linha-flex" style="margin-top:10px"><button class="btn btn-s btn-sm" data-ir="metodos">Lições</button><button class="btn btn-g btn-sm">Concluir</button><button class="btn btn-g btn-sm">Pausar</button></div></div>
+        <div class="metodo"><div class="topo"><div class="linha-flex"><b>Hinário de Jovens</b><span class="selo s-marca">Hinário</span><span class="selo s-info">Iniciado</span></div><b>40%</b></div><div class="barra" style="--cor:var(--n3)"><i style="width:40%"></i></div><p class="muted" style="font-size:13px;margin-top:8px">20 de 50 hinos · atual: <b style="color:var(--ink)">21. Hino 21</b></p></div>
+        <div class="metodo"><div class="topo"><div class="linha-flex"><b>Apostila própria — Teoria</b><span class="selo s-ok">Concluído</span></div><b>100%</b></div><div class="barra" style="--cor:var(--ok)"><i style="width:100%"></i></div></div>
+        <div class="aviso a-info" style="margin-top:12px"><svg class="i"><use href="#i-info"/></svg><div>Todas as lições de “Apostila própria — Teoria” foram aprovadas. <b>Confirmar como concluído?</b></div></div></div>
+      <div class="empilha">
+        <div class="card"><header><h3>Técnica</h3></header><div class="empilha" style="gap:12px"><div class="campo"><label>Mão 1</label><select><option>Concluído</option></select></div><div class="campo"><label>Mão 2</label><select><option>Em andamento</option></select></div><div class="campo"><label>Pedal</label><select><option>Não iniciado</option></select></div></div></div>
+        <div class="card"><header><h3>Frequência</h3></header><div class="anel-bloco"><div class="anel p" style="--v:77;--cor:var(--n5)"><b>77<small>%</small></b></div><div class="muted" style="font-size:13px">13 aulas · 10 presenças<br>2 faltas · 1 da professora</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="painel-aba" data-painel="ficha:aulas"><div class="grade g-7-5"><div class="card"><header><h2>Histórico de aulas</h2><button class="btn btn-p btn-sm" data-ir="lancar">Lançar aula</button></header><table class="tb"><thead><tr><th>Data</th><th>Presença</th><th>Conteúdo</th><th></th></tr></thead><tbody>
+    <tr><td>17/11</td><td><span class="selo s-ok">Presente</span></td><td>Leitura rítmica · Hino 21</td><td><button class="btn btn-g btn-sm">Corrigir</button></td></tr>
+    <tr><td>10/11</td><td><span class="selo s-warn">Falta justificada</span></td><td class="muted">Gripe</td><td><button class="btn btn-g btn-sm">Corrigir</button></td></tr>
+    <tr><td>03/11</td><td><span class="selo s-ok">Presente</span></td><td>Escala de Dó maior</td><td><button class="btn btn-g btn-sm">Corrigir</button></td></tr>
+    <tr><td>27/10</td><td><span class="selo s-info">Falta da professora</span></td><td class="muted">Aula cancelada</td><td><button class="btn btn-g btn-sm">Corrigir</button></td></tr></tbody></table></div>
+    <div class="card"><header><h3>Lição de casa mais recente</h3></header><div class="aviso a-info"><svg class="i"><use href="#i-info"/></svg><div>“Estudar 20 minutos por dia, mãos separadas.”<small style="display:block;margin-top:4px;opacity:.8">aula de 17/11</small></div></div></div></div></div>
+
+  <div class="painel-aba" data-painel="ficha:fin">
+    <div class="grade g4" style="margin-bottom:18px"><div class="card kpi"><span class="ico t6"><svg class="i"><use href="#i-carteira"/></svg></span><div><small>Previsto</small><strong>R$ 1.080</strong></div></div><div class="card kpi"><span class="ico t4"><svg class="i"><use href="#i-check"/></svg></span><div><small>Recebido</small><strong>R$ 900</strong></div></div><div class="card kpi"><span class="ico t3"><svg class="i"><use href="#i-relogio"/></svg></span><div><small>Em aberto</small><strong>R$ 180</strong></div></div><div class="card kpi"><span class="ico t1"><svg class="i"><use href="#i-alerta"/></svg></span><div><small>Atrasado</small><strong>R$ 180</strong></div></div></div>
+    <div class="card"><header><h2>Cobranças e pagamentos</h2><button class="btn btn-s btn-sm"><svg class="i"><use href="#i-baixar"/></svg>Exportar Excel</button></header><div class="tabela-rolagem"><table class="tb"><thead><tr><th>Competência</th><th>Vencimento</th><th class="num">Líquido</th><th class="num">Pago</th><th class="num">Saldo</th><th>Estado</th><th></th></tr></thead><tbody>
+      <tr><td><b>2026-11</b></td><td>05/11 <small style="color:var(--bad)">(12d)</small></td><td class="num">R$ 180,00</td><td class="num">R$ 0,00</td><td class="num">R$ 180,00</td><td><span class="selo s-bad">Atrasado</span></td><td><button class="btn btn-p btn-sm" data-abrir="m-pagamento">Receber</button></td></tr>
+      <tr><td><b>2026-10</b></td><td>05/10</td><td class="num">R$ 180,00</td><td class="num">R$ 210,00</td><td class="num">R$ 0,00</td><td><span class="selo s-ok">Pago</span> <small style="color:var(--warn);font-weight:600">+R$ 30,00 a mais</small></td><td><button class="btn btn-g btn-sm">Ajustar</button></td></tr>
+      <tr><td><b>2026-09</b></td><td>05/09</td><td class="num">R$ 180,00</td><td class="num">R$ 180,00</td><td class="num">R$ 0,00</td><td><span class="selo s-ok">Pago</span></td><td><button class="btn btn-g btn-sm">Ajustar</button></td></tr>
+      <tr><td><b>2026-08</b></td><td>05/08</td><td class="num">R$ 180,00</td><td class="num">R$ 90,00</td><td class="num">R$ 90,00</td><td><span class="selo s-info">Parcial</span></td><td><button class="btn btn-p btn-sm" data-abrir="m-pagamento">Receber</button></td></tr></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- =============================== AULAS =============================== -->
+<section class="tela" data-tela="aulas">
+  <div class="cab"><div><div class="trilha">Rotina</div><h1>Aulas</h1></div><div class="acoes"><button class="btn btn-p" data-ir="lancar"><svg class="i"><use href="#i-mais"/></svg>Lançar aula</button></div></div>
+  <div class="abas" role="tablist" data-abas="aulas"><button class="aba" role="tab" aria-selected="true" data-aba="hoje">Hoje</button><button class="aba" role="tab" aria-selected="false" data-aba="cal">Calendário</button><button class="aba" role="tab" aria-selected="false" data-aba="rec">Últimas aulas</button></div>
+  <div class="painel-aba ativo" data-painel="aulas:hoje"><div class="grade g-7-5"><div class="card"><header><h2>Aulas de hoje — 17/11/2026</h2></header><div class="lista">
+    <div class="item"><span class="hora">08:00</span><span class="av c1">AB</span><div class="corpo"><b>Ana Beatriz Lima</b><small>Piano</small></div><span class="selo s-ok">Presente</span><button class="btn btn-g btn-sm">Corrigir</button></div>
+    <div class="item"><span class="hora">11:30</span><span class="av c5">LT</span><div class="corpo"><b>Lucas Teixeira</b><small>Órgão</small></div><button class="btn btn-p btn-sm" data-ir="lancar">Lançar aula</button></div>
+    <div class="item"><span class="hora">14:00</span><span class="av c6">GA</span><div class="corpo"><b>Gabriela Alves</b><small>Flauta</small></div><button class="btn btn-p btn-sm" data-ir="lancar">Lançar aula</button></div></div></div>
+    <div class="card"><header><h3>Resumo da semana</h3></header><div class="horiz"><div class="linha"><span>Presentes</span><div class="barra" style="--cor:var(--ok)"><i style="width:80%"></i></div><b>34</b></div><div class="linha"><span>Falta aluno</span><div class="barra" style="--cor:var(--n2)"><i style="width:14%"></i></div><b>6</b></div><div class="linha"><span>Falta professora</span><div class="barra" style="--cor:var(--info)"><i style="width:5%"></i></div><b>2</b></div></div></div></div></div>
+  <div class="painel-aba" data-painel="aulas:cal"><div class="card"><header><div class="linha-flex"><button class="btn btn-s btn-ic" aria-label="Mês anterior">‹</button><h2 style="min-width:190px;text-align:center">Novembro de 2026</h2><button class="btn btn-s btn-ic" aria-label="Próximo mês">›</button></div><span class="muted" style="font-size:14px">62 aulas · 49 presenças · 8 faltas do aluno · 3 da professora</span></header>
+    <div class="cal" id="calendario"></div>
+    <div class="legenda"><span><i style="background:var(--ok)"></i>presente</span><span><i style="background:var(--n2)"></i>falta justificada</span><span><i style="background:var(--bad)"></i>sem aviso</span><span><i style="background:var(--info)"></i>falta da professora</span><span><i style="background:var(--n3)"></i>feriado/evento</span></div></div></div>
+  <div class="painel-aba" data-painel="aulas:rec"><div class="card"><header><h2>Últimas aulas lançadas</h2></header><div class="tabela-rolagem"><table class="tb"><thead><tr><th>Data</th><th>Aluno</th><th>Presença</th><th>Conteúdo</th><th></th></tr></thead><tbody>
+    <tr><td>17/11</td><td><b>Ana Beatriz Lima</b></td><td><span class="selo s-ok">Presente</span></td><td>Leitura rítmica</td><td><button class="btn btn-g btn-sm">Corrigir</button></td></tr>
+    <tr><td>16/11</td><td><b>Bruno Carvalho</b></td><td><span class="selo s-bad">Falta sem aviso</span></td><td class="muted">—</td><td><button class="btn btn-g btn-sm">Corrigir</button></td></tr>
+    <tr><td>14/11</td><td><b>Carla Mendes</b></td><td><span class="selo s-ok">Presente</span></td><td>Hino 12 · Legato e staccato</td><td><button class="btn btn-g btn-sm">Corrigir</button></td></tr></tbody></table></div></div></div>
+</section>
+
+<!-- =============================== LANÇAR AULA =============================== -->
+<section class="tela" data-tela="lancar">
+  <div class="cab"><div><div class="trilha"><a href="#" data-ir="aulas">Aulas</a> / Nova</div><h1>Lançar aula</h1></div></div>
+  <div class="empilha">
+    <div class="card"><header><h2>Quem e quando</h2></header><div class="form-grade">
+      <div class="campo"><label for="a-aluno">Aluno</label><select id="a-aluno"><option>Ana Beatriz Lima</option></select></div><div class="campo"><label for="a-data">Data</label><input id="a-data" type="date" value="2026-11-17"></div>
+      <div class="campo todo"><label>Presença</label><div class="segmentos" data-seg="presenca"><button aria-pressed="true">Presente</button><button aria-pressed="false">Falta — aluno (justificada)</button><button aria-pressed="false">Falta — aluno (sem aviso)</button><button aria-pressed="false">Falta — professora</button><button aria-pressed="false">Feriado / evento</button></div></div></div></div>
+    <div class="aviso a-info"><svg class="i"><use href="#i-info"/></svg><div><b>Última aula (10/11):</b> lição de casa — “Estudar 20 minutos por dia, mãos separadas.”</div></div>
+    <div class="card"><header><h2>Conteúdo da aula</h2></header><div class="form-grade"><div class="campo"><label>Tipo de aula</label><select><option>Prática</option></select></div><div class="campo"><label>Hino</label><input placeholder="Ex.: Hino 21"></div><div class="campo todo"><label>Conteúdo trabalhado</label><textarea>Leitura rítmica e compasso 3/4.</textarea></div><div class="campo todo"><label>Lição de casa</label><textarea></textarea></div><div class="campo todo invalido"><label>Vídeo (link)</label><input value="youtube"><span class="erro">Informe um link completo, começando por https://</span></div></div></div>
+    <div class="card"><header><h2>Avaliar lições nesta aula</h2><span class="selo s-neutro">opcional</span></header>
+      <p class="muted" style="font-size:13px;margin-bottom:12px">Presença não gera progresso: marque só o que o aluno apresentou. A data da tentativa é a da aula.</p>
+      <div class="campo" style="max-width:360px;margin-bottom:12px"><label>Método ou hinário</label><select><option>Faber Vol.2 — Intermediário</option></select></div>
+      <div class="lista"><div class="licao feita"><span class="n"><svg class="i" style="width:16px"><use href="#i-check"/></svg></span><div><b>1. Postura e respiração</b><small class="muted" style="display:block">aprovada em 10/09</small></div><span class="selo s-ok">Aprovada</span></div>
+        <div class="licao atual"><span class="n">3</span><div><b>3. Leitura rítmica</b><small class="muted" style="display:block">lição atual · reprovada 2× desde 20/10</small></div><div class="segmentos" data-seg="l3"><button aria-pressed="false">Aprovado</button><button aria-pressed="true">Reprovado</button></div></div>
+        <div class="licao"><span class="n">4</span><div><b>4. Pausas e compassos</b></div><div class="segmentos" data-seg="l4"><button aria-pressed="false">Aprovado</button><button aria-pressed="false">Reprovado</button></div></div></div>
+      <div class="aviso a-warn" style="margin-top:12px"><svg class="i"><use href="#i-alerta"/></svg><div>A lição 4 está <b>fora da ordem sugerida</b>. Será registrada mesmo assim.</div></div></div>
+    <div class="acoes" style="justify-content:flex-end"><button class="btn btn-s" data-ir="aulas">Cancelar</button><button class="btn btn-p" onclick="toast('Aula lançada e 1 lição avaliada.','ok'); irPara('aulas')">Salvar aula</button></div>
+  </div>
+</section>
+
+<!-- =============================== FINANCEIRO =============================== -->
+<section class="tela" data-tela="financeiro">
+  <div class="cab"><div><div class="trilha">Controle</div><h1>Financeiro</h1></div><div class="acoes"><button class="btn btn-s" onclick="toast('Gerando planilha Excel com totais e gráficos…','info')"><svg class="i"><use href="#i-baixar"/></svg>Exportar Excel</button><button class="btn btn-p" onclick="toast('12 cobranças criadas; 0 já existiam.','ok')">Gerar cobranças do mês</button></div></div>
+  <div class="abas" role="tablist" data-abas="fin"><button class="aba" role="tab" aria-selected="true" data-aba="mes">Cobranças do mês</button><button class="aba" role="tab" aria-selected="false" data-aba="dash">Dashboard</button></div>
+  <div class="painel-aba ativo" data-painel="fin:mes">
+    <div class="grade g4" style="margin-bottom:18px"><div class="card kpi"><span class="ico t6"><svg class="i"><use href="#i-carteira"/></svg></span><div><small>Previsto</small><strong>R$ 2.700</strong></div></div><div class="card kpi"><span class="ico t4"><svg class="i"><use href="#i-check"/></svg></span><div><small>Recebido</small><strong>R$ 1.650</strong></div></div><div class="card kpi"><span class="ico t3"><svg class="i"><use href="#i-relogio"/></svg></span><div><small>Em aberto</small><strong>R$ 1.050</strong></div></div><div class="card kpi"><span class="ico t1"><svg class="i"><use href="#i-alerta"/></svg></span><div><small>Atrasado</small><strong>R$ 540</strong></div></div></div>
+    <div class="card"><div class="barra-ferr"><div class="campo"><label>Competência</label><input type="month" value="2026-11"></div><div class="campo"><label>Estado</label><select><option>Todos</option><option>Atrasado</option><option>Pendente</option></select></div></div>
+      <div class="tabela-rolagem"><table class="tb"><thead><tr><th>Aluno</th><th>Vencimento</th><th class="num">Líquido</th><th class="num">Pago</th><th class="num">Saldo</th><th>Estado</th><th></th></tr></thead><tbody>
+      <tr><td><div class="celula-aluno"><span class="av c1">AB</span>Ana Beatriz Lima</div></td><td>05/11 <small style="color:var(--bad)">(12d)</small></td><td class="num">R$ 180,00</td><td class="num">R$ 0,00</td><td class="num">R$ 180,00</td><td><span class="selo s-bad">Atrasado</span></td><td><button class="btn btn-p btn-sm" data-abrir="m-pagamento">Receber</button></td></tr>
+      <tr><td><div class="celula-aluno"><span class="av c2">BC</span>Bruno Carvalho</div></td><td>10/11 <small style="color:var(--bad)">(7d)</small></td><td class="num">R$ 150,00</td><td class="num">R$ 150,00</td><td class="num">R$ 0,00</td><td><span class="selo s-ok">Pago</span></td><td><button class="btn btn-g btn-sm">Ajustar</button></td></tr>
+      <tr><td><div class="celula-aluno"><span class="av c5">CM</span>Carla Mendes</div></td><td>28/11</td><td class="num">R$ 120,00</td><td class="num">R$ 60,00</td><td class="num">R$ 60,00</td><td><span class="selo s-info">Parcial</span></td><td><button class="btn btn-p btn-sm" data-abrir="m-pagamento">Receber</button></td></tr>
+      <tr><td><div class="celula-aluno"><span class="av c3">ES</span>Eduarda Souza</div></td><td>30/11</td><td class="num">R$ 150,00</td><td class="num">R$ 0,00</td><td class="num">R$ 150,00</td><td><span class="selo s-warn">Pendente</span></td><td><button class="btn btn-p btn-sm" data-abrir="m-pagamento">Receber</button></td></tr>
+      <tr><td><div class="celula-aluno"><span class="av c7">FR</span>Felipe Ramos</div></td><td>31/11</td><td class="num">R$ 180,00</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td><td><span class="selo s-neutro">Cancelada</span></td><td><button class="btn btn-g btn-sm">Ajustar</button></td></tr></tbody></table></div></div>
+  </div>
+  <div class="painel-aba" data-painel="fin:dash">
+    <div class="card" style="margin-bottom:18px"><div class="barra-ferr" style="margin:0"><div class="campo"><label>De</label><input type="month" value="2026-06"></div><div class="campo"><label>Até</label><input type="month" value="2026-11"></div><button class="btn btn-s"><svg class="i"><use href="#i-baixar"/></svg>Cobranças</button><button class="btn btn-s"><svg class="i"><use href="#i-baixar"/></svg>Resumo mensal</button><button class="btn btn-s"><svg class="i"><use href="#i-baixar"/></svg>Inadimplência</button><button class="btn btn-s"><svg class="i"><use href="#i-baixar"/></svg>Por forma</button></div></div>
+    <div class="grade g-7-5" style="margin-bottom:18px">
+      <div class="card"><header><h2>Previsto × recebido × atrasado</h2></header>
+        <svg class="grafico" viewBox="0 0 560 250" role="img" aria-label="Barras por competência">
+          <g stroke="var(--line)"><path d="M40 20H550M40 70H550M40 120H550M40 170H550M40 210H550"/></g>
+          <g text-anchor="end"><text x="34" y="24">2600</text><text x="34" y="74">1950</text><text x="34" y="124">1300</text><text x="34" y="174">650</text><text x="34" y="214">0</text></g>
+          <g id="barras-fin"></g><g text-anchor="middle"><text x="95" y="236">jun</text><text x="180" y="236">jul</text><text x="265" y="236">ago</text><text x="350" y="236">set</text><text x="435" y="236">out</text><text x="520" y="236">nov</text></g></svg>
+        <div class="legenda"><span><i style="background:var(--n6)"></i>Previsto</span><span><i style="background:var(--n4)"></i>Recebido</span><span><i style="background:var(--n1)"></i>Atrasado</span></div></div>
+      <div class="card"><header><h2>Por forma de pagamento</h2></header><div class="linha-flex" style="gap:24px;flex-wrap:wrap"><div class="rosca" style="background:conic-gradient(var(--n5) 0 32%,var(--n3) 32% 58%,var(--n6) 58% 82%,var(--n2) 82% 100%)"><b><span>R$ 10.080<small>recebido</small></span></b></div>
+        <div class="leg-linhas" style="flex:1;min-width:150px"><div><i style="background:var(--n5)"></i>Dinheiro<b>R$ 3.255</b></div><div><i style="background:var(--n3)"></i>Pix<b>R$ 2.860</b></div><div><i style="background:var(--n6)"></i>Transferência<b>R$ 2.430</b></div><div><i style="background:var(--n2)"></i>Outro<b>R$ 1.535</b></div></div></div></div></div>
+    <div class="grade g2"><div class="card"><header><h2>Envelhecimento do atraso</h2></header><div class="horiz"><div class="linha"><span>1 a 30 dias</span><div class="barra" style="--cor:var(--n3)"><i style="width:27%"></i></div><b>2</b></div><div class="linha"><span>31 a 60 dias</span><div class="barra" style="--cor:var(--n2)"><i style="width:12%"></i></div><b>1</b></div><div class="linha"><span>61 dias ou mais</span><div class="barra" style="--cor:var(--n1)"><i style="width:100%"></i></div><b>9</b></div></div><div class="aviso a-bad" style="margin-top:14px"><svg class="i"><use href="#i-alerta"/></svg><div><b>Inadimplência de 15,5%</b> (atrasado ÷ previsto no período).</div></div></div>
+      <div class="card"><header><h2>Quem mais deve</h2></header><table class="tb"><thead><tr><th>Aluno</th><th class="num">Saldo</th><th class="num">Maior atraso</th></tr></thead><tbody><tr><td><div class="celula-aluno"><span class="av c6">HC</span>Heitor Costa</div></td><td class="num">R$ 400,00</td><td class="num">135 dias</td></tr><tr><td><div class="celula-aluno"><span class="av c4">IN</span>Isabela Nunes</div></td><td class="num">R$ 300,00</td><td class="num">94 dias</td></tr><tr><td><div class="celula-aluno"><span class="av c1">BC</span>Bruno Carvalho</div></td><td class="num">R$ 225,00</td><td class="num">99 dias</td></tr></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- =============================== MÉTODOS =============================== -->
+<section class="tela" data-tela="metodos">
+  <div class="cab"><div><div class="trilha">Pedagógico</div><h1>Métodos e hinários</h1></div><div class="acoes"><button class="btn btn-p" onclick="toast('Abriria o formulário de novo método.','info')"><svg class="i"><use href="#i-mais"/></svg>Novo método</button></div></div>
+  <div class="abas" role="tablist" data-abas="met"><button class="aba" role="tab" aria-selected="true" data-aba="cat">Catálogo</button><button class="aba" role="tab" aria-selected="false" data-aba="det">Lições do método</button><button class="aba" role="tab" aria-selected="false" data-aba="aluno">Lições do aluno</button></div>
+  <div class="painel-aba ativo" data-painel="met:cat"><div class="grade g3">
+    <div class="card"><div class="linha-flex" style="justify-content:space-between"><span class="ico kpi" style="padding:0"><span class="ico t4"><svg class="i"><use href="#i-livro"/></svg></span></span><span class="selo s-ok">Ativo</span></div><h3 style="margin:12px 0 2px">Faber Vol.1</h3><p class="muted" style="font-size:13px">Piano · 30 lições</p><div class="degraus" style="margin:14px 0 6px"><i class="on"></i><i class="on"></i><i></i><i></i></div><span class="selo s-ok">Básico</span></div>
+    <div class="card"><div class="linha-flex" style="justify-content:space-between"><span class="ico kpi" style="padding:0"><span class="ico t6"><svg class="i"><use href="#i-livro"/></svg></span></span><span class="selo s-ok">Ativo</span></div><h3 style="margin:12px 0 2px">Faber Vol.2</h3><p class="muted" style="font-size:13px">Piano · 30 lições</p><div class="degraus" style="margin:14px 0 6px"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><span class="selo s-info">Intermediário</span></div>
+    <div class="card"><div class="linha-flex" style="justify-content:space-between"><span class="ico kpi" style="padding:0"><span class="ico t3"><svg class="i"><use href="#i-nota"/></svg></span></span><span class="selo s-marca">Hinário</span></div><h3 style="margin:12px 0 2px">Hinário Oficial</h3><p class="muted" style="font-size:13px">Qualquer instrumento · 430 hinos</p><div class="degraus" style="margin:14px 0 6px"><i></i><i></i><i></i><i></i></div><span class="selo s-neutro">Sem nível</span></div></div></div>
+  <div class="painel-aba" data-painel="met:det"><div class="card"><header><h2>Faber Vol.2 — lições</h2><div class="acoes"><button class="btn btn-s btn-sm">Colar lista</button><button class="btn btn-p btn-sm">Adicionar lição</button></div></header>
+    <div class="lista"><div class="licao"><span class="alca"><svg class="i"><use href="#i-alca"/></svg></span><div><b>1. Postura e respiração</b></div><div class="linha-flex"><button class="btn btn-g btn-sm">Editar</button><button class="btn btn-g btn-sm">Excluir</button></div></div>
+      <div class="licao"><span class="alca"><svg class="i"><use href="#i-alca"/></svg></span><div><b>2. Escala de Dó maior</b></div><div class="linha-flex"><button class="btn btn-g btn-sm">Editar</button><button class="btn btn-g btn-sm">Excluir</button></div></div>
+      <div class="licao"><span class="alca"><svg class="i"><use href="#i-alca"/></svg></span><div><b>3. Leitura rítmica</b></div><div class="linha-flex"><button class="btn btn-g btn-sm">Editar</button><button class="btn btn-g btn-sm" data-abrir="m-excluir">Excluir</button></div></div></div></div></div>
+  <div class="painel-aba" data-painel="met:aluno"><div class="card"><header><div><h2>Hinário de Jovens — Ana Beatriz</h2><p class="muted" style="font-size:13px">20 de 50 aprovados</p></div><div class="barra-ferr" style="margin:0"><div class="campo"><label>Data da tentativa</label><input type="date" value="2026-11-17"></div></div></header>
+    <div class="tabela-rolagem"><table class="tb"><thead><tr><th>#</th><th>Lição</th><th>Status</th><th>Desde</th><th>Tent.</th><th>Tempo</th><th>Avaliar</th></tr></thead><tbody>
+      <tr><td>19</td><td><b>Hino 19</b></td><td><span class="selo s-ok">Aprovado</span></td><td>03/11</td><td>1</td><td>0 d</td><td><button class="btn btn-g btn-sm">Histórico</button></td></tr>
+      <tr><td>20</td><td><b>Hino 20</b></td><td><span class="selo s-ok">Aprovado</span></td><td>07/04</td><td>1</td><td>28 d</td><td><button class="btn btn-g btn-sm">Histórico</button></td></tr>
+      <tr style="background:var(--brand-soft)"><td>21</td><td><b>Hino 21</b> <span class="selo s-marca">atual</span></td><td><span class="selo s-bad">Reprovado</span></td><td>10/03</td><td>2</td><td>252 d</td><td class="linha-flex"><button class="btn btn-s btn-sm">Aprovar</button><button class="btn btn-s btn-sm">Reprovar</button></td></tr>
+      <tr><td>22</td><td><b>Hino 22</b></td><td><span class="selo s-neutro">Pendente</span></td><td>—</td><td>—</td><td>—</td><td class="linha-flex"><button class="btn btn-s btn-sm">Aprovar</button><button class="btn btn-s btn-sm">Reprovar</button></td></tr></tbody></table></div></div></div>
+</section>
+
+<!-- =============================== ADMIN =============================== -->
+<section class="tela" data-tela="admin">
+  <div class="cab"><div><div class="trilha">Somente administrador</div><h1>Usuários e auditoria</h1></div><div class="acoes"><button class="btn btn-s" onclick="window.open('about:blank')">Docs da API</button></div></div>
+  <div class="abas" role="tablist" data-abas="adm"><button class="aba" role="tab" aria-selected="true" data-aba="usu">Usuários</button><button class="aba" role="tab" aria-selected="false" data-aba="aud">Auditoria</button><button class="aba" role="tab" aria-selected="false" data-aba="lis">Listas</button></div>
+  <div class="painel-aba ativo" data-painel="adm:usu"><div class="card"><header><h2>Usuários</h2><button class="btn btn-p btn-sm"><svg class="i"><use href="#i-mais"/></svg>Novo usuário</button></header><div class="tabela-rolagem"><table class="tb"><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Situação</th><th>Último acesso</th><th></th></tr></thead><tbody>
+    <tr><td><div class="celula-aluno"><span class="av c6">AD</span>Administrador</div></td><td>admin@ddc.local</td><td><span class="selo s-marca">Administrador</span></td><td><span class="selo s-ok">Ativo</span></td><td>17/11 18:02</td><td class="linha-flex"><button class="btn btn-g btn-sm">Senha</button><button class="btn btn-g btn-sm">Editar</button></td></tr>
+    <tr><td><div class="celula-aluno"><span class="av c3">HM</span>Helena Martins</div></td><td>professora@ddc.local</td><td><span class="selo s-info">Professora</span></td><td><span class="selo s-ok">Ativo</span></td><td>17/11 17:57</td><td class="linha-flex"><button class="btn btn-g btn-sm">Senha</button><button class="btn btn-g btn-sm">Editar</button></td></tr>
+    <tr><td><div class="celula-aluno"><span class="av c7">UI</span>Usuário Inativo</div></td><td>inativo@ddc.local</td><td><span class="selo s-info">Professora</span></td><td><span class="selo s-neutro">Inativo</span></td><td>—</td><td class="linha-flex"><button class="btn btn-g btn-sm">Ativar</button></td></tr></tbody></table></div></div></div>
+  <div class="painel-aba" data-painel="adm:aud"><div class="card"><div class="barra-ferr"><div class="campo"><label>Tabela</label><select><option>Todas</option><option>cobrancas</option></select></div><div class="campo"><label>Operação</label><select><option>Todas</option><option>INSERT</option></select></div><div class="campo"><label>De</label><input type="date"></div><div class="campo"><label>Até</label><input type="date"></div></div>
+    <div class="tabela-rolagem"><table class="tb"><thead><tr><th>Quando</th><th>Quem</th><th>Operação</th><th>Registro</th><th>Origem</th><th></th></tr></thead><tbody>
+      <tr><td>17/11 18:01</td><td>Helena</td><td><span class="selo s-ok">INSERT</span></td><td>pagamentos #66</td><td class="muted">POST /api/v1/cobrancas/12/pagamentos</td><td><button class="btn btn-s btn-sm" data-abrir="m-auditoria">Detalhes</button></td></tr>
+      <tr><td>17/11 17:58</td><td>Helena</td><td><span class="selo s-info">UPDATE</span></td><td>progresso_aluno #4</td><td class="muted">PUT /api/v1/alunos/1/progresso</td><td><button class="btn btn-s btn-sm" data-abrir="m-auditoria">Detalhes</button></td></tr>
+      <tr><td>17/11 17:40</td><td>Sistema</td><td><span class="selo s-ok">INSERT</span></td><td>cobrancas #81</td><td class="muted">cron:gerar-cobrancas</td><td><button class="btn btn-s btn-sm" data-abrir="m-auditoria">Detalhes</button></td></tr>
+      <tr><td>17/11 17:12</td><td>Helena</td><td><span class="selo s-bad">DELETE</span></td><td>aulas #190</td><td class="muted">DELETE /api/v1/aulas/190</td><td><button class="btn btn-s btn-sm" data-abrir="m-auditoria">Detalhes</button></td></tr></tbody></table></div></div></div>
+  <div class="painel-aba" data-painel="adm:lis"><div class="grade g3"><div class="card"><header><h3>Instrumentos</h3><button class="btn btn-g btn-sm">Adicionar</button></header><div class="lista"><div class="item"><div class="corpo"><b>Piano</b></div><span class="selo s-ok">Ativo</span></div><div class="item"><div class="corpo"><b>Órgão</b></div><span class="selo s-ok">Ativo</span></div><div class="item"><div class="corpo"><b>Flauta</b></div><span class="selo s-ok">Ativo</span></div></div></div>
+    <div class="card"><header><h3>Tipos de aula</h3><button class="btn btn-g btn-sm">Adicionar</button></header><div class="lista"><div class="item"><div class="corpo"><b>Teórica</b></div><span class="selo s-ok">Ativo</span></div><div class="item"><div class="corpo"><b>Prática</b></div><span class="selo s-ok">Ativo</span></div></div></div>
+    <div class="card"><header><h3>Formas de pagamento</h3><button class="btn btn-g btn-sm">Adicionar</button></header><div class="lista"><div class="item"><div class="corpo"><b>Pix</b></div><span class="selo s-ok">Ativo</span></div><div class="item"><div class="corpo"><b>Dinheiro</b></div><span class="selo s-ok">Ativo</span></div></div></div></div></div>
+</section>
+
+<!-- =============================== GUIA DE ESTILO =============================== -->
+<section class="tela" data-tela="componentes">
+  <div class="cab"><div><div class="trilha">Design system</div><h1>Guia de estilo</h1></div></div>
+  <div class="secao-comp card"><h3>Paleta atual · cores das notas</h3><div class="amostras">
+    <div class="amostra"><i style="background:var(--brand)"></i><div><b>Marca</b>menu, botão primário</div></div><div class="amostra"><i style="background:var(--accent)"></i><div><b>Destaque</b>indicador ativo</div></div>
+    <div class="amostra"><i style="background:var(--n1)"></i><div><b>Dó</b>--n1</div></div><div class="amostra"><i style="background:var(--n2)"></i><div><b>Ré</b>--n2</div></div><div class="amostra"><i style="background:var(--n3)"></i><div><b>Mi</b>--n3</div></div><div class="amostra"><i style="background:var(--n4)"></i><div><b>Fá</b>--n4</div></div><div class="amostra"><i style="background:var(--n5)"></i><div><b>Sol</b>--n5</div></div><div class="amostra"><i style="background:var(--n6)"></i><div><b>Lá</b>--n6</div></div><div class="amostra"><i style="background:var(--n7)"></i><div><b>Si</b>--n7</div></div>
+    <div class="amostra"><i style="background:var(--ok)"></i><div><b>Sucesso</b>pago, presente</div></div><div class="amostra"><i style="background:var(--warn)"></i><div><b>Atenção</b>pendente, excedente</div></div><div class="amostra"><i style="background:var(--bad)"></i><div><b>Erro</b>atrasado, exclusão</div></div><div class="amostra"><i style="background:var(--info)"></i><div><b>Informação</b>parcial</div></div></div></div>
+  <div class="grade g2">
+    <div class="secao-comp card"><h3>Botões</h3><div class="linha-flex"><button class="btn btn-p">Primário</button><button class="btn btn-s">Secundário</button><button class="btn btn-g">Fantasma</button><button class="btn btn-a">Destaque</button><button class="btn btn-d">Perigo</button><button class="btn btn-p" disabled>Desabilitado</button><button class="btn btn-s btn-ic" aria-label="Adicionar"><svg class="i"><use href="#i-mais"/></svg></button></div></div>
+    <div class="secao-comp card"><h3>Selos de estado</h3><div class="linha-flex"><span class="selo s-warn">Pendente</span><span class="selo s-info">Parcial</span><span class="selo s-bad">Atrasado</span><span class="selo s-ok">Pago</span><span class="selo s-neutro">Cancelada</span><span class="selo s-marca">Hinário</span></div><div class="linha-flex" style="margin-top:10px"><span class="chip t1">Dó</span><span class="chip t2">Ré</span><span class="chip t3">Mi</span><span class="chip t4">Fá</span><span class="chip t5">Sol</span><span class="chip t6">Lá</span><span class="chip t7">Si</span></div></div>
+    <div class="secao-comp card"><h3>Campos de formulário</h3><div class="form-grade"><div class="campo"><label>Texto</label><input value="Ana Beatriz"></div><div class="campo"><label>Seleção</label><select><option>Piano</option></select></div><div class="campo invalido"><label>Com erro</label><input value="32"><span class="erro">Entre 1 e 31.</span></div><div class="campo"><label>Com dica</label><input value="5"><span class="dica">Fixo todo mês.</span></div></div></div>
+    <div class="secao-comp card"><h3>Controles</h3><div class="linha-flex" style="gap:24px"><label class="interruptor"><input type="checkbox" checked><span class="trilho"></span>Ligado</label><label class="interruptor"><input type="checkbox"><span class="trilho"></span>Desligado</label><div class="segmentos" data-seg="x"><button aria-pressed="true">Dia</button><button aria-pressed="false">Semana</button><button aria-pressed="false">Mês</button></div></div></div>
+    <div class="secao-comp card"><h3>Avisos</h3><div class="empilha" style="gap:10px"><div class="aviso a-info"><svg class="i"><use href="#i-info"/></svg>Informação: lição de casa da aula anterior.</div><div class="aviso a-ok"><svg class="i"><use href="#i-check"/></svg>Sucesso: pagamento registrado.</div><div class="aviso a-warn"><svg class="i"><use href="#i-alerta"/></svg>Atenção: lição fora da ordem sugerida.</div><div class="aviso a-bad"><svg class="i"><use href="#i-alerta"/></svg>Erro: não foi possível salvar.</div></div></div>
+    <div class="secao-comp card"><h3>Notificações, confirmações e modais</h3><div class="linha-flex"><button class="btn btn-s" onclick="toast('Aluno salvo com sucesso.','ok')">Toast sucesso</button><button class="btn btn-s" onclick="toast('Valor acima do saldo: o excedente será registrado.','alerta')">Toast alerta</button><button class="btn btn-s" onclick="toast('Não foi possível gerar a planilha.','erro')">Toast erro</button><button class="btn btn-s" onclick="toast('Sincronizado há 1 minuto.','info')">Toast info</button></div><div class="linha-flex" style="margin-top:10px"><button class="btn btn-d" data-abrir="m-excluir">Confirmar exclusão</button><button class="btn btn-p" data-abrir="m-pagamento">Registrar pagamento</button><button class="btn btn-s" data-abrir="m-auditoria">Detalhe de auditoria</button></div></div>
+    <div class="secao-comp card"><h3>Progresso</h3><div class="linha-flex" style="gap:24px"><div class="anel p" style="--v:25;--cor:var(--n1)"><b>25</b></div><div class="anel p" style="--v:50;--cor:var(--n3)"><b>50</b></div><div class="anel p" style="--v:75;--cor:var(--n5)"><b>75</b></div><div style="flex:1;min-width:180px" class="empilha"><div class="barra"><i style="width:40%"></i></div><div class="barra" style="--cor:var(--n4)"><i style="width:70%"></i></div></div></div></div>
+    <div class="secao-comp card"><h3>Estados vazio e carregando</h3><div class="vazio"><div class="arte"><svg class="i"><use href="#i-nota"/></svg></div><h3>Nenhum aluno encontrado</h3><p>Ajuste os filtros ou cadastre um novo aluno.</p><button class="btn btn-p" style="margin-top:12px">Novo aluno</button></div><div class="empilha" style="gap:8px;margin-top:10px"><div class="esq" style="height:16px;width:70%"></div><div class="esq" style="height:16px"></div><div class="esq" style="height:16px;width:50%"></div></div></div>
+  </div>
+</section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Modais -->
+<div class="fundo" id="m-excluir" role="dialog" aria-modal="true" aria-labelledby="t-exc"><div class="modal"><span class="icone-grande s-bad"><svg class="i"><use href="#i-lixeira"/></svg></span><h2 id="t-exc">Excluir registro?</h2><p class="muted">A exclusão é lógica: o registro some das listas, mas fica registrado na auditoria.</p><div class="rodape"><button class="btn btn-s" data-fechar>Cancelar</button><button class="btn btn-d" onclick="fecharModais(); toast('Registro excluído.','ok')">Excluir</button></div></div></div>
+<div class="fundo" id="m-pagamento" role="dialog" aria-modal="true" aria-labelledby="t-pag"><div class="modal"><h2 id="t-pag">Registrar pagamento</h2><p class="muted" style="margin-bottom:14px"><b>Ana Beatriz Lima</b> — competência 2026-11 · saldo R$ 180,00</p>
+  <div class="empilha" style="gap:12px"><div class="campo"><label for="p-valor">Valor pago (R$)</label><input id="p-valor" type="number" step="0.01" value="180"><span class="dica">Parcial é permitido; acima do saldo também, com alerta.</span></div><div class="aviso a-warn" id="p-alerta" style="display:none"><svg class="i"><use href="#i-alerta"/></svg><div><b>Atenção:</b> o valor é <span id="p-exc"></span> maior que o saldo. O pagamento será aceito e o excedente ficará registrado nesta cobrança.</div></div>
+  <div class="form-grade"><div class="campo"><label>Data</label><input type="date" value="2026-11-17"></div><div class="campo"><label>Forma</label><select><option>Pix</option><option>Dinheiro</option></select></div></div></div>
+  <div class="rodape"><button class="btn btn-s" data-fechar>Cancelar</button><button class="btn btn-p" onclick="fecharModais(); toast('Pagamento registrado.','ok')">Confirmar pagamento</button></div></div></div>
+<div class="fundo" id="m-associar" role="dialog" aria-modal="true" aria-labelledby="t-ass"><div class="modal"><h2 id="t-ass">Associar método ao aluno</h2><div class="campo" style="margin-top:12px"><label>Método ou hinário</label><select><option>Hanon — Intermediário</option><option>Czerny Op.599 — Avançado</option><option>Hinário Oficial</option></select></div><div class="rodape"><button class="btn btn-s" data-fechar>Cancelar</button><button class="btn btn-p" onclick="fecharModais(); toast('Método associado (Iniciado).','ok')">Associar</button></div></div></div>
+<div class="fundo" id="m-auditoria" role="dialog" aria-modal="true" aria-labelledby="t-aud"><div class="modal" style="width:min(620px,100%)"><h2 id="t-aud">Entrada de auditoria</h2><div class="linha-flex" style="margin:8px 0"><span class="selo s-ok">INSERT</span><span class="muted">pagamentos #66 · Helena · 17/11 18:01</span></div>
+  <pre style="background:#1e1e1e;color:#e8e8e8;padding:14px;border-radius:12px;font-size:12px;overflow:auto;max-height:190px;margin:0">{ "id": "66", "cobranca_id": "12", "valor": "180.00",
+  "data_pagamento": "2026-11-17", "sys_cri": "2026-11-17 18:01:22", "sys_del": null }</pre>
+  <p class="muted" style="font-size:12px;margin:10px 0;word-break:break-all"><svg class="i" style="width:14px;vertical-align:-2px"><use href="#i-fingerprint"/></svg> 9f2c6a1e…b73d0a (SHA-256)</p>
+  <div class="aviso a-ok"><svg class="i"><use href="#i-check"/></svg>O JSON confere com o fingerprint e com a linha atual da tabela.</div>
+  <div class="rodape"><button class="btn btn-s" data-fechar>Fechar</button><button class="btn btn-p" onclick="toast('Verificação concluída: íntegro.','ok')">Verificar fingerprint</button></div></div></div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="mockup.js"></script>
+</body>
+</html>
