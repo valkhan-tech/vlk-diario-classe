@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import { z } from 'zod';
 import { useLista } from '../../api/hooks';
 import { NIVEL, type Metodo } from '../../api/tipos';
-import { Aviso, Badge, Botao, Campo, Carregando, Cartao, Modal, Selecao, Tabela, Td, Titulo, Vazio } from '../../components/ui';
+import { Icone } from '../../components/icones';
+import { Aviso, Badge, Botao, Campo, Carregando, Cartao, Modal, Selecao, Titulo, Vazio, useToast } from '../../components/ui';
 import { api, mensagemDeErro } from '../../lib/api';
 
 const vazio = (v: unknown) => (v === '' || v === undefined ? null : v);
@@ -61,32 +62,48 @@ export function FormularioMetodo({ metodo, aoSalvar, aoCancelar }: { metodo?: Me
   );
 }
 
+const ORDEM_NIVEL = { iniciante: 1, basico: 2, intermediario: 3, avancado: 4 } as const;
+const NOTA_NIVEL = { iniciante: 4, basico: 5, intermediario: 6, avancado: 7 } as const;
+
 export function PaginaMetodos() {
   const cliente = useQueryClient();
+  const avisar = useToast();
   const [novo, setNovo] = useState(false);
   const consulta = useQuery({ queryKey: ['metodos'], queryFn: async () => (await api.get<{ dados: Metodo[] }>('/metodos')).dados });
 
   return (
     <>
-      <Titulo acoes={<Botao onClick={() => setNovo(true)}>Novo método</Botao>}>Métodos e hinários</Titulo>
-      <Cartao>
-        {consulta.isLoading ? <Carregando /> : !consulta.data?.length ? <Vazio>Nenhum método cadastrado.</Vazio> : (
-          <Tabela rotulo="Métodos" cabecalhos={['Nome', 'Tipo', 'Nível', 'Instrumento', 'Lições', 'Situação']}>
-            {consulta.data.map((m) => (
-              <tr key={m.id} className="hover:bg-slate-50">
-                <Td className="font-medium"><Link className="text-marca-700 underline" to={`/metodos/${m.id}`}>{m.nome}</Link></Td>
-                <Td>{m.tipo === 'hinario' ? <Badge tom="roxo">Hinário</Badge> : 'Método'}</Td>
-                <Td>{m.nivel ? NIVEL[m.nivel] : '—'}</Td>
-                <Td>{m.instrumento ?? 'Qualquer'}</Td>
-                <Td>{m.total_licoes}</Td>
-                <Td>{m.ativo ? <Badge tom="verde">Ativo</Badge> : <Badge>Inativo</Badge>}</Td>
-              </tr>
-            ))}
-          </Tabela>
-        )}
-      </Cartao>
+      <Titulo trilha="Pedagógico" acoes={<Botao onClick={() => setNovo(true)}><Icone nome="mais" />Novo método</Botao>}>Métodos e hinários</Titulo>
+      {consulta.isLoading ? <Carregando /> : !consulta.data?.length ? (
+        <Cartao><Vazio icone="livro" acao={<Botao onClick={() => setNovo(true)}>Novo método</Botao>}>Nenhum método cadastrado.</Vazio></Cartao>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
+          {consulta.data.map((m) => {
+            const nota = m.nivel ? NOTA_NIVEL[m.nivel] : 3;
+            return (
+              <Link key={m.id} to={`/metodos/${m.id}`} className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-[var(--shadow-cartao)] transition hover:border-marca-500">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: `color-mix(in srgb, var(--color-nota-${nota}) 18%, white)`, color: nota === 3 ? '#8a6a00' : `var(--color-nota-${nota})` }}>
+                    <Icone nome={m.tipo === 'hinario' ? 'nota' : 'livro'} className="h-6 w-6" />
+                  </span>
+                  {m.ativo ? <Badge tom="verde">Ativo</Badge> : <Badge>Inativo</Badge>}
+                </div>
+                <h3 className="mt-3 text-lg font-semibold">{m.nome}</h3>
+                <p className="text-[13px] text-slate-500">{m.instrumento ?? 'Qualquer instrumento'} · {m.total_licoes} {m.tipo === 'hinario' ? 'hinos' : 'lições'}</p>
+                <div className="mb-2 mt-4 flex gap-1.5" aria-hidden="true">
+                  {[1, 2, 3, 4].map((n) => <i key={n} className="h-2 flex-1 rounded" style={{ background: m.nivel && n <= ORDEM_NIVEL[m.nivel] ? 'var(--color-marca-600)' : 'var(--color-slate-200)' }} />)}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {m.tipo === 'hinario' && <Badge tom="roxo">Hinário</Badge>}
+                  <Badge tom={m.nivel ? 'azul' : 'neutro'}>{m.nivel ? NIVEL[m.nivel] : 'Sem nível'}</Badge>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
       <Modal aberto={novo} aoFechar={() => setNovo(false)} titulo="Novo método">
-        <FormularioMetodo aoCancelar={() => setNovo(false)} aoSalvar={() => { setNovo(false); void cliente.invalidateQueries({ queryKey: ['metodos'] }); }} />
+        <FormularioMetodo aoCancelar={() => setNovo(false)} aoSalvar={() => { setNovo(false); avisar('Método cadastrado.', 'ok'); void cliente.invalidateQueries({ queryKey: ['metodos'] }); }} />
       </Modal>
     </>
   );

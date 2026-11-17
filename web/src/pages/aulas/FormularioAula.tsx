@@ -2,11 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 import { useLista } from '../../api/hooks';
 import { PRESENCA, type Aluno, type Aula, type ItemAvaliacao } from '../../api/tipos';
-import { AreaTexto, Aviso, Botao, Campo, Carregando, Cartao, Selecao, Titulo } from '../../components/ui';
+import { AreaTexto, Aviso, Botao, Campo, Carregando, Cartao, Selecao, Titulo, useToast } from '../../components/ui';
 import { api, mensagemDeErro } from '../../lib/api';
 import { data as formatarData, hoje } from '../../lib/format';
 import { AvaliacaoNaAula } from '../progresso/AvaliacaoNaAula';
@@ -35,6 +35,7 @@ export function PaginaFormularioAula() {
   const navegar = useNavigate();
   const cliente = useQueryClient();
   const tipos = useLista('tipo_aula');
+  const avisar = useToast();
   const [erro, setErro] = useState<string | null>(null);
   const [avaliacoes, setAvaliacoes] = useState<ItemAvaliacao[]>([]);
 
@@ -80,6 +81,7 @@ export function PaginaFormularioAula() {
     },
     onSuccess: (r) => {
       for (const k of ['aulas', 'agenda', 'calendario', 'aula', 'aluno-aulas', 'ficha-progresso', 'licoes-aluno', 'inicio']) void cliente.invalidateQueries({ queryKey: [k] });
+      avisar(avaliacoes.length > 0 ? `Aula salva e ${avaliacoes.length} lição(ões) avaliada(s).` : 'Aula salva.', 'ok');
       navegar(`/alunos/${r.dados.aluno_id}`);
     },
     onError: (e) => setErro(mensagemDeErro(e)),
@@ -89,6 +91,7 @@ export function PaginaFormularioAula() {
     mutationFn: () => api.delete(`/aulas/${id}`),
     onSuccess: () => {
       for (const k of ['aulas', 'agenda', 'calendario', 'aluno-aulas']) void cliente.invalidateQueries({ queryKey: [k] });
+      avisar('Aula excluída.', 'ok');
       navegar('/aulas');
     },
     onError: (e) => setErro(mensagemDeErro(e)),
@@ -100,7 +103,7 @@ export function PaginaFormularioAula() {
 
   return (
     <>
-      <Titulo acoes={editando && <Botao variante="perigo" onClick={() => { if (window.confirm('Excluir esta aula?')) excluir.mutate(); }}>Excluir</Botao>}>
+      <Titulo trilha={<Link to="/aulas" className="text-marca-700 hover:underline">Aulas</Link>} acoes={editando && <Botao variante="perigo" onClick={() => { if (window.confirm('Excluir esta aula?')) excluir.mutate(); }}>Excluir</Botao>}>
         {editando ? 'Corrigir aula' : 'Lançar aula'}
       </Titulo>
       <form onSubmit={handleSubmit((d) => { setErro(null); salvar.mutate(d); })} noValidate className="flex flex-col gap-4">
@@ -145,9 +148,9 @@ export function PaginaFormularioAula() {
 
         {alunoId > 0 && presenca === 'presente' && <AvaliacaoNaAula alunoId={alunoId} aoMudar={setAvaliacoes} />}
 
-        <div className="flex justify-end gap-2">
-          <Botao type="button" variante="secundario" onClick={() => navegar(-1)}>Cancelar</Botao>
-          <Botao type="submit" carregando={salvar.isPending}>Salvar aula</Botao>
+        <div className="sticky bottom-[calc(4.9rem+var(--safe-b))] z-30 -mx-4 flex justify-end gap-2 border-t border-slate-200 bg-[color-mix(in_srgb,var(--bg)_94%,transparent)] px-4 py-3 backdrop-blur md:static md:mx-0 md:border-0 md:bg-transparent md:p-0">
+          <Botao type="button" variante="secundario" className="flex-1 md:flex-none" onClick={() => navegar(-1)}>Cancelar</Botao>
+          <Botao type="submit" className="flex-1 md:flex-none" carregando={salvar.isPending}>Salvar aula</Botao>
         </div>
       </form>
     </>

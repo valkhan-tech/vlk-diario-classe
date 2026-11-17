@@ -5,7 +5,8 @@ import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { useLista } from '../../api/hooks';
 import { ESTADO_COBRANCA, TOM_ESTADO, type Cobranca, type EstadoCobranca, type ResumoFinanceiro } from '../../api/tipos';
-import { AreaTexto, Aviso, Badge, Botao, Campo, Cartao, Modal, Selecao } from '../../components/ui';
+import { Icone } from '../../components/icones';
+import { AreaTexto, Aviso, Badge, Botao, Campo, Cartao, Modal, Selecao, useToast } from '../../components/ui';
 import { api, mensagemDeErro } from '../../lib/api';
 import { hoje, moeda } from '../../lib/format';
 
@@ -27,18 +28,20 @@ export function useInvalidarFinanceiro() {
 }
 
 export function ResumoCards({ resumo }: { resumo: ResumoFinanceiro }) {
-  const itens = [
-    { r: 'Previsto', v: moeda(resumo.previsto), c: 'text-slate-900' },
-    { r: 'Recebido', v: moeda(resumo.recebido), c: 'text-emerald-700' },
-    { r: 'Em aberto', v: moeda(resumo.aberto), c: 'text-amber-700' },
-    { r: 'Atrasado', v: moeda(resumo.atrasado), c: 'text-red-700' },
+  const itens: { r: string; v: string; nota: 1 | 3 | 4 | 6; icone: 'carteira' | 'check' | 'relogio' | 'alerta' }[] = [
+    { r: 'Previsto', v: moeda(resumo.previsto), nota: 6, icone: 'carteira' },
+    { r: 'Recebido', v: moeda(resumo.recebido), nota: 4, icone: 'check' },
+    { r: 'Em aberto', v: moeda(resumo.aberto), nota: 3, icone: 'relogio' },
+    { r: 'Atrasado', v: moeda(resumo.atrasado), nota: 1, icone: 'alerta' },
   ];
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       {itens.map((i) => (
-        <div key={i.r} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-          <p className="text-xs uppercase tracking-wide text-slate-500">{i.r}</p>
-          <p className={`text-xl font-bold ${i.c}`}>{i.v}</p>
+        <div key={i.r} className="flex items-center gap-3 rounded-[22px] border border-slate-200 bg-white p-3.5 shadow-[var(--shadow-cartao)] sm:p-4">
+          <span className="hidden h-11 w-11 shrink-0 place-items-center rounded-2xl sm:grid" style={{ background: `color-mix(in srgb, var(--color-nota-${i.nota}) 18%, white)`, color: i.nota === 3 ? '#8a6a00' : `var(--color-nota-${i.nota})` }}>
+            <Icone nome={i.icone} />
+          </span>
+          <div className="min-w-0"><p className="text-xs text-slate-500">{i.r}</p><p className="truncate font-titulo text-xl font-semibold sm:text-2xl">{i.v}</p></div>
         </div>
       ))}
     </div>
@@ -58,6 +61,7 @@ type SaidaPagamento = z.output<typeof esquemaPagamento>;
 export function ModalPagamento({ cobranca, aoFechar }: { cobranca: Cobranca | null; aoFechar: () => void }) {
   const formas = useLista('forma_pagamento');
   const invalidar = useInvalidarFinanceiro();
+  const avisar = useToast();
   const [erro, setErro] = useState<string | null>(null);
   const { register, handleSubmit, formState, reset, control } = useForm<EntradaPagamento, unknown, SaidaPagamento>({
     resolver: zodResolver(esquemaPagamento),
@@ -67,7 +71,7 @@ export function ModalPagamento({ cobranca, aoFechar }: { cobranca: Cobranca | nu
   const excesso = cobranca ? Math.round((digitado - cobranca.saldo) * 100) / 100 : 0;
   const salvar = useMutation({
     mutationFn: (d: SaidaPagamento) => api.post(`/cobrancas/${cobranca!.id}/pagamentos`, d),
-    onSuccess: () => { invalidar(); reset(); setErro(null); aoFechar(); },
+    onSuccess: () => { invalidar(); reset(); setErro(null); aoFechar(); avisar(excesso > 0 ? `Pagamento registrado, com excedente de ${moeda(excesso)}.` : 'Pagamento registrado.', excesso > 0 ? 'alerta' : 'ok'); },
     onError: (e) => setErro(mensagemDeErro(e)),
   });
   return (
@@ -92,7 +96,7 @@ export function ModalPagamento({ cobranca, aoFechar }: { cobranca: Cobranca | nu
             {formas.data?.map((f) => <option key={f.id} value={f.id}>{f.valor}</option>)}
           </Selecao>
           <AreaTexto rotulo="Observações" {...register('observacoes')} />
-          <div className="flex justify-end gap-2">
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <Botao type="button" variante="secundario" onClick={aoFechar}>Cancelar</Botao>
             <Botao type="submit" carregando={salvar.isPending}>Confirmar pagamento</Botao>
           </div>
@@ -114,12 +118,13 @@ type SaidaCobranca = z.output<typeof esquemaCobranca>;
 
 export function ModalCobranca({ cobranca, aoFechar }: { cobranca: Cobranca | null; aoFechar: () => void }) {
   const invalidar = useInvalidarFinanceiro();
+  const avisar = useToast();
   const [erro, setErro] = useState<string | null>(null);
   const { register, handleSubmit, formState } = useForm<EntradaCobranca, unknown, SaidaCobranca>({
     resolver: zodResolver(esquemaCobranca),
     values: cobranca ? { valor: cobranca.valor, desconto: cobranca.desconto, vencimento: cobranca.vencimento, observacoes: cobranca.observacoes ?? '' } : undefined,
   });
-  const concluir = () => { invalidar(); setErro(null); aoFechar(); };
+  const concluir = () => { invalidar(); setErro(null); aoFechar(); avisar('Cobrança atualizada.', 'ok'); };
   const salvar = useMutation({
     mutationFn: (d: SaidaCobranca) => api.put(`/cobrancas/${cobranca!.id}`, d),
     onSuccess: concluir,

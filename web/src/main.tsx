@@ -4,6 +4,9 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 import { AuthProvider } from './auth/AuthContext';
+import { ToastProvider } from './components/ui';
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/inter';
 import './index.css';
 
 const cliente = new QueryClient({
@@ -15,7 +18,9 @@ createRoot(document.getElementById('raiz')!).render(
     <QueryClientProvider client={cliente}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <ToastProvider>
+            <App />
+          </ToastProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

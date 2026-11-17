@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 import { useLista } from '../../api/hooks';
 import { SITUACAO_ALUNO, type Aluno } from '../../api/tipos';
-import { AreaTexto, Aviso, Botao, Campo, Carregando, Cartao, Selecao, Titulo } from '../../components/ui';
+import { AreaTexto, Aviso, Botao, Campo, Carregando, Cartao, Selecao, Titulo, useToast } from '../../components/ui';
 import { api, mensagemDeErro } from '../../lib/api';
 import { DIAS_SEMANA } from '../../lib/format';
 
@@ -35,6 +35,7 @@ export function PaginaFormularioAluno() {
   const navegar = useNavigate();
   const cliente = useQueryClient();
   const instrumentos = useLista('instrumento');
+  const avisar = useToast();
   const [erro, setErro] = useState<string | null>(null);
 
   const aluno = useQuery({
@@ -64,6 +65,7 @@ export function PaginaFormularioAluno() {
     onSuccess: (r) => {
       void cliente.invalidateQueries({ queryKey: ['alunos'] });
       void cliente.invalidateQueries({ queryKey: ['aluno'] });
+      avisar(editando ? 'Aluno salvo com sucesso.' : 'Aluno cadastrado.', 'ok');
       navegar(`/alunos/${r.dados.id}`);
     },
     onError: (e) => setErro(mensagemDeErro(e)),
@@ -110,9 +112,9 @@ export function PaginaFormularioAluno() {
         <Cartao titulo="Observações">
           <AreaTexto rotulo="Observações" {...register('observacoes')} />
         </Cartao>
-        <div className="flex justify-end gap-2">
-          <Botao type="button" variante="secundario" onClick={() => navegar(-1)}>Cancelar</Botao>
-          <Botao type="submit" carregando={salvar.isPending}>Salvar</Botao>
+        <div className="sticky bottom-[calc(4.9rem+var(--safe-b))] z-30 -mx-4 flex justify-end gap-2 border-t border-slate-200 bg-[color-mix(in_srgb,var(--bg)_94%,transparent)] px-4 py-3 backdrop-blur md:static md:mx-0 md:border-0 md:bg-transparent md:p-0">
+          <Botao type="button" variante="secundario" className="flex-1 md:flex-none" onClick={() => navegar(-1)}>Cancelar</Botao>
+          <Botao type="submit" className="flex-1 md:flex-none" carregando={salvar.isPending}>Salvar</Botao>
         </div>
       </form>
     </>

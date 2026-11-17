@@ -1,48 +1,92 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Tema "Madeira & Âmbar" (paleta quente: violino, latão e creme).
+   As escalas slate/emerald/red/amber/sky/violet do Tailwind são REMAPEADAS para
+   tons da paleta, então todo o app herda as cores sem trocar classe por classe.
+   As cores --color-nota-* são as 7 notas (dó…si) usadas em gráficos e avatares.
+   ========================================================================== */
 @theme {
-  --color-marca-50: #eef2ff;
-  --color-marca-100: #e0e7ff;
-  --color-marca-500: #6366f1;
-  --color-marca-600: #4f46e5;
-  --color-marca-700: #4338ca;
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-titulo: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+
+  /* marca (terracota de violino) */
+  --color-marca-50: #fbf3ec; --color-marca-100: #f3e1d3; --color-marca-200: #e8c7ad; --color-marca-500: #b0653f;
+  --color-marca-600: #8c4a2f; --color-marca-700: #6f3822; --color-marca-800: #57291a;
+  /* destaque (latão/âmbar) */
+  --color-ambar-100: #fbebd0; --color-ambar-500: #d9902f; --color-ambar-600: #b9741f;
+
+  /* neutros quentes (substituem slate) */
+  --color-slate-50: #faf6f0; --color-slate-100: #f6eee4; --color-slate-200: #ebdfd0; --color-slate-300: #dccdb9; --color-slate-400: #a8978a;
+  --color-slate-500: #7b6a5b; --color-slate-600: #65564a; --color-slate-700: #4a3d32; --color-slate-800: #3a2e24; --color-slate-900: #2d2118;
+  /* sucesso, atenção, erro, informação */
+  --color-emerald-50: #eef5ea; --color-emerald-100: #e3eedf; --color-emerald-200: #c9dec3; --color-emerald-500: #5b9060; --color-emerald-600: #4f8453;
+  --color-emerald-700: #3f6d43; --color-emerald-800: #2f5533; --color-emerald-900: #25502a;
+  --color-amber-50: #fcf3e3; --color-amber-100: #fae8cc; --color-amber-200: #f1d29f; --color-amber-300: #e6b46a; --color-amber-700: #96601a; --color-amber-800: #75490f; --color-amber-900: #5e3c07;
+  --color-red-50: #fbeeea; --color-red-100: #f6dad4; --color-red-200: #ecbdb2; --color-red-600: #b64636; --color-red-700: #983a2c; --color-red-800: #7a2d22;
+  --color-sky-50: #eaf4f6; --color-sky-100: #d9ebee; --color-sky-200: #bcdbe1; --color-sky-700: #2f6572; --color-sky-800: #1d4c5a;
+  --color-violet-100: #e3e8f1; --color-violet-800: #3e4a68;
+
+  /* as 7 notas */
+  --color-nota-1: #c4503f; --color-nota-2: #d9822f; --color-nota-3: #e2b93e; --color-nota-4: #7fa35a;
+  --color-nota-5: #3f9a8c; --color-nota-6: #4b7fa6; --color-nota-7: #6b7a9e;
+
+  --radius-cartao: 22px;
+  --shadow-cartao: 0 1px 2px rgba(40, 30, 20, .06), 0 4px 14px rgba(40, 30, 20, .05);
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
+:root {
+  --bg: #faf4ec;
+  --sb-bg: linear-gradient(180deg, #8c4a2f 0%, #6f3822 100%);
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
 
-body {
-  background: #f8fafc;
-  color: #0f172a;
-}
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: #2d2118; font-family: var(--font-sans); }
+h1, h2, h3 { font-family: var(--font-titulo); letter-spacing: -.01em; }
 
 /* Foco visível em tudo que é interativo */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 3px solid var(--color-marca-500);
+  outline: 3px solid color-mix(in srgb, var(--color-marca-600) 55%, transparent);
   outline-offset: 2px;
 }
 
-/* Alvos de toque confortáveis em tablet */
-button, [role="button"], select, input:not([type="checkbox"]):not([type="radio"]) {
-  min-height: 44px;
+/* Alvos de toque confortáveis (tablet/celular) e fonte ≥16px nos campos (iOS não dá zoom ao focar) */
+button, [role="button"], select, input:not([type="checkbox"]):not([type="radio"]) { min-height: 44px; }
+input, select, textarea { font-size: 16px; }
+
+/* ---------- Anel de progresso (conic-gradient) ---------- */
+.anel {
+  --v: 0; --cor: var(--color-marca-600);
+  position: relative; flex: none; display: grid; place-items: center; border-radius: 50%;
+  background: conic-gradient(var(--cor) calc(var(--v) * 1%), var(--color-slate-100) 0);
+}
+.anel::before { content: ""; position: absolute; inset: 12%; border-radius: 50%; background: #fff; }
+.anel > * { position: relative; }
+
+/* ---------- Tabelas viram cartões no celular ---------- */
+@media (max-width: 639px) {
+  table.tb-resp, table.tb-resp tbody, table.tb-resp tr, table.tb-resp td { display: block; width: 100%; min-width: 0 !important; }
+  table.tb-resp { min-width: 0 !important; }
+  table.tb-resp thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.tb-resp tr { border: 1px solid var(--color-slate-200); border-radius: 16px; padding: 6px 14px; margin-bottom: 10px; background: #fff; }
+  table.tb-resp td { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 8px 0 !important; text-align: right; border: 0; }
+  table.tb-resp td[data-rotulo]::before { content: attr(data-rotulo); flex: none; font-size: 12px; color: var(--color-slate-500); text-align: left; }
+  table.tb-resp td[data-rotulo=""]::before { content: none; }
+  table.tb-resp td:empty { display: none; }
+  table.tb-resp td.col-acoes { justify-content: flex-end; }
 }
 
-@page {
-  size: A4;
-  margin: 12mm;
-}
-
+/* ---------- Impressão (fichas em A4) ---------- */
+@page { size: A4; margin: 12mm; }
 @media print {
-  .nao-imprimir {
-    display: none !important;
-  }
-  body {
-    background: #fff;
-  }
-  .imprimir-pagina {
-    box-shadow: none !important;
-    border: none !important;
-  }
+  .nao-imprimir { display: none !important; }
+  body { background: #fff; }
+  .imprimir-pagina { box-shadow: none !important; border: none !important; }
+  .app-lateral, .app-barra-inferior { display: none !important; }
+  .app-conteudo { margin: 0 !important; padding: 0 !important; }
 }
+
+@keyframes surgir { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.surgir { animation: surgir .22s ease both; }
+@media (prefers-reduced-motion: reduce) { .surgir, * { animation: none !important; transition: none !important; } }

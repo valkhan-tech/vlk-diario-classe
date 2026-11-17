@@ -9,7 +9,7 @@ import { api, baixar, mensagemDeErro, qs } from '../../lib/api';
 import { mesAtual, moeda, percentual } from '../../lib/format';
 import { ResumoCards } from './componentes';
 
-const CORES = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#0ea5e9', '#8b5cf6'];
+const CORES = ['var(--color-nota-5)', 'var(--color-nota-3)', 'var(--color-nota-6)', 'var(--color-nota-2)', 'var(--color-nota-4)', 'var(--color-nota-7)'];
 
 const EXPORTACOES = [
   { tipo: 'cobrancas', rotulo: 'Cobranças do período' },
@@ -67,9 +67,9 @@ export function PainelDashboard() {
                     <YAxis tickFormatter={(v: number) => `${Math.round(v)}`} />
                     <Tooltip formatter={(v) => moeda(Number(v))} />
                     <Legend />
-                    <Bar dataKey="previsto" name="Previsto" fill="#4f46e5" />
-                    <Bar dataKey="recebido" name="Recebido" fill="#10b981" />
-                    <Bar dataKey="atrasado" name="Atrasado" fill="#ef4444" />
+                    <Bar dataKey="previsto" name="Previsto" fill="var(--color-nota-6)" />
+                    <Bar dataKey="recebido" name="Recebido" fill="var(--color-nota-4)" />
+                    <Bar dataKey="atrasado" name="Atrasado" fill="var(--color-nota-1)" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -98,7 +98,7 @@ export function PainelDashboard() {
                     <XAxis dataKey="faixa" />
                     <YAxis />
                     <Tooltip formatter={(v) => moeda(Number(v))} />
-                    <Bar dataKey="valor" name="Saldo atrasado" fill="#ef4444" />
+                    <Bar dataKey="valor" name="Saldo atrasado" fill="var(--color-nota-1)" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

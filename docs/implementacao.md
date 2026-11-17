@@ -37,6 +37,17 @@ Opcionais incluídos (os marcados "incluir" no escopo): lição de casa anterior
 
 Os roteiros de navegador **não estão no repositório** (rodaram do diretório de trabalho temporário). Se quiser, viram uma suíte Playwright em `web/e2e`.
 
+## 2.1 Identidade visual (17/11/2026)
+
+Aplicada a paleta **Madeira & Âmbar** do mockup (`docs/mockup/`), sem roxo, com as 7 cores das notas (dó…si) em gráficos, avatares e selos.
+
+- **Tokens:** `web/src/index.css` remapeia as escalas do Tailwind (slate, emerald, red, amber, sky) para a paleta; fontes Fraunces (títulos) e Inter (texto), **hospedadas no próprio pacote** (sem Google Fonts).
+- **Navegação:** menu lateral colorido no computador (≥1024 px), só ícones no tablet (≥768 px) e barra inferior + "Mais" no celular. Busca de alunos, notificações (cobranças atrasadas, aula sem lançamento, conclusões a confirmar, aniversários) e menu do usuário na barra superior.
+- **Tablet e celular:** alvos de toque ≥44 px, campos a 16 px (sem zoom no iOS), tabelas viram **cartões** no celular, modais viram *bottom sheets*, barra de ações fixa nos formulários, respeito à área segura (`safe-area`), sem rolagem horizontal (verificado em 390, 820 e 1280 px).
+- **Novos componentes:** `Avatar`, `Anel`, `Barra`, `Interruptor`, `Segmentos`, `ToastProvider` (avisos rápidos), ícones SVG próprios.
+- **API:** `/inicio` ganhou `notificacoes`, `aniversariantes` e `mes` (frequência e recebido); `/alunos` devolve `estagio` e `progresso_geral`.
+- **Testes:** `npm test` agora usa `scripts/testar.mjs` (no Windows, `e:\` e `E:\` duplicavam módulos e o Vitest falhava).
+
 ## 3. Diferenças em relação ao `stack-proposta.md`
 
 | Previsto | Feito | Motivo / impacto |

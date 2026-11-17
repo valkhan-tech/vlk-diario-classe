@@ -19,6 +19,8 @@ export interface Aluno {
   meses_ativos: number | null;
   situacao: SituacaoAluno;
   observacoes: string | null;
+  estagio?: { valor: string | null; origem: string | null; rotulo: string | null };
+  progresso_geral?: number | null;
 }
 
 export type TipoLista = 'instrumento' | 'tipo_aula' | 'forma_pagamento';
@@ -264,10 +266,15 @@ export interface ItemAvaliacao {
   status: StatusLicao;
 }
 
+export interface NotificacaoApp { tipo: 'erro' | 'info' | 'ok'; titulo: string; detalhe: string; link: string }
+
 export interface PainelInicio {
-  kpis: { alunos_ativos: number; aulas_hoje: number; aulas_hoje_lancadas: number; cobrancas_atrasadas: number; valor_atrasado: number; aptos_culto: number };
+  kpis: { alunos_ativos: number; aulas_hoje: number; aulas_hoje_lancadas: number; cobrancas_atrasadas: number; valor_atrasado: number; aptos_culto: number; conclusoes_pendentes: number };
   agenda: { data: string; itens: ItemAgenda[] };
   por_estagio: { estagio: string; rotulo: string; quantidade: number }[];
+  mes: { competencia: string; aulas: number; frequencia: number | null; previsto: number; recebido: number; vencido: number };
+  aniversariantes: { aluno_id: number; aluno: string; data: string; idade: number; hoje: boolean }[];
+  notificacoes: NotificacaoApp[];
 }
 
 export interface EntradaLog {

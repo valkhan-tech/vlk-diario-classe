@@ -30,7 +30,7 @@ final class Semeador
 
     public const USUARIOS = [
         ['Administrador', 'admin@ddc.local', 'Admin@123', 'admin'],
-        ['Professora Helena', 'professora@ddc.local', 'Professora@123', 'professora'],
+        ['Helena Martins', 'professora@ddc.local', 'Professora@123', 'professora'],
         ['Responsável Teste', 'responsavel@ddc.local', 'Responsavel@123', 'responsavel'],
     ];
 
